@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>{{ tool.sub_tool }} | ICA Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        select:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .page-shell {
+            width: min(1240px, calc(100% - 48px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 15px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 14px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link:hover { color: #245eea; }
+        .page-content { padding: 25px 0 40px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 14px;
+            color: #8995a8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a { color: #65738a; text-decoration: none; }
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 17px;
+        }
+
+        .eyebrow {
+            margin: 0 0 7px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(24px, 2.8vw, 32px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 8px 0 0;
+            color: #78869b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 9px 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 11px "Manrope", sans-serif;
+            white-space: nowrap;
+        }
+
+        .messages {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 13px;
+        }
+
+        .message {
+            padding: 10px 12px;
+            border: 1px solid #dce7ff;
+            border-left: 3px solid #4a7dea;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #345d9c;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            border-color: #cdebdc;
+            border-left-color: #45a77b;
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .message.warning {
+            border-color: #f3e4be;
+            border-left-color: #e8ad35;
+            background: #fff9eb;
+            color: #87600c;
+        }
+
+        .message.error {
+            border-color: #f4dada;
+            border-left-color: #df7070;
+            background: #fff3f3;
+            color: #a84141;
+        }
+
+        .panel {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 14px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel-subtitle {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .row-count-badge {
+            flex: 0 0 auto;
+            padding: 7px 10px;
+            border: 1px solid #e5e9f0;
+            border-radius: 20px;
+            background: #f6f8fb;
+            color: #697991;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .detail-form { padding: 14px 16px 16px; }
+
+        .create-box {
+            display: none;
+            align-items: flex-end;
+            gap: 10px;
+            margin-bottom: 13px;
+            padding: 12px;
+            border: 1px solid #e8edf5;
+            border-radius: 10px;
+            background: #fbfcfe;
+        }
+
+        .create-field { flex: 0 1 220px; }
+
+        .create-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #53627a;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        select,
+        input[type="number"] {
+            min-height: 35px;
+            padding: 0 10px;
+            border: 1px solid #dbe3ef;
+            border-radius: 8px;
+            background: #fff;
+            color: #263650;
+            font: 500 11px "DM Sans", sans-serif;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        select:focus,
+        input[type="number"]:focus {
+            border-color: #83a7f8;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        .create-field select { width: 100%; }
+
+        .scroll-hint {
+            display: none;
+            margin: 0;
+            padding: 8px 12px 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+        }
+
+        .details-table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #34435b;
+            font-size: 11px;
+        }
+
+        .details-table th,
+        .details-table td {
+            padding: 9px 11px;
+            border-bottom: 1px solid #edf0f6;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .details-table th {
+            background: #f3f6fb;
+            color: #65738a;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .details-table tbody tr:last-child td { border-bottom: 0; }
+        .details-table tbody tr:hover td { background: #fafbfe; }
+        .details-table td:first-child { width: 60px; color: #8995a8; font-weight: 700; }
+        .details-table td:nth-child(2) { color: #243650; font-weight: 700; text-align: left; }
+        .details-table select { width: 100%; min-width: 105px; }
+        .details-table input[type="number"] { width: 100%; min-width: 90px; }
+        .details-table .action-col { display: none; width: 80px; }
+        .details-table .action-col button { margin: 0 auto; }
+
+        .empty-state {
+            padding: 26px 15px !important;
+            color: #78869b !important;
+            text-align: center !important;
+            font-size: 11px;
+            font-weight: 500 !important;
+        }
+
+        .empty-state strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #253650;
+            font: 800 13px "Manrope", sans-serif;
+        }
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 13px;
+        }
+
+        .button {
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 13px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font: 700 10px "DM Sans", sans-serif;
+            text-decoration: none;
+            transition: background .18s ease, color .18s ease, transform .18s ease;
+        }
+
+        .button:hover { transform: translateY(-1px); }
+        .button-primary { background: #245eea; color: #fff; }
+        .button-primary:hover { background: #194dc8; }
+        .button-success { background: #20b981; color: #fff; }
+        .button-success:hover { background: #159d6c; }
+        .button-secondary { border-color: #dfe6f0; background: #fff; color: #56657d; }
+        .button-secondary:hover { background: #f6f8fb; }
+        .button-danger { border-color: #f4dada; background: #fff4f4; color: #b74949; }
+        .button-danger:hover { background: #ffe8e8; }
+
+        .totals-panel {
+            margin-top: 14px;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .totals-header {
+            padding: 13px 16px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .totals-header h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 14px "Manrope", sans-serif;
+        }
+
+        .totals-content { padding: 10px 16px; }
+
+        .totals-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #53627a;
+            font-size: 11px;
+        }
+
+        .totals-table th,
+        .totals-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #edf0f6;
+            text-align: left;
+        }
+
+        .totals-table th {
+            background: #f7f9fc;
+            color: #65738a;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+
+        .totals-table td:last-child,
+        .totals-table th:last-child { text-align: right; }
+
+        .totals-table tfoot th {
+            border-bottom: 0;
+            background: #f0faf4;
+            color: #247650;
+            font-size: 11px;
+        }
+
+        .empty-total {
+            color: #8995a8;
+            text-align: center !important;
+        }
+
+        @media (max-width: 760px) {
+            .page-shell { width: calc(100% - 28px); }
+            .topbar { min-height: 68px; }
+            .page-content { padding-top: 19px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 11px; }
+            .panel-header { align-items: flex-start; }
+            .scroll-hint { display: block; }
+            .detail-form { padding: 12px; }
+            .details-table { min-width: 700px; }
+        }
+
+        @media (max-width: 440px) {
+            .topbar { align-items: flex-start; flex-direction: column; justify-content: center; gap: 8px; padding: 10px 0; }
+            .create-box { align-items: stretch; flex-direction: column; }
+            .create-field { flex: 1 1 auto; }
+            .form-actions .button { flex: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'assessment_tool_page' course.id %}">Back to assessment tools</a>
+        </header>
+
+        <div class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' course.id %}">{{ course.course_name }}</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <a href="{% url 'assessment_tool_page' course.id %}">Assessment tools</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <span>{{ tool.sub_tool }}</span>
+            </nav>
+
+            <section class="page-heading" aria-labelledby="page-title">
+                <div>
+                    <p class="eyebrow">Assessment configuration</p>
+                    <h1 id="page-title">{{ tool.main_tool }} · {{ tool.sub_tool }}</h1>
+                    <p class="page-description">Configure CO mapping, Bloom level and maximum marks for each assessment row.</p>
+                </div>
+                <span class="course-chip">{{ course.course_code }} · {{ course.course_name }}</span>
+            </section>
+
+            {% if messages %}
+            <div class="messages" role="status" aria-live="polite">
+                {% for message in messages %}
+                    <p class="message {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <section class="panel" aria-labelledby="detail-title">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title" id="detail-title">{{ tool.sub_tool }} details</h2>
+                        <p class="panel-subtitle">Add or update assessment rows and their CO, Bloom level and marks.</p>
+                    </div>
+                    <span class="row-count-badge">{{ details|length }} row{{ details|length|pluralize }}</span>
+                </div>
+
+                <form method="post" class="detail-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="total_rows" id="totalRows" value="{{ details|length }}">
+
+                    <div class="create-box" id="createBox">
+                        <div class="create-field">
+                            <label for="rowCount">Number of {{ tool.sub_tool }} rows</label>
+                            <select id="rowCount">
+                                {% for i in range_15 %}
+                                <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="button" class="button button-primary" onclick="createRows()">Create rows</button>
+                    </div>
+
+                    <p class="scroll-hint">Scroll horizontally to view all details and actions.</p>
+                    <div class="table-wrap" role="region" aria-label="{{ tool.sub_tool }} detail rows" tabindex="0">
+                        <table class="details-table" id="toolTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sr.</th>
+                                    <th scope="col">Sub-tool name</th>
+                                    <th scope="col">Course outcome</th>
+                                    <th scope="col">Bloom level</th>
+                                    <th scope="col">Maximum marks</th>
+                                    <th scope="col" class="action-col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for d in details %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ sub_tool_prefix }} {{ d.sub_tool_no }}</td>
+                                    <td>
+                                        <select name="co_{{ d.sub_tool_no }}" disabled aria-label="Course outcome for row {{ d.sub_tool_no }}">
+                                            {% for co in cos %}
+                                            <option value="{{ co.id }}" {% if co == d.co %}selected{% endif %}>CO{{ co.co_number }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="bl_{{ d.sub_tool_no }}" disabled aria-label="Bloom level for row {{ d.sub_tool_no }}">
+                                            {% for i in "123456"|make_list %}
+                                            <option value="BL{{ i }}" {% if d.bl == "BL"|add:i %}selected{% endif %}>BL{{ i }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td><input type="number" name="marks_{{ d.sub_tool_no }}" value="{{ d.marks }}" min="0" disabled aria-label="Maximum marks for row {{ d.sub_tool_no }}"></td>
+                                    <td class="action-col">
+                                        <button type="button" class="button button-danger" onclick="deleteRow(this)" aria-label="Delete row {{ d.sub_tool_no }}">Remove</button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr class="empty-row">
+                                    <td colspan="6" class="empty-state">
+                                        <strong>No assessment rows configured</strong>
+                                        Select Edit to create rows for this {{ tool.sub_tool|lower }}.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="button button-primary" id="editBtn" onclick="enableEdit()">Edit</button>
+                        <button type="submit" class="button button-success" id="saveBtn" style="display:none;">Save changes</button>
+                        <a class="button button-secondary" href="{% url 'assessment_tool_page' course.id %}">Back</a>
+                    </div>
+
+                    <section class="totals-panel" aria-labelledby="totals-title">
+                        <header class="totals-header">
+                            <h2 id="totals-title">CO-wise total marks</h2>
+                        </header>
+                        <div class="totals-content">
+                            <table class="totals-table">
+                                <thead>
+                                    <tr><th scope="col">Course outcome</th><th scope="col">Total marks</th></tr>
+                                </thead>
+                                <tbody id="coTotalsBody">
+                                    <tr><td class="empty-total" colspan="2">Totals will appear when assessment rows are configured.</td></tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr><th scope="row">Overall total</th><th id="grandTotal">0</th></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </section>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        function enableEdit() {
+            document.querySelectorAll(".detail-form select, .detail-form input").forEach(element => {
+                element.disabled = false;
+            });
+            document.querySelectorAll(".action-col").forEach(cell => {
+                cell.style.display = "table-cell";
+            });
+            document.getElementById("editBtn").style.display = "none";
+            document.getElementById("saveBtn").style.display = "inline-flex";
+            document.getElementById("createBox").style.display = "flex";
+            document.querySelectorAll(".empty-row").forEach(row => row.remove());
+        }
+
+        function createRows() {
+            const tbody = document.querySelector("#toolTable tbody");
+            const existing = [...tbody.querySelectorAll("tr")].filter(
+                row => !row.classList.contains("empty-row")
+            ).length;
+            const target = parseInt(document.getElementById("rowCount").value, 10);
+
+            for (let index = existing + 1; index <= target; index++) {
+                tbody.insertAdjacentHTML("beforeend", `
+                    <tr>
+                        <td>${index}</td>
+                        <td>{{ tool.sub_tool }} ${index}</td>
+                        <td>
+                            <select name="co_${index}" aria-label="Course outcome for row ${index}">
+                                {% for co in cos %}
+                                <option value="{{ co.id }}">CO{{ co.co_number }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select name="bl_${index}" aria-label="Bloom level for row ${index}">
+                                <option value="BL1">BL1</option><option value="BL2">BL2</option>
+                                <option value="BL3">BL3</option><option value="BL4">BL4</option>
+                                <option value="BL5">BL5</option><option value="BL6">BL6</option>
+                            </select>
+                        </td>
+                        <td><input type="number" name="marks_${index}" min="0" aria-label="Maximum marks for row ${index}"></td>
+                        <td class="action-col">
+                            <button type="button" class="button button-danger" onclick="deleteRow(this)" aria-label="Delete row ${index}">Remove</button>
+                        </td>
+                    </tr>
+                `);
+            }
+            document.getElementById("totalRows").value = Math.max(target, existing);
+            calculateTotals();
+        }
+
+        function deleteRow(button) {
+            if (confirm("Are you sure you want to delete this row? Saved student marks prevent removal.")) {
+                button.closest("tr").remove();
+                calculateTotals();
+            }
+        }
+
+        function calculateTotals() {
+            const coTotals = {};
+            let grandTotal = 0;
+
+            document.querySelectorAll("#toolTable tbody tr").forEach(row => {
+                const coSelect = row.querySelector('select[name^="co_"]');
+                const markInput = row.querySelector('input[name^="marks_"]');
+                if (!coSelect || !markInput) return;
+
+                const coText = coSelect.options[coSelect.selectedIndex]?.text || "";
+                const marks = parseInt(markInput.value, 10) || 0;
+                coTotals[coText] = (coTotals[coText] || 0) + marks;
+                grandTotal += marks;
+            });
+
+            const tbody = document.getElementById("coTotalsBody");
+            tbody.innerHTML = "";
+            const outcomes = Object.keys(coTotals).sort();
+            if (!outcomes.length) {
+                tbody.innerHTML = '<tr><td class="empty-total" colspan="2">Totals will appear when assessment rows are configured.</td></tr>';
+            } else {
+                outcomes.forEach(co => {
+                    const row = document.createElement("tr");
+                    const label = document.createElement("td");
+                    const marks = document.createElement("td");
+                    label.textContent = co;
+                    marks.textContent = String(coTotals[co]);
+                    row.append(label, marks);
+                    tbody.appendChild(row);
+                });
+            }
+
+            document.getElementById("grandTotal").textContent = String(grandTotal);
+        }
+
+        document.addEventListener("input", event => {
+            if (event.target.name?.startsWith("marks_")) calculateTotals();
+        });
+
+        document.addEventListener("change", event => {
+            if (event.target.name?.startsWith("co_")) calculateTotals();
+        });
+
+        calculateTotals();
+    </script>
+</body>
+</html>

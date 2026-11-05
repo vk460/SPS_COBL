@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>College Outcome Based System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 12%, rgba(196, 218, 255, .48), transparent 34%),
+                #f5f8ff;
+        }
+
+        a:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 4px;
+        }
+
+        .home-page {
+            width: min(1180px, calc(100% - 64px));
+            min-height: 100vh;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-header {
+            min-height: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: #245eea;
+            color: #fff;
+            font: 800 17px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+        }
+
+        .brand-name {
+            font: 800 16px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .header-note {
+            color: #65738a;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .hero {
+            flex: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(390px, .92fr);
+            align-items: center;
+            gap: clamp(48px, 8vw, 104px);
+            padding: 66px 0 76px;
+        }
+
+        .hero-copy {
+            max-width: 570px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 24px;
+            color: #245eea;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            width: 24px;
+            height: 2px;
+            background: #245eea;
+            content: "";
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(42px, 5vw, 64px)/1.08 "Manrope", "Segoe UI", sans-serif;
+            letter-spacing: -.065em;
+        }
+
+        h1 span {
+            color: #245eea;
+        }
+
+        .hero-description {
+            max-width: 485px;
+            margin: 22px 0 0;
+            color: #65738a;
+            font-size: 17px;
+            line-height: 1.75;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-top: 34px;
+        }
+
+        .login-link {
+            min-height: 54px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 0 23px;
+            border-radius: 12px;
+            background: #245eea;
+            box-shadow: 0 10px 22px rgba(36, 94, 234, .2);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+        }
+
+        .login-link:hover {
+            transform: translateY(-2px);
+            background: #174bd0;
+            box-shadow: 0 13px 25px rgba(36, 94, 234, .27);
+        }
+
+        .login-link svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .secure-note {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #718098;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .secure-note svg {
+            width: 15px;
+            height: 15px;
+            color: #368b68;
+        }
+
+        .preview-wrap {
+            position: relative;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, .8);
+            border-radius: 28px;
+            background: linear-gradient(145deg, rgba(224, 235, 255, .88), rgba(235, 241, 252, .64));
+            box-shadow: 0 26px 70px rgba(43, 73, 128, .12);
+        }
+
+        .preview-card {
+            overflow: hidden;
+            border: 1px solid #e9edf5;
+            border-radius: 19px;
+            background: #fff;
+            box-shadow: 0 12px 30px rgba(30, 55, 96, .08);
+        }
+
+        .preview-top {
+            min-height: 62px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 21px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .preview-title {
+            color: #263650;
+            font: 700 13px "Manrope", sans-serif;
+        }
+
+        .preview-period {
+            padding: 6px 9px;
+            border-radius: 7px;
+            background: #f2f5fb;
+            color: #728099;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .preview-content {
+            padding: 21px;
+        }
+
+        .summary-label {
+            color: #78869b;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .summary-value {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-top: 7px;
+        }
+
+        .summary-value strong {
+            color: #1b2b46;
+            font: 800 32px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .summary-value span {
+            color: #2e9a72;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .chart {
+            height: 142px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 14px;
+            margin-top: 24px;
+            padding: 0 6px 21px;
+            border-bottom: 1px solid #edf0f6;
+            background: repeating-linear-gradient(to bottom, transparent 0, transparent 34px, #f1f3f8 35px, transparent 36px);
+        }
+
+        .bar-group {
+            height: 100%;
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .bar {
+            width: min(15px, 35%);
+            min-height: 14px;
+            border-radius: 5px 5px 2px 2px;
+            background: #dce7ff;
+        }
+
+        .bar.accent {
+            background: #5180f2;
+        }
+
+        .bar-group:nth-child(1) .bar { height: 43%; }
+        .bar-group:nth-child(2) .bar { height: 61%; }
+        .bar-group:nth-child(3) .bar { height: 52%; }
+        .bar-group:nth-child(4) .bar { height: 79%; }
+        .bar-group:nth-child(5) .bar { height: 68%; }
+        .bar-group:nth-child(6) .bar { height: 92%; }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 13px;
+            color: #78869b;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .chart-legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #dce7ff;
+        }
+
+        .legend-dot.accent {
+            background: #5180f2;
+        }
+
+        .outcome-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 19px;
+        }
+
+        .outcome-item {
+            padding: 12px 10px;
+            border: 1px solid #edf0f6;
+            border-radius: 11px;
+            background: #fbfcfe;
+        }
+
+        .outcome-item span {
+            display: block;
+            color: #8995a8;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .outcome-item strong {
+            display: block;
+            margin-top: 5px;
+            color: #263650;
+            font: 700 14px "Manrope", sans-serif;
+        }
+
+        .site-footer {
+            min-height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border-top: 1px solid #e6ebf4;
+            color: #8a96a9;
+            font-size: 11px;
+        }
+
+        .footer-label {
+            color: #66748b;
+            font-weight: 700;
+        }
+
+        @media (max-width: 800px) {
+            .home-page {
+                width: min(100% - 40px, 620px);
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 42px;
+                padding: 56px 0;
+            }
+
+            .hero-copy {
+                max-width: 600px;
+            }
+
+            .preview-wrap {
+                max-width: 520px;
+            }
+        }
+
+        @media (min-width: 801px) and (max-height: 760px) {
+            .site-header {
+                min-height: 72px;
+            }
+
+            .hero {
+                padding: 32px 0;
+            }
+
+            .preview-wrap {
+                padding: 14px;
+            }
+
+            .preview-content {
+                padding: 17px;
+            }
+
+            .chart {
+                height: 104px;
+                margin-top: 18px;
+            }
+
+            .chart-legend {
+                margin-top: 10px;
+            }
+
+            .outcome-row {
+                margin-top: 14px;
+            }
+
+            .site-footer {
+                min-height: 50px;
+            }
+        }
+
+        @media (min-width: 801px) and (max-height: 650px) {
+            .site-header {
+                min-height: 64px;
+            }
+
+            .hero {
+                padding: 14px 0;
+            }
+
+            .eyebrow {
+                margin-bottom: 15px;
+            }
+
+            h1 {
+                font-size: clamp(38px, 4.2vw, 52px);
+            }
+
+            .hero-description {
+                margin-top: 15px;
+                font-size: 15px;
+            }
+
+            .hero-actions {
+                gap: 12px;
+                margin-top: 22px;
+            }
+
+            .login-link {
+                min-height: 48px;
+            }
+
+            .preview-wrap {
+                padding: 10px;
+            }
+
+            .preview-top {
+                min-height: 52px;
+                padding: 0 16px;
+            }
+
+            .preview-content {
+                padding: 13px;
+            }
+
+            .chart {
+                height: 82px;
+                margin-top: 13px;
+            }
+
+            .outcome-row {
+                margin-top: 10px;
+            }
+
+            .outcome-item {
+                padding: 9px 8px;
+            }
+
+            .site-footer {
+                min-height: 42px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .home-page {
+                width: calc(100% - 32px);
+            }
+
+            .site-header {
+                min-height: 72px;
+            }
+
+            .brand-mark {
+                width: 38px;
+                height: 38px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-caption {
+                font-size: 9px;
+            }
+
+            .header-note {
+                font-size: 11px;
+            }
+
+            .hero {
+                gap: 34px;
+                padding: 44px 0;
+            }
+
+            .eyebrow {
+                margin-bottom: 17px;
+                font-size: 10px;
+            }
+
+            h1 {
+                font-size: clamp(39px, 12vw, 52px);
+            }
+
+            .hero-description {
+                margin-top: 17px;
+                font-size: 15px;
+            }
+
+            .hero-actions {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 14px;
+                margin-top: 25px;
+            }
+
+            .login-link {
+                width: 100%;
+            }
+
+            .preview-wrap {
+                padding: 11px;
+                border-radius: 21px;
+            }
+
+            .preview-content {
+                padding: 16px;
+            }
+
+            .chart {
+                gap: 7px;
+            }
+
+            .outcome-row {
+                gap: 6px;
+            }
+
+            .outcome-item {
+                padding: 10px 7px;
+            }
+
+            .site-footer {
+                min-height: 54px;
+                align-items: flex-start;
+                flex-direction: column;
+                justify-content: center;
+                gap: 3px;
+                padding: 10px 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="home-page">
+        <header class="site-header">
+            <a class="brand" href="{% url 'home' %}" aria-label="COBL home">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <span class="header-note">College OBE platform</span>
+        </header>
+
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow">Outcome-based education</p>
+                <h1 id="hero-title">Make every learning outcome <span>count.</span></h1>
+                <p class="hero-description">
+                    A clear, connected workspace for managing courses, assessments and outcome attainment across your college.
+                </p>
+                <div class="hero-actions">
+                    <a class="login-link" href="{% url 'login' %}">
+                        Login to dashboard
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M4.25 10h11.5M10 4.25 15.75 10 10 15.75" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <span class="secure-note">
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M10 2.5 4 5v4.3c0 3.8 2.55 6.8 6 8.2 3.45-1.4 6-4.4 6-8.2V5l-6-2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="m7.5 9.75 1.65 1.65 3.4-3.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Secure access for your institution
+                    </span>
+                </div>
+            </div>
+
+            <div class="preview-wrap" aria-label="Illustration of course outcome attainment dashboard">
+                <div class="preview-card">
+                    <div class="preview-top">
+                        <span class="preview-title">Course outcome attainment</span>
+                        <span class="preview-period">SAMPLE PREVIEW</span>
+                    </div>
+                    <div class="preview-content">
+                        <span class="summary-label">Average attainment</span>
+                        <div class="summary-value">
+                            <strong>78.4%</strong>
+                            <span>↑ On track</span>
+                        </div>
+                        <div class="chart" aria-hidden="true">
+                            <div class="bar-group"><i class="bar"></i><i class="bar accent"></i></div>
+                            <div class="bar-group"><i class="bar"></i><i class="bar accent"></i></div>
+                            <div class="bar-group"><i class="bar"></i><i class="bar accent"></i></div>
+                            <div class="bar-group"><i class="bar"></i><i class="bar accent"></i></div>
+                            <div class="bar-group"><i class="bar"></i><i class="bar accent"></i></div>
+                            <div class="bar-group"><i class="bar"></i><i class="bar accent"></i></div>
+                        </div>
+                        <div class="chart-legend" aria-hidden="true">
+                            <span><i class="legend-dot"></i>Previous</span>
+                            <span><i class="legend-dot accent"></i>Current</span>
+                        </div>
+                        <div class="outcome-row" aria-hidden="true">
+                            <div class="outcome-item"><span>CO 01</span><strong>82%</strong></div>
+                            <div class="outcome-item"><span>CO 02</span><strong>76%</strong></div>
+                            <div class="outcome-item"><span>CO 03</span><strong>79%</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <span class="footer-label">COBL System</span>
+            <span>College Outcome Based Learning</span>
+        </footer>
+    </main>
+</body>
+</html>

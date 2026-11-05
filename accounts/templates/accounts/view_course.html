@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>{{ course.course_code }} | Course Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 87% 4%, rgba(196, 218, 255, .34), transparent 30%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .course-shell {
+            width: min(1120px, calc(100% - 64px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 15px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 14px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color .18s ease;
+        }
+
+        .back-link:hover {
+            color: #245eea;
+        }
+
+        .back-link svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .page-content {
+            padding: 32px 0 54px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+            color: #17243b;
+            font: 800 clamp(26px, 3vw, 34px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-subtitle {
+            margin-bottom: 0;
+            color: #78869b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .course-hero {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 22px;
+            margin-bottom: 19px;
+        }
+
+        .course-code-chip {
+            flex: 0 0 auto;
+            padding: 9px 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 11px "Manrope", sans-serif;
+            white-space: nowrap;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .detail-card {
+            min-height: 75px;
+            padding: 14px 15px;
+            border: 1px solid #e7ecf4;
+            border-radius: 11px;
+            background: rgba(255,255,255,.92);
+            box-shadow: 0 6px 20px rgba(34, 57, 97, .035);
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #8793a6;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+        }
+
+        .detail-value {
+            display: block;
+            overflow-wrap: anywhere;
+            color: #273750;
+            font: 700 13px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel {
+            margin-top: 15px;
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 13px;
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 8px 25px rgba(34, 57, 97, .045);
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 18px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-heading h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 15px/1.35 "Manrope", sans-serif;
+            letter-spacing: -.03em;
+        }
+
+        .panel-heading p {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .panel-content {
+            padding: 16px 18px;
+        }
+
+        .panel-content > :last-child {
+            margin-bottom: 0;
+        }
+
+        .count-badge {
+            min-width: 28px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+            padding: 0 7px;
+            border: 1px solid #dce7ff;
+            border-radius: 8px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 10px "Manrope", sans-serif;
+        }
+
+        .primary-link,
+        .secondary-link,
+        .quick-link {
+            min-height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 0 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 8px;
+            background: #f3f6ff;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 1.3;
+            text-align: center;
+            text-decoration: none;
+            transition: border-color .18s ease, color .18s ease, background .18s ease, transform .18s ease;
+        }
+
+        .primary-link {
+            border-color: #245eea;
+            background: #245eea;
+            color: #fff;
+        }
+
+        .primary-link svg {
+            width: 14px;
+            height: 14px;
+            flex: 0 0 14px;
+        }
+
+        .primary-link:hover {
+            border-color: #174bc7;
+            background: #174bc7;
+            transform: translateY(-1px);
+        }
+
+        .secondary-link:hover,
+        .quick-link:hover {
+            border-color: #245eea;
+            background: #245eea;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .co-edit {
+            margin-bottom: 12px;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .co-table {
+            min-width: 500px;
+        }
+
+        th {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e8edf5;
+            background: #f8faff;
+            color: #78869b;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-align: left;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 11px 12px;
+            border-bottom: 1px solid #f0f2f7;
+            color: #36445b;
+            font-size: 11px;
+            line-height: 1.55;
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        tbody tr:hover td {
+            background: #fbfcff;
+        }
+
+        .co-number {
+            width: 96px;
+            color: #245eea;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .empty-state {
+            padding: 18px 12px;
+            color: #78869b;
+            font-size: 11px;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+        }
+
+        .quick-link {
+            min-height: 52px;
+            justify-content: flex-start;
+            padding: 10px 12px;
+            background: #fff;
+            color: #35445c;
+            text-align: left;
+        }
+
+        .quick-icon {
+            width: 28px;
+            height: 28px;
+            display: grid;
+            flex: 0 0 28px;
+            place-items: center;
+            border-radius: 8px;
+            background: #eff4ff;
+            color: #245eea;
+        }
+
+        .quick-icon svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .quick-link:hover .quick-icon {
+            background: rgba(255,255,255,.18);
+            color: #fff;
+        }
+
+        .matrix-table {
+            min-width: 520px;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            min-width: 62px;
+            text-align: center;
+        }
+
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            min-width: 78px;
+            text-align: left;
+        }
+
+        .matrix-table tbody td {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .matrix-table .average-row td {
+            border-bottom: 0;
+            background: #f2f6ff;
+            color: #2452b6;
+            font-weight: 700;
+        }
+
+        .value-1 {
+            background: #fff0ef !important;
+            color: #c33b35 !important;
+            font-weight: 700;
+        }
+
+        .value-2 {
+            background: #fff8df !important;
+            color: #946600 !important;
+            font-weight: 700;
+        }
+
+        .value-3 {
+            background: #eaf8f0 !important;
+            color: #187447 !important;
+            font-weight: 700;
+        }
+
+        .matrix-empty {
+            padding: 17px 0 2px;
+            color: #78869b;
+            font-size: 11px;
+        }
+
+        .tool-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tool-link {
+            min-height: 32px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0 10px;
+            border: 1px solid #e1e9fa;
+            border-radius: 8px;
+            background: #f8faff;
+            color: #45546c;
+            font-size: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+        .tool-link:hover {
+            border-color: #245eea;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .tool-link svg,
+        .secondary-link svg {
+            width: 14px;
+            height: 14px;
+            flex: 0 0 14px;
+        }
+
+        .tool-empty {
+            color: #78869b;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .tool-empty a {
+            color: #245eea;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .tool-empty a:hover {
+            text-decoration: underline;
+        }
+
+        .report-panel .panel-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .report-panel .primary-link {
+            min-width: 185px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .report-panel p {
+            margin: 0;
+            color: #78869b;
+            font-size: 11px;
+        }
+
+        @media (max-width: 700px) {
+            .course-shell {
+                width: calc(100% - 32px);
+            }
+
+            .topbar {
+                min-height: 68px;
+            }
+
+            .page-content {
+                padding: 26px 0 40px;
+            }
+
+            .course-hero {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .detail-card {
+                min-height: 0;
+                padding: 11px 13px;
+            }
+
+            .panel-heading {
+                padding: 14px;
+            }
+
+            .panel-content {
+                padding: 13px;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+
+            .report-panel .panel-content {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .report-panel .primary-link {
+                width: 100%;
+            }
+
+        }
+
+        @media (max-width: 400px) {
+            .brand-mark {
+                width: 35px;
+                height: 35px;
+            }
+
+            .back-link {
+                font-size: 10px;
+            }
+
+            .panel-heading h2 {
+                font-size: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="course-shell">
+        <header class="topbar">
+            <a class="brand" href="{% if request.user.role == 'HOD' %}{% url 'hod_dashboard' %}{% elif request.user.role == 'FACULTY' %}{% url 'faculty_dashboard' %}{% else %}#{% endif %}" aria-label="COBL dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            {% if request.user.role == "HOD" %}
+            <a class="back-link" href="{% url 'hod_dashboard' %}">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15.75 10H4.25M10 15.75 4.25 10 10 4.25" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                HOD Dashboard
+            </a>
+            {% elif request.user.role == "FACULTY" %}
+            <a class="back-link" href="{% url 'faculty_dashboard' %}">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15.75 10H4.25M10 15.75 4.25 10 10 4.25" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Faculty Dashboard
+            </a>
+            {% endif %}
+        </header>
+
+        <main class="page-content">
+            <section class="course-hero" aria-labelledby="page-title">
+                <div>
+                    <p class="eyebrow">Course workspace</p>
+                    <h1 id="page-title">Course Dashboard</h1>
+                    <p class="page-subtitle">Course outcomes, mappings, assessment tools, and attainment reports.</p>
+                </div>
+                <span class="course-code-chip">{{ course.course_code }}</span>
+            </section>
+
+            <section class="details-grid" aria-label="Course details">
+                <article class="detail-card">
+                    <span class="detail-label">Course name</span>
+                    <strong class="detail-value">{{ course.course_name }}</strong>
+                </article>
+                <article class="detail-card">
+                    <span class="detail-label">Class</span>
+                    <strong class="detail-value">{{ course.academic_class.name }}</strong>
+                </article>
+                <article class="detail-card">
+                    <span class="detail-label">Semester</span>
+                    <strong class="detail-value">{{ course.academic_class.semester|default:"—" }}</strong>
+                </article>
+            </section>
+
+            <section class="panel" aria-labelledby="co-title">
+                <div class="panel-heading">
+                    <div>
+                        <h2 id="co-title">Course Outcomes</h2>
+                        <p>Competencies defined for this course.</p>
+                    </div>
+                    <span class="count-badge" aria-label="{{ course.cos.count }} course outcomes">{{ course.cos.count }}</span>
+                </div>
+                <div class="panel-content">
+                    {% if request.user == course.faculty %}
+                    <div class="co-edit">
+                        <a class="primary-link" href="{% url 'manage_co' course.id %}">Create / Edit CO</a>
+                    </div>
+                    {% endif %}
+                    {% if course.cos.exists %}
+                    <div class="table-wrap">
+                        <table class="co-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">CO number</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for co in course.cos.all %}
+                                <tr>
+                                    <td class="co-number">CO{{ co.co_number }}</td>
+                                    <td>{{ co.description }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="empty-state">No Course Outcomes have been created for this course yet.</p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="mapping-title">
+                <div class="panel-heading">
+                    <div>
+                        <h2 id="mapping-title">Outcome Mapping</h2>
+                        <p>Configure and review CO links to program outcomes.</p>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <nav class="quick-links" aria-label="Outcome mapping actions">
+                        <a class="quick-link" href="{% url 'co_po_pso_matrix' course.id %}">
+                            <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M3 4.5h14v11H3zM3 8h14M7.5 4.5v11M12.5 4.5v11" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>
+                            CO-PO-PSO Matrix
+                        </a>
+                        <a class="quick-link" href="{% url 'course_performance_indicators' course.id %}">
+                            <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M4 16V9m6 7V4m6 12v-5M2.5 16.5h15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                            Mapping Performance Indicators
+                        </a>
+                        <a class="quick-link" href="{% url 'course_mapping_grade' course.id %}">
+                            <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2.8 12.2 7.3l5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7L10 2.8Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>
+                            Mapping Grade
+                        </a>
+                    </nav>
+
+                    <div class="panel" style="margin-top:16px;box-shadow:none;">
+                        <div class="panel-heading">
+                            <div>
+                                <h2>CO-PO-PSO Matrix</h2>
+                                <p>Read-only summary of course outcome mapping levels.</p>
+                            </div>
+                        </div>
+                        <div class="panel-content">
+                            {% if matrix_rows %}
+                            <div class="table-wrap">
+                                <table class="matrix-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Course outcome</th>
+                                            {% for po in pos %}
+                                            <th scope="col">{{ po.po_number }}</th>
+                                            {% endfor %}
+                                            {% for pso in psos %}
+                                            <th scope="col">{{ pso.pso_number }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in matrix_rows %}
+                                        <tr>
+                                            <td class="co-number">CO{{ row.co.co_number }}</td>
+                                            {% for cell in row.cells %}
+                                            <td{% if cell != "-" %} class="value-{{ cell }}"{% endif %}>{{ cell }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                        {% endfor %}
+                                        <tr class="average-row">
+                                            <td>Average</td>
+                                            {% for avg in averages %}
+                                            <td>{{ avg }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% else %}
+                            <p class="matrix-empty">No mapping data is available yet. Use the mapping actions above to get started.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="assessment-title">
+                <div class="panel-heading">
+                    <div>
+                        <h2 id="assessment-title">Assessment &amp; CO Targets</h2>
+                        <p>Set up course tools and review assessment information.</p>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <nav class="quick-links" aria-label="Assessment actions">
+                        <a class="quick-link" href="{% url 'assessment_tool_page' course.id %}">
+                            <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m11.7 2.8-8 9.2h5l-.4 5.2 8-9.2h-5l.4-5.2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+                            Create / Manage Tools
+                        </a>
+                        <a class="quick-link" href="{% url 'assessment_pattern' course.id %}">
+                            <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M3 16.5h14M5 14V9m5 5V4m5 10v-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                            View Assessment Report
+                        </a>
+                        <a class="quick-link" href="{% url 'co_target_page' course.id %}">
+                            <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="6.8" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r="3.3" stroke="currentColor" stroke-width="1.4"/><circle cx="10" cy="10" r=".8" fill="currentColor"/></svg></span>
+                            Attainment Targets
+                        </a>
+                        <a class="quick-link" href="{% url 'course_exit_survey' course.id %}">
+                            <span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M4 3.5h12v13H4zM7 7h6M7 10h6M7 13h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                            Course Exit Survey
+                        </a>
+                    </nav>
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="tools-title">
+                <div class="panel-heading">
+                    <div>
+                        <h2 id="tools-title">Course Tools</h2>
+                        <p>Open a CO summary for an assessment tool.</p>
+                    </div>
+                    <span class="count-badge" aria-label="{{ tools|length }} assessment tools">{{ tools|length }}</span>
+                </div>
+                <div class="panel-content">
+                    {% if tools %}
+                    <div class="tool-list">
+                        {% for tool in tools %}
+                        <a class="tool-link" href="{% url 'tool_marks_co_summary' tool.id %}">
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 16.5h14M5 13.5V9m5 4.5V4m5 9.5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            {{ tool.main_tool|title }} {{ tool.sub_tool|truncatewords:4 }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="tool-empty">No assessment tools created yet. <a href="{% url 'assessment_tool_page' course.id %}">Create a tool</a> to see its CO summary here.</p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section class="panel report-panel" aria-label="Course attainment report">
+                <div class="panel-content">
+                    <div>
+                        <h2 style="margin-bottom:4px;color:#1b2b46;font:800 14px/1.35 'Manrope',sans-serif;">CO Attainment Sheet</h2>
+                        <p>View the full-course outcome attainment report.</p>
+                    </div>
+                    <a class="primary-link" href="{% url 'co_attainment_sheet' course.id %}">
+                        View attainment sheet
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.25 10h11.5M10 4.25 15.75 10 10 15.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
+            </section>
+
+            <section class="panel report-panel" aria-label="CO attainment gap report">
+                <div class="panel-content">
+                    <div>
+                        <h2 style="margin-bottom:4px;color:#1b2b46;font:800 14px/1.35 'Manrope',sans-serif;">CO Attainment Gap</h2>
+                        <p>Compare each course outcome target with its total attainment.</p>
+                    </div>
+                    <a class="primary-link" href="{% url 'co_attainment_gap' course.id %}">
+                        View attainment gap
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.25 10h11.5M10 4.25 15.75 10 10 15.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
+            </section>
+            <section class="panel report-panel" aria-label="CO-PO-PSO attainment">
+                <div class="panel-content">
+                    <div>
+                        <h2 style="margin-bottom:4px;color:#1b2b46;font:800 14px/1.35 'Manrope',sans-serif;">CO-PO-PSO Attainment</h2>
+                        <p>View attainment across mapped program outcomes.</p>
+                    </div>
+                    <a class="primary-link" href="{% url 'co_po_pso_attainment' course.id %}">
+                        View PO-PSO attainment
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.25 10h11.5M10 4.25 15.75 10 10 15.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
+            </section>
+            <section class="panel report-panel" aria-label="Course report preview">
+                <div class="panel-content">
+                    <div>
+                        <h2 style="margin-bottom:4px;color:#1b2b46;font:800 14px/1.35 'Manrope',sans-serif;">Course Report</h2>
+                        <p>View the report before downloading the Word document.</p>
+                    </div>
+                    <a class="primary-link" href="{% url 'course_report_preview' course.id %}">
+                        View Report
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.25 10h11.5M10 4.25 15.75 10 10 15.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".matrix-table tbody td").forEach(function (cell) {
+                const value = cell.textContent.trim();
+                cell.classList.remove("value-1", "value-2", "value-3");
+                if (value === "1" || value === "2" || value === "3") {
+                    cell.classList.add("value-" + value);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

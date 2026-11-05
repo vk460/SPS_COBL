@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Mapping Performance Indicators | {{ course.course_code }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 2px;
+        }
+
+        main {
+            width: min(1600px, calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 16px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 15px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .course-nav {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            overflow-x: auto;
+        }
+
+        .course-nav a {
+            min-height: 38px;
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            justify-content: center;
+            padding: 0 11px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background .18s ease, color .18s ease, border-color .18s ease;
+        }
+
+        .course-nav a:hover,
+        .course-nav a[aria-current="page"] {
+            border-color: #dce7ff;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .page-content { padding: 22px 0 32px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 14px;
+            color: #8995a8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a { color: #65738a; text-decoration: none; }
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+
+        .eyebrow {
+            margin: 0 0 7px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(24px, 2.8vw, 32px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .hint {
+            max-width: 900px;
+            margin: 8px 0 0;
+            color: #78869b;
+            font-size: 12px;
+            line-height: 1.65;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 9px 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 11px "Manrope", sans-serif;
+            white-space: nowrap;
+        }
+
+        .panel {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-toolbar > .form-actions {
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .panel-toolbar form {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin: 0;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 14px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel-subtitle {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            flex: 0 0 auto;
+            padding: 7px 10px;
+            border: 1px solid #e5e9f0;
+            border-radius: 20px;
+            background: #f6f8fb;
+            color: #697991;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .status-badge.editing {
+            border-color: #bfe8d3;
+            background: #effaf4;
+            color: #17764f;
+        }
+
+        .table-wrap {
+            max-height: min(74vh, 820px);
+            overflow: auto;
+            background: #fff;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1080px;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: fixed;
+            font-size: 10px;
+        }
+
+        th, td {
+            padding: 6px 7px;
+            border-right: 1px solid #edf0f6;
+            border-bottom: 1px solid #edf0f6;
+            vertical-align: middle;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: #f4f7fc;
+            color: #697991;
+            text-align: center;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        th:first-child { left: 0; z-index: 4; }
+        th:nth-child(1), td.outcome-cell { width: 76px; }
+        th:nth-child(2), td.statement-cell { width: 165px; }
+        th:nth-child(3), td.competency-code { width: 62px; }
+        th:nth-child(4), td.competency-description { width: 178px; }
+        th:nth-child(5), td.pi-code { width: 66px; }
+        th:nth-child(6), td.pi-description { min-width: 175px; }
+        th.co-header, td.co-cell { width: 48px; min-width: 48px; max-width: 48px; }
+        td { background: #fff; color: #36445b; }
+        tbody tr:hover td { background: #fbfcff; }
+        td.outcome-cell {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            width: 76px;
+            min-width: 76px;
+            background: #f8faff;
+            color: #245eea;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        td.statement-cell { white-space: pre-wrap; line-height: 1.4; overflow-wrap: anywhere; }
+        td.competency-code, td.pi-code { text-align: center; font-weight: 800; color: #52617a; }
+        td.competency-description, td.pi-description { overflow: hidden; }
+        td.co-cell { padding: 4px 3px; text-align: center; }
+
+        input, select {
+            max-width: 100%;
+            min-height: 28px;
+            padding: 4px 6px;
+            border: 1px solid #dce3ee;
+            border-radius: 7px;
+            background: #fff;
+            color: #36445b;
+            font: 500 10px "DM Sans", sans-serif;
+            transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        .text-entry { width: 100%; }
+
+        input:focus, select:focus {
+            border-color: #7ea1f4;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        input:disabled, select:disabled {
+            border-color: #edf0f6;
+            background: #f7f8fb;
+            color: #52617a;
+            opacity: 1;
+            cursor: default;
+        }
+
+        .mapping-select { width: 40px; min-height: 25px; padding: 2px 3px; text-align: center; }
+
+        .count-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5px;
+            margin-top: 4px;
+            color: #8995a8;
+            font-size: 8px;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .count-select { display: inline-block; flex: 0 0 52px; width: 52px; min-height: 24px; margin: 0; padding: 3px; }
+
+        .outcome-total td {
+            background: #f2f6ff;
+            color: #2452b6;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .empty-cell { padding: 12px; color: #8995a8; text-align: center; }
+
+        .statement-tooltip {
+            position: fixed;
+            z-index: 20;
+            display: none;
+            max-width: min(520px, calc(100vw - 24px));
+            max-height: 45vh;
+            overflow: auto;
+            padding: 11px 13px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #36445b;
+            box-shadow: 0 8px 28px rgba(22, 38, 67, .16);
+            font: 12px/1.55 "DM Sans", sans-serif;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            pointer-events: none;
+        }
+
+        .messages {
+            padding: 11px 13px;
+            margin: 0 19px 14px;
+            border: 1px solid #bfe8d3;
+            border-radius: 8px;
+            background: #effaf4;
+            color: #17764f;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .messages.error {
+            border-color: #f2c6c6;
+            background: #fff3f3;
+            color: #9b2c2c;
+        }
+
+        .notice {
+            margin: 0 19px 14px;
+            padding: 11px 13px;
+            border: 1px solid #e1e9fa;
+            border-radius: 8px;
+            background: #f7f9ff;
+            color: #56657d;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .notice strong { color: #35445c; }
+
+        .panel-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 19px;
+            border-top: 1px solid #edf0f6;
+            background: #fbfcff;
+        }
+
+        .footer-hint { margin: 0; color: #8995a8; font-size: 10px; line-height: 1.5; }
+        .form-actions { display: flex; align-items: center; gap: 9px; }
+
+        button {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 14px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font: 700 11px "DM Sans", sans-serif;
+            transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+        }
+
+        button:hover { transform: translateY(-1px); }
+        .primary { color: #fff; background: #245eea; }
+        .primary:hover { background: #174bd0; }
+        .secondary {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            color: #45546c;
+            background: #fff;
+            font: 700 11px "DM Sans", sans-serif;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .secondary:hover { border-color: #bfd0fb; color: #245eea; background: #f3f6ff; }
+        .panel-toolbar input[type="file"] {
+            width: 205px;
+            min-height: 38px;
+            padding: 5px 7px;
+            color: #697991;
+            font-size: 10px;
+        }
+        [hidden] { display: none !important; }
+
+        @media (max-width: 760px) {
+            main { width: calc(100% - 36px); }
+            .topbar { min-height: auto; align-items: flex-start; flex-direction: column; justify-content: center; gap: 10px; padding: 13px 0; }
+            .course-nav { width: 100%; padding-bottom: 2px; }
+            .course-nav a { min-height: 34px; padding: 0 9px; font-size: 10px; }
+            .page-content { padding: 24px 0 36px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+            .panel-toolbar { align-items: flex-start; flex-direction: column; gap: 12px; padding: 14px 15px; }
+            .panel-toolbar > .form-actions { width: 100%; justify-content: flex-start; }
+            .panel-toolbar form { flex-wrap: wrap; }
+            .table-wrap { max-height: 72vh; }
+            .panel-footer { align-items: flex-start; flex-direction: column; padding: 13px 15px; }
+            .messages, .notice { margin-right: 15px; margin-left: 15px; }
+        }
+
+        @media (max-width: 420px) {
+            main { width: calc(100% - 28px); }
+            .brand-mark { width: 36px; height: 36px; }
+            .brand-name { font-size: 14px; }
+            .brand-caption { font-size: 8px; }
+            .form-actions { width: 100%; }
+            .form-actions button { flex: 1; }
+            .panel-toolbar form { width: 100%; }
+            .panel-toolbar input[type="file"] { flex: 1; width: auto; min-width: 0; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <header class="topbar">
+        <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+            <span class="brand-mark" aria-hidden="true">CO</span>
+            <span>
+                <span class="brand-name">COBL System</span>
+                <span class="brand-caption">Academic outcomes</span>
+            </span>
+        </a>
+        <nav class="course-nav" aria-label="Course navigation">
+            <a href="{% url 'view_course' course.id %}">Course</a>
+            <a href="{% url 'co_po_pso_matrix' course.id %}">CO–PO–PSO Matrix</a>
+            <a href="{% url 'course_mapping_grade' course.id %}">Mapping Grade</a>
+            <a href="{% url 'course_performance_indicators' course.id %}" aria-current="page">Performance Indicators</a>
+        </nav>
+    </header>
+
+    <div class="page-content">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="{% url 'view_course' course.id %}">{{ course.course_name }}</a>
+            <span class="breadcrumb-separator" aria-hidden="true">/</span>
+            <span>Mapping Performance Indicators</span>
+        </nav>
+
+        <section class="page-heading" aria-labelledby="page-title">
+            <div>
+                <p class="eyebrow">Outcome mapping</p>
+                <h1 id="page-title">Mapping Performance Indicators</h1>
+                <p class="hint">Set the competency count for each PO/PSO and the PI count for each competency. Numbering is generated automatically. In Excel import, repeat the competency details only on the first row; blank cells on following rows reuse the previous values. Select 1 under a CO when that PI maps to the CO; leave it blank otherwise.</p>
+            </div>
+            <span class="course-chip">{{ course.course_code }} · {{ course.course_name }}</span>
+        </section>
+
+        <section class="panel" aria-labelledby="panel-title">
+            <div class="panel-toolbar">
+                <div>
+                    <h2 class="panel-title" id="panel-title">Competencies and performance indicators</h2>
+                    <p class="panel-subtitle">Map each indicator to one or more course outcomes. Changes are saved when you select Save.</p>
+                </div>
+                <div class="form-actions">
+                    <a class="secondary" href="{% url 'export_course_performance_indicators_template' course.id %}">Excel template</a>
+                    <form method="post" action="{% url 'import_course_performance_indicators' course.id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" name="excel" accept=".xlsx" required>
+                        <button class="secondary" type="submit">Import Excel</button>
+                    </form>
+                    <span class="status-badge" id="edit-status" aria-live="polite">Read-only</span>
+                </div>
+            </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="messages{% if message.tags == 'error' %} error{% endif %}" role="status">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% if not pos and not psos %}
+            <p class="notice"><strong>No program outcomes found.</strong> Set up PO or PSO records for this course's department before adding performance indicators.</p>
+        {% endif %}
+        {% if not cos %}
+            <p class="notice"><strong>No course outcomes found.</strong> Create course outcomes before mapping indicators to COs.</p>
+        {% endif %}
+
+        <form method="post" id="mapping-form">
+            {% csrf_token %}
+            <div class="table-wrap">
+                <table id="mapping-table">
+                    <thead>
+                    <tr>
+                        <th>POs / PSOs</th>
+                        <th>PO / PSO Statement</th>
+                        <th>Competency No.</th>
+                        <th>Competency Level</th>
+                        <th>PI No.</th>
+                        <th>Performance Indicators</th>
+                        {% for co in cos %}
+                            <th class="co-header" title="{{ co.description }}" aria-label="CO{{ co.co_number }}: {{ co.description }}">CO{{ co.co_number }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody id="mapping-rows"></tbody>
+                </table>
+            </div>
+            <div id="statement-tooltip" class="statement-tooltip" role="tooltip"></div>
+            <footer class="panel-footer">
+                <p class="footer-hint">Use the count selectors to add competencies and indicators. Existing data remains until you save your changes.</p>
+                <div class="form-actions">
+                    <button type="button" class="secondary" id="edit-mapping">Edit</button>
+                    <button type="submit" class="primary" id="save-mapping" hidden>Save</button>
+                </div>
+            </footer>
+        </form>
+        </section>
+    </div>
+</main>
+{{ outcome_sections|json_script:"outcome-data" }}
+{{ co_data|json_script:"co-data" }}
+<script>
+    const outcomeSections = JSON.parse(document.getElementById("outcome-data").textContent);
+    const courseOutcomes = JSON.parse(document.getElementById("co-data").textContent);
+    const tableBody = document.getElementById("mapping-rows");
+    const fixedColumnCount = 6;
+    const editButton = document.getElementById("edit-mapping");
+    const saveButton = document.getElementById("save-mapping");
+    const editStatus = document.getElementById("edit-status");
+    const statementTooltip = document.getElementById("statement-tooltip");
+    let isEditing = false;
+
+    function setEditing(enabled) {
+        isEditing = enabled;
+        tableBody.querySelectorAll("input, select").forEach(control => {
+            control.disabled = !isEditing;
+        });
+        editButton.hidden = isEditing;
+        saveButton.hidden = !isEditing;
+        editStatus.textContent = isEditing ? "Edit mode" : "Read-only";
+        editStatus.classList.toggle("editing", isEditing);
+    }
+
+    editButton.addEventListener("click", () => setEditing(true));
+
+    function showStatementTooltip(cell, x, y) {
+        const statement = cell.dataset.fullStatement;
+        if (!statement) return;
+        statementTooltip.textContent = statement;
+        statementTooltip.style.display = "block";
+        const margin = 12;
+        const rect = statementTooltip.getBoundingClientRect();
+        statementTooltip.style.left = `${Math.max(
+            margin,
+            Math.min(x + 14, window.innerWidth - rect.width - margin)
+        )}px`;
+        statementTooltip.style.top = `${Math.max(
+            margin,
+            Math.min(y + 14, window.innerHeight - rect.height - margin)
+        )}px`;
+    }
+
+    tableBody.addEventListener("pointerover", event => {
+        const cell = event.target.closest("[data-full-statement]");
+        if (cell && tableBody.contains(cell)) {
+            showStatementTooltip(cell, event.clientX, event.clientY);
+        }
+    });
+    tableBody.addEventListener("pointermove", event => {
+        const cell = event.target.closest("[data-full-statement]");
+        if (cell && tableBody.contains(cell)) {
+            showStatementTooltip(cell, event.clientX, event.clientY);
+        }
+    });
+    tableBody.addEventListener("pointerout", event => {
+        const cell = event.target.closest("[data-full-statement]");
+        if (cell && !cell.contains(event.relatedTarget)) {
+            statementTooltip.style.display = "none";
+        }
+    });
+    tableBody.addEventListener("focusin", event => {
+        const cell = event.target.closest("[data-full-statement]");
+        if (cell) {
+            const rect = cell.getBoundingClientRect();
+            showStatementTooltip(cell, rect.left, rect.bottom);
+        }
+    });
+    tableBody.addEventListener("focusout", () => {
+        statementTooltip.style.display = "none";
+    });
+
+    function countSelect(name, value, label) {
+        const wrapper = document.createElement("label");
+        wrapper.className = "count-label";
+        wrapper.textContent = label;
+        const select = document.createElement("select");
+        select.className = "count-select";
+        select.name = name;
+        select.setAttribute("aria-label", label);
+        for (let count = 0; count <= 50; count += 1) {
+            select.add(new Option(String(count), String(count)));
+        }
+        select.value = String(value);
+        wrapper.appendChild(select);
+        return select;
+    }
+
+    function textInput(name, value, label, onInput) {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = name;
+        input.value = value || "";
+        input.required = true;
+        input.setAttribute("aria-label", label);
+        input.className = "text-entry";
+        if (onInput) input.addEventListener("input", () => onInput(input.value));
+        return input;
+    }
+
+    function updateTotals(totalRow, outcome) {
+        const indicators = outcome.competencies.flatMap(competency => competency.indicators || []);
+        totalRow.querySelector("[data-total-pi]").textContent = String(indicators.length);
+        courseOutcomes.forEach(co => {
+            const count = indicators.filter(indicator =>
+                (indicator.co_ids || []).map(String).includes(String(co.id))
+            ).length;
+            totalRow.querySelector(`[data-total-co="${co.id}"]`).textContent = String(count);
+        });
+    }
+
+    function renderTable() {
+        tableBody.replaceChildren();
+        outcomeSections.forEach(outcome => {
+            if (!Array.isArray(outcome.competencies)) outcome.competencies = [];
+            const visibleRows = Math.max(
+                1,
+                outcome.competencies.reduce(
+                    (total, competency) => total + Math.max(1, (competency.indicators || []).length),
+                    0
+                )
+            );
+            let outcomeCellAdded = false;
+            const totalRow = document.createElement("tr");
+            totalRow.className = "outcome-total";
+            const totalLabel = document.createElement("td");
+            totalLabel.colSpan = 4;
+            totalLabel.textContent = `${outcome.label} Total`;
+            const piTotalCell = document.createElement("td");
+            piTotalCell.dataset.totalPi = "";
+            const totalDescriptionCell = document.createElement("td");
+            totalDescriptionCell.textContent = "Total indicators";
+            totalRow.append(totalLabel, piTotalCell, totalDescriptionCell);
+            courseOutcomes.forEach(co => {
+                const cell = document.createElement("td");
+                cell.dataset.totalCo = String(co.id);
+                totalRow.appendChild(cell);
+            });
+
+            function appendOutcomeCells(row) {
+                if (outcomeCellAdded) return;
+                const labelCell = document.createElement("td");
+                labelCell.className = "outcome-cell";
+                labelCell.rowSpan = visibleRows;
+                labelCell.textContent = outcome.label;
+                const competencyCount = countSelect(
+                    `${outcome.kind}_${outcome.id}_competency_count`,
+                    outcome.competencies.length,
+                    "No. of Competencies"
+                );
+                competencyCount.addEventListener("change", () => {
+                    outcome.competencies.length = Number(competencyCount.value);
+                    for (let index = 0; index < outcome.competencies.length; index += 1) {
+                        if (!outcome.competencies[index]) {
+                            outcome.competencies[index] = { indicators: [] };
+                        }
+                    }
+                    renderTable();
+                });
+                labelCell.appendChild(competencyCount);
+                const statementCell = document.createElement("td");
+                statementCell.className = "statement-cell";
+                statementCell.rowSpan = visibleRows;
+                statementCell.textContent = outcome.description;
+                row.append(labelCell, statementCell);
+                outcomeCellAdded = true;
+            }
+
+            if (outcome.competencies.length === 0) {
+                const row = document.createElement("tr");
+                appendOutcomeCells(row);
+                const empty = document.createElement("td");
+                empty.colSpan = fixedColumnCount - 2 + courseOutcomes.length;
+                empty.className = "empty-cell";
+                empty.textContent = "Select the number of competencies to begin.";
+                row.appendChild(empty);
+                tableBody.appendChild(row);
+            } else {
+                outcome.competencies.forEach((competency, competencyIndex) => {
+                    if (!Array.isArray(competency.indicators)) competency.indicators = [];
+                    const indicatorCount = competency.indicators.length;
+                    const competencyRows = Math.max(1, indicatorCount);
+                    const competencyNumber = `${outcome.number}.${competencyIndex + 1}`;
+                    const competencyPrefix = `${outcome.kind}_${outcome.id}_comp_${competencyIndex + 1}`;
+
+                    for (let piIndex = 0; piIndex < competencyRows; piIndex += 1) {
+                        const row = document.createElement("tr");
+                        appendOutcomeCells(row);
+                        if (piIndex === 0) {
+                            const competencyCode = document.createElement("td");
+                            competencyCode.className = "competency-code";
+                            competencyCode.rowSpan = competencyRows;
+                            competencyCode.textContent = competencyNumber;
+
+                            const competencyDescription = document.createElement("td");
+                            competencyDescription.className = "competency-description";
+                            competencyDescription.dataset.fullStatement =
+                                competency.description || "";
+                            competencyDescription.rowSpan = competencyRows;
+                            competencyDescription.appendChild(textInput(
+                                `${competencyPrefix}_description`,
+                                competency.description,
+                                `Competency ${competencyNumber} description`,
+                                value => {
+                                    competency.description = value;
+                                    competencyDescription.dataset.fullStatement = value;
+                                }
+                            ));
+                            const indicatorCountSelect = countSelect(
+                                `${competencyPrefix}_indicator_count`,
+                                indicatorCount,
+                                "No. of Performance Indicators"
+                            );
+                            indicatorCountSelect.addEventListener("change", () => {
+                                competency.indicators.length = Number(indicatorCountSelect.value);
+                                for (let index = 0; index < competency.indicators.length; index += 1) {
+                                    if (!competency.indicators[index]) competency.indicators[index] = {};
+                                }
+                                renderTable();
+                            });
+                            competencyDescription.appendChild(indicatorCountSelect);
+                            row.append(competencyCode, competencyDescription);
+                        }
+
+                        if (indicatorCount === 0) {
+                            const empty = document.createElement("td");
+                            empty.colSpan = 2 + courseOutcomes.length;
+                            empty.className = "empty-cell";
+                            empty.textContent = "No performance indicators selected.";
+                            row.appendChild(empty);
+                        } else {
+                            const indicator = competency.indicators[piIndex];
+                            const piPrefix = `${competencyPrefix}_pi_${piIndex + 1}`;
+                            const piCode = document.createElement("td");
+                            piCode.className = "pi-code";
+                            piCode.textContent = `${competencyNumber}.${piIndex + 1}`;
+                            const piDescription = document.createElement("td");
+                            piDescription.className = "pi-description";
+                            piDescription.dataset.fullStatement =
+                                indicator.indicator_description || "";
+                            piDescription.appendChild(textInput(
+                                `${piPrefix}_description`,
+                                indicator.indicator_description,
+                                `Performance indicator ${competencyNumber}.${piIndex + 1} description`,
+                                value => {
+                                    indicator.indicator_description = value;
+                                    piDescription.dataset.fullStatement = value;
+                                }
+                            ));
+                            row.append(piCode, piDescription);
+                            courseOutcomes.forEach(co => {
+                                const cell = document.createElement("td");
+                                cell.className = "co-cell";
+                                const select = document.createElement("select");
+                                select.className = "mapping-select";
+                                select.name = `${piPrefix}_co_${co.id}`;
+                                select.add(new Option("", ""));
+                                select.add(new Option("1", "1"));
+                                if ((indicator.co_ids || []).map(String).includes(String(co.id))) {
+                                    select.value = "1";
+                                }
+                                select.addEventListener("change", () => {
+                                    const coIds = new Set((indicator.co_ids || []).map(String));
+                                    if (select.value === "1") coIds.add(String(co.id));
+                                    else coIds.delete(String(co.id));
+                                    indicator.co_ids = [...coIds];
+                                    updateTotals(totalRow, outcome);
+                                });
+                                cell.appendChild(select);
+                                row.appendChild(cell);
+                            });
+                        }
+
+                        tableBody.appendChild(row);
+                    }
+                });
+            }
+
+            tableBody.appendChild(totalRow);
+            updateTotals(totalRow, outcome);
+        });
+        setEditing(isEditing);
+    }
+
+    renderTable();
+</script>
+</body>
+</html>

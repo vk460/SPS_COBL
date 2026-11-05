@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Create Department Classes | COBL System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .create-shell {
+            width: min(1120px, calc(100% - 64px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 16px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 15px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            min-height: 39px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #45546c;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+        .back-link:hover {
+            border-color: #bfd0fb;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .back-link svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .page-content {
+            padding: 38px 0 56px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 23px;
+            color: #8995a8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a {
+            color: #65738a;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #245eea;
+        }
+
+        .breadcrumb-separator {
+            color: #b7c0ce;
+        }
+
+        .page-heading {
+            margin-bottom: 22px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(28px, 3.2vw, 36px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            max-width: 680px;
+            margin: 9px 0 0;
+            color: #78869b;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .form-card {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: rgba(255,255,255,.95);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .form-card-heading {
+            padding: 19px 22px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .form-card-heading h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 16px/1.35 "Manrope", sans-serif;
+            letter-spacing: -.03em;
+        }
+
+        .form-card-heading p {
+            margin: 5px 0 0;
+            color: #8995a8;
+            font-size: 11px;
+        }
+
+        .class-form {
+            padding: 20px 22px 22px;
+        }
+
+        .form-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #45546c;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            height: 42px;
+            padding: 0 12px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            background: #fff;
+            color: #263650;
+            font: 500 12px "DM Sans", sans-serif;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        .field input::placeholder {
+            color: #9aa5b5;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: #7ea1f4;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        .table-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 11px;
+        }
+
+        .table-heading h3 {
+            margin: 0;
+            color: #263650;
+            font: 700 13px "Manrope", sans-serif;
+        }
+
+        .table-heading p {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .class-count {
+            flex: 0 0 auto;
+            color: #78869b;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow-x: auto;
+            border: 1px solid #edf0f6;
+            border-radius: 10px;
+            background: #fff;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .class-table {
+            width: 100%;
+            min-width: 720px;
+            border-collapse: collapse;
+        }
+
+        .class-table th {
+            padding: 11px 12px;
+            border-bottom: 1px solid #e8edf5;
+            background: #f4f7fc;
+            color: #697991;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-align: left;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .class-table th:nth-child(2),
+        .class-table th:nth-child(3),
+        .class-table th:nth-child(4),
+        .class-table th:nth-child(5) {
+            width: 155px;
+        }
+
+        .class-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f2f7;
+            vertical-align: middle;
+        }
+
+        .class-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .class-table tbody tr:hover td {
+            background: #fbfcff;
+        }
+
+        .class-table input {
+            width: 100%;
+            height: 36px;
+            padding: 0 9px;
+            border: 1px solid #dce3ee;
+            border-radius: 7px;
+            background: #fff;
+            color: #263650;
+            font: 500 11px "DM Sans", sans-serif;
+        }
+
+        .class-table input[readonly] {
+            background: #f8faff;
+            color: #78869b;
+            cursor: default;
+        }
+
+        .class-table input[type="number"] {
+            min-width: 65px;
+            text-align: center;
+        }
+
+        .delete-button {
+            min-height: 32px;
+            padding: 0 10px;
+            border: 1px solid #fecaca;
+            border-radius: 7px;
+            background: #fff5f5;
+            color: #b42323;
+            font: 700 10px "DM Sans", sans-serif;
+            cursor: pointer;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+        .delete-button:hover {
+            border-color: #b42323;
+            background: #b42323;
+            color: #fff;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .add-button,
+        .submit-button,
+        .cancel-link {
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 0 14px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font: 700 11px "DM Sans", sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
+        }
+
+        .add-button:hover,
+        .submit-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .add-button {
+            border-color: #dce7ff;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .add-button:hover {
+            border-color: #245eea;
+            background: #245eea;
+            color: #fff;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 9px;
+        }
+
+        .cancel-link {
+            border-color: #dce3ee;
+            background: #fff;
+            color: #45546c;
+        }
+
+        .cancel-link:hover {
+            background: #f4f7fc;
+            color: #263650;
+        }
+
+        .submit-button {
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .17);
+            color: #fff;
+        }
+
+        .submit-button:hover {
+            background: #174bd0;
+            box-shadow: 0 10px 20px rgba(36, 94, 234, .23);
+        }
+
+        .actions svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        @media (max-width: 640px) {
+            .create-shell {
+                width: calc(100% - 32px);
+            }
+
+            .topbar {
+                min-height: 70px;
+            }
+
+            .page-content {
+                padding: 27px 0 40px;
+            }
+
+            .form-card-heading {
+                padding: 16px 17px;
+            }
+
+            .class-form {
+                padding: 17px;
+            }
+
+            .table-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .add-button {
+                width: 100%;
+            }
+
+            .action-group {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .brand-mark {
+                width: 36px;
+                height: 36px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-caption {
+                font-size: 8px;
+            }
+
+            .back-link {
+                min-height: 36px;
+                padding: 0 10px;
+                font-size: 11px;
+            }
+
+            .form-fields {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .form-fields .field:first-child {
+                grid-column: auto;
+            }
+
+            .action-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="create-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'hod_dashboard' %}" aria-label="COBL HOD dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'dept_class_list' %}">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Classes
+            </a>
+        </header>
+
+        <main class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'hod_dashboard' %}">HOD Dashboard</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <a href="{% url 'dept_class_list' %}">Department Classes</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <span>Create semester</span>
+            </nav>
+
+            <section class="page-heading" aria-labelledby="page-title">
+                <p class="eyebrow">Academic setup</p>
+                <h1 id="page-title">Create classes</h1>
+                <p class="page-description">Set the academic year and semester, then add the classes to include.</p>
+            </section>
+
+            <section class="form-card" aria-labelledby="form-title">
+                <div class="form-card-heading">
+                    <h2 id="form-title">Semester details</h2>
+                    <p>All classes in this form will be created for the selected semester.</p>
+                </div>
+
+                <form class="class-form" method="POST">
+                    {% csrf_token %}
+                    <div class="form-fields">
+                        <div class="field">
+                            <label for="academicYear">Academic year</label>
+                            <input type="text" id="academicYear" name="academic_year" value="{{ academic_year }}" placeholder="e.g. 2025-26" pattern="[0-9]{4}-[0-9]{2}" title="Enter academic year as YYYY-YY, for example 2025-26" required>
+                        </div>
+                        <div class="field">
+                            <label for="semester">Semester</label>
+                            <select id="semester" name="semester" required>
+                                <option value="Sem 1">Sem 1</option>
+                                <option value="Sem 2">Sem 2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-heading">
+                        <div>
+                            <h3>Classes in this semester</h3>
+                            <p>Add one row for each class or division.</p>
+                        </div>
+                        <span class="class-count" id="classCount" aria-live="polite">1 class</span>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="class-table" id="classTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Class name</th>
+                                    <th scope="col">Academic year</th>
+                                    <th scope="col">Semester</th>
+                                    <th scope="col">Order</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="class_name[]" placeholder="e.g. SY B.Tech Div-A" aria-label="Class name" required></td>
+                                    <td><input type="text" name="year_display[]" aria-label="Academic year preview" readonly></td>
+                                    <td><input type="text" name="sem_display[]" aria-label="Semester preview" readonly></td>
+                                    <td><input type="number" name="order[]" value="1" min="1" aria-label="Class order" required></td>
+                                    <td><button type="button" class="delete-button" onclick="deleteRow(this)" aria-label="Remove class row">Remove</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="add-button" onclick="addRow()">
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                            Add class
+                        </button>
+                        <div class="action-group">
+                            <a class="cancel-link" href="{% url 'dept_class_list' %}">Cancel</a>
+                            <button type="submit" class="submit-button">
+                                Create classes
+                                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m4 10.5 4 4 8-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const academicYearInput = document.getElementById("academicYear");
+        const semesterSelect = document.getElementById("semester");
+
+        function syncYearSem() {
+            document.querySelectorAll('input[name="year_display[]"]').forEach((input) => {
+                input.value = academicYearInput.value;
+            });
+            document.querySelectorAll('input[name="sem_display[]"]').forEach((input) => {
+                input.value = semesterSelect.value;
+            });
+        }
+
+        function updateClassCount() {
+            const count = document.querySelectorAll("#classTable tbody tr").length;
+            document.getElementById("classCount").textContent = `${count} ${count === 1 ? "class" : "classes"}`;
+        }
+
+        function addRow() {
+            const tbody = document.querySelector("#classTable tbody");
+            const row = tbody.insertRow();
+
+            const nameCell = row.insertCell();
+            const nameInput = document.createElement("input");
+            nameInput.type = "text";
+            nameInput.name = "class_name[]";
+            nameInput.placeholder = "e.g. SY B.Tech Div-B";
+            nameInput.setAttribute("aria-label", "Class name");
+            nameInput.required = true;
+            nameCell.appendChild(nameInput);
+
+            const yearCell = row.insertCell();
+            const yearInput = document.createElement("input");
+            yearInput.type = "text";
+            yearInput.name = "year_display[]";
+            yearInput.setAttribute("aria-label", "Academic year preview");
+            yearInput.readOnly = true;
+            yearCell.appendChild(yearInput);
+
+            const semesterCell = row.insertCell();
+            const semesterInput = document.createElement("input");
+            semesterInput.type = "text";
+            semesterInput.name = "sem_display[]";
+            semesterInput.setAttribute("aria-label", "Semester preview");
+            semesterInput.readOnly = true;
+            semesterCell.appendChild(semesterInput);
+
+            const orderCell = row.insertCell();
+            const orderInput = document.createElement("input");
+            orderInput.type = "number";
+            orderInput.name = "order[]";
+            orderInput.value = "1";
+            orderInput.min = "1";
+            orderInput.setAttribute("aria-label", "Class order");
+            orderInput.required = true;
+            orderCell.appendChild(orderInput);
+
+            const actionCell = row.insertCell();
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.className = "delete-button";
+            removeButton.textContent = "Remove";
+            removeButton.setAttribute("aria-label", "Remove class row");
+            removeButton.addEventListener("click", () => deleteRow(removeButton));
+            actionCell.appendChild(removeButton);
+
+            syncYearSem();
+            updateClassCount();
+            nameInput.focus();
+        }
+
+        function deleteRow(button) {
+            const tbody = document.querySelector("#classTable tbody");
+            if (tbody.rows.length === 1) {
+                const nameInput = tbody.rows[0].querySelector('input[name="class_name[]"]');
+                nameInput.value = "";
+                nameInput.focus();
+                return;
+            }
+
+            button.closest("tr").remove();
+            updateClassCount();
+        }
+
+        academicYearInput.addEventListener("input", syncYearSem);
+        semesterSelect.addEventListener("change", syncYearSem);
+        syncYearSem();
+    </script>
+</body>
+</html>

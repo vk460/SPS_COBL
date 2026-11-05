@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>General Science Classes | COBL System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .gs-shell {
+            width: min(1120px, calc(100% - 64px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 16px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 15px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 9px;
+        }
+
+        .dashboard-link,
+        .create-link {
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #45546c;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color .18s ease, color .18s ease, background .18s ease, box-shadow .18s ease, transform .18s ease;
+        }
+
+        .dashboard-link:hover {
+            border-color: #bfd0fb;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .dashboard-link svg,
+        .create-link svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .create-link {
+            border-color: #245eea;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .17);
+            color: #fff;
+        }
+
+        .create-link:hover {
+            transform: translateY(-1px);
+            border-color: #174bd0;
+            background: #174bd0;
+            box-shadow: 0 10px 20px rgba(36, 94, 234, .23);
+        }
+
+        .page-content {
+            padding: 38px 0 60px;
+        }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 23px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(28px, 3.2vw, 36px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 8px 0 0;
+            color: #78869b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 11px 14px;
+            border: 1px solid #bfe8d3;
+            border-radius: 9px;
+            background: #effaf4;
+            color: #17764f;
+            font-size: 12px;
+        }
+
+        .message.error {
+            border-color: #fecaca;
+            background: #fff5f5;
+            color: #a32727;
+        }
+
+        .year-section {
+            margin-top: 20px;
+        }
+
+        .year-heading {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin: 0 0 12px;
+            color: #263650;
+            font: 800 16px/1.3 "Manrope", sans-serif;
+            letter-spacing: -.03em;
+        }
+
+        .year-chip {
+            padding: 5px 8px;
+            border: 1px solid #dce7ff;
+            border-radius: 7px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 700 10px "DM Sans", sans-serif;
+        }
+
+        .semester-card {
+            overflow: hidden;
+            margin-top: 12px;
+            border: 1px solid #e7ecf4;
+            border-radius: 13px;
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 7px 22px rgba(34, 57, 97, .045);
+        }
+
+        .semester-heading {
+            min-height: 61px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 12px 17px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .semester-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0;
+            color: #263650;
+            font: 700 13px/1.35 "Manrope", sans-serif;
+        }
+
+        .semester-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #5180f2;
+        }
+
+        .semester-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .semester-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #16845d;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .semester-status svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .small-button,
+        .view-link,
+        .delete-button {
+            min-height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 11px;
+            border: 1px solid #dce3ee;
+            border-radius: 7px;
+            background: #fff;
+            color: #45546c;
+            font: 700 10px "DM Sans", sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+        .small-button:hover,
+        .view-link:hover {
+            border-color: #bfd0fb;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .small-button.save-semester {
+            border-color: #bfe8d3;
+            background: #effaf4;
+            color: #17764f;
+        }
+
+        .small-button.save-semester:hover {
+            border-color: #16845d;
+            background: #16845d;
+            color: #fff;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .class-table {
+            width: 100%;
+            min-width: 720px;
+            border-collapse: collapse;
+        }
+
+        .class-table th {
+            padding: 10px 14px;
+            border-bottom: 1px solid #edf0f6;
+            background: #f8faff;
+            color: #78869b;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-align: left;
+            text-transform: uppercase;
+        }
+
+        .class-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0f2f7;
+            color: #36445b;
+            font-size: 11px;
+            vertical-align: middle;
+        }
+
+        .class-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .class-table tbody tr:hover td {
+            background: #fbfcff;
+        }
+
+        .class-table input,
+        .class-table select {
+            width: 100%;
+            min-width: 100px;
+            height: 34px;
+            padding: 0 9px;
+            border: 1px solid #dce3ee;
+            border-radius: 7px;
+            background: #fff;
+            color: #263650;
+            font: 500 11px "DM Sans", sans-serif;
+        }
+
+        .class-table input[type="number"] {
+            width: 70px;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .class-table input:focus,
+        .class-table select:focus {
+            border-color: #7ea1f4;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        .view-link {
+            border-color: #dce7ff;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .delete-button {
+            border-color: #fecaca;
+            background: #fff5f5;
+            color: #b42323;
+        }
+
+        .delete-button:hover {
+            border-color: #b42323;
+            background: #b42323;
+            color: #fff;
+        }
+
+        .new-class-actions {
+            display: flex;
+            justify-content: flex-start;
+            padding: 13px 14px;
+            border-top: 1px solid #edf0f6;
+            background: #fbfcff;
+        }
+
+        .add-class-button {
+            min-height: 33px;
+            display: inline-flex;
+            flex: 0 0 auto;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 0 14px;
+            border: 1px solid #dce7ff;
+            border-radius: 7px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 700 10px "DM Sans", sans-serif;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .add-class-button:hover {
+            border-color: #245eea;
+            background: #245eea;
+            color: #fff;
+        }
+
+        .empty-state {
+            padding: 34px 20px;
+            border: 1px dashed #dce3ee;
+            border-radius: 13px;
+            background: rgba(255,255,255,.78);
+            color: #78869b;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .empty-state strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #35445c;
+            font: 700 14px "Manrope", sans-serif;
+        }
+
+        @media (max-width: 700px) {
+            .gs-shell {
+                width: calc(100% - 32px);
+            }
+
+            .topbar {
+                min-height: 70px;
+            }
+
+            .page-content {
+                padding: 28px 0 42px;
+            }
+
+            .page-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .create-link {
+                width: 100%;
+            }
+
+            .semester-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 9px;
+            }
+
+            .semester-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .brand-mark {
+                width: 36px;
+                height: 36px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-caption {
+                font-size: 8px;
+            }
+
+            .dashboard-link {
+                min-height: 36px;
+                padding: 0 10px;
+                font-size: 11px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gs-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'hod_dashboard' %}" aria-label="COBL HOD dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <div class="topbar-actions">
+                <a class="dashboard-link" href="{% url 'hod_dashboard' %}">
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Dashboard
+                </a>
+            </div>
+        </header>
+
+        <main class="page-content">
+            <section class="page-heading" aria-labelledby="page-title">
+                <div>
+                    <p class="eyebrow">Academic setup</p>
+                    <h1 id="page-title">General Science Classes</h1>
+                    <p class="page-description">Manage mapped department classes across academic years and semesters.</p>
+                </div>
+                <a class="create-link" href="{% url 'gs_class_create' %}">
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    Create new semester
+                </a>
+            </section>
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="message{% if message.tags == 'error' %} error{% endif %}" role="{% if message.tags == 'error' %}alert{% else %}status{% endif %}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% regroup classes by academic_year as year_list %}
+            {% for year in year_list %}
+            <section class="year-section" aria-labelledby="year-{{ forloop.counter }}">
+                <h2 class="year-heading" id="year-{{ forloop.counter }}">
+                    Academic year
+                    <span class="year-chip">{{ year.grouper }}</span>
+                </h2>
+
+                {% regroup year.list by semester as sem_list %}
+                {% for sem in sem_list %}
+                <form class="semester-card" method="post" action="{% url 'gs_sem_update' year.grouper sem.grouper %}"
+                      onsubmit="return confirm('Save full semester changes?');">
+                    {% csrf_token %}
+                    <div class="semester-heading">
+                        <h3 class="semester-title"><span class="semester-dot" aria-hidden="true"></span>Semester: {{ sem.grouper }}</h3>
+                        <div class="semester-actions">
+                            {% if sem.list.0.has_course %}
+                            <span class="semester-status">
+                                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="4" y="8.5" width="12" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 8.5V6a3.5 3.5 0 0 1 7 0v2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                                Courses created · locked
+                            </span>
+                            {% elif sem.list.0.is_locked %}
+                            <a href="{% url 'gs_sem_edit' year.grouper sem.grouper %}" class="small-button">Edit semester</a>
+                            {% else %}
+                            <button type="submit" class="small-button save-semester">Save semester</button>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="class-table" id="table_{{ year.grouper }}_{{ sem.grouper }}">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Class</th>
+                                    <th scope="col">Order</th>
+                                    <th scope="col">View</th>
+                                    {% if not sem.list.0.is_locked %}<th scope="col">Delete</th>{% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for class in sem.list %}
+                                <tr>
+                                    <td>
+                                        {% if class.is_locked %}
+                                        {{ class.mapped_department.name }}
+                                        {% else %}
+                                        <select name="dept_{{ class.id }}" aria-label="Mapped department">
+                                            {% for dept in departments %}
+                                            <option value="{{ dept.id }}" {% if dept.id == class.mapped_department.id %}selected{% endif %}>{{ dept.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if class.is_locked %}
+                                        {{ class.name }}
+                                        {% else %}
+                                        <input type="text" name="name_{{ class.id }}" value="{{ class.name }}" aria-label="Class name" required>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if class.is_locked %}
+                                        {{ class.order }}
+                                        {% else %}
+                                        <input type="number" name="order_{{ class.id }}" value="{{ class.order }}" aria-label="Class order" required>
+                                        {% endif %}
+                                    </td>
+                                    <td><a href="{% url 'class_dashboard' class.id %}" class="view-link">View class</a></td>
+                                    {% if not sem.list.0.is_locked %}
+                                    <td><button type="button" class="delete-button" onclick="clearRow({{ class.id }})">Remove</button></td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {% if not sem.list.0.is_locked %}
+                    <div class="new-class-actions">
+                        <button type="button" class="add-class-button" onclick="addRow('table_{{ year.grouper }}_{{ sem.grouper }}')">
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                            <span>Add class</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                </form>
+                {% endfor %}
+            </section>
+            {% empty %}
+            <div class="empty-state">
+                <strong>No classes created yet</strong>
+                Create a semester and map classes to departments to get started.
+            </div>
+            {% endfor %}
+        </main>
+    </div>
+
+    <template id="departmentOptions">
+        {% for dept in departments %}
+        <option value="{{ dept.id }}">{{ dept.name }}</option>
+        {% endfor %}
+    </template>
+
+    <script>
+        function clearRow(id) {
+            const input = document.querySelector(`[name="name_${id}"]`);
+            if (input) {
+                input.value = "";
+            }
+        }
+
+        function addRow(tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) {
+                return;
+            }
+
+            const row = table.tBodies[0].insertRow();
+
+            const departmentCell = row.insertCell();
+            const departmentSelect = document.createElement("select");
+            departmentSelect.name = "new_dept[]";
+            departmentSelect.required = true;
+            departmentSelect.setAttribute("aria-label", "New class department");
+            departmentSelect.add(new Option("Select department", ""));
+            departmentSelect.options[0].disabled = true;
+            const departmentOptions = document.getElementById("departmentOptions");
+            departmentSelect.append(departmentOptions.content.cloneNode(true));
+            departmentCell.appendChild(departmentSelect);
+
+            const nameCell = row.insertCell();
+            const nameInput = document.createElement("input");
+            nameInput.type = "text";
+            nameInput.name = "new_name[]";
+            nameInput.placeholder = "Class name";
+            nameInput.setAttribute("aria-label", "New class name");
+            nameCell.appendChild(nameInput);
+
+            const orderCell = row.insertCell();
+            const orderInput = document.createElement("input");
+            orderInput.type = "number";
+            orderInput.name = "new_order[]";
+            orderInput.value = "1";
+            orderInput.setAttribute("aria-label", "New class order");
+            orderCell.appendChild(orderInput);
+
+            const viewCell = row.insertCell();
+            viewCell.textContent = "Available after saving";
+
+            const deleteCell = row.insertCell();
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.className = "delete-button";
+            removeButton.textContent = "Remove";
+            removeButton.setAttribute("aria-label", "Remove new class row");
+            removeButton.addEventListener("click", () => row.remove());
+            deleteCell.appendChild(removeButton);
+            departmentSelect.focus();
+        }
+    </script>
+</body>
+</html>

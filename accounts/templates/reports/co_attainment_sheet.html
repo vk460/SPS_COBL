@@ -1,0 +1,519 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>CO Attainment Sheet | {{ course.course_code }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/site.css">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0 !important;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff !important;
+            color: #17243b !important;
+            font-family: "DM Sans", "Segoe UI", sans-serif !important;
+        }
+
+        a:focus-visible { outline: 3px solid #93b4ff; outline-offset: 3px; }
+
+        .page-shell {
+            width: min(1360px, calc(100% - 48px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #245eea;
+            color: #fff;
+            font: 800 14px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 13px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 3px;
+            color: #78869c;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 8px; }
+
+        .nav-link {
+            padding: 8px 10px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: #56657d;
+            font-size: 10px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            border-color: #dfe6f0;
+            background: #fff;
+            color: #245eea;
+        }
+
+        .page-content { padding: 22px 0 42px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 12px;
+            color: #8995a8;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a { color: #65738a; text-decoration: none; }
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 15px;
+        }
+
+        .eyebrow {
+            margin: 0 0 6px;
+            color: #245eea;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(22px, 2.8vw, 30px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 7px 0 0;
+            color: #78869b;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 8px 11px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 10px "Manrope", sans-serif;
+        }
+
+        .panel {
+            overflow: hidden;
+            margin-bottom: 13px;
+            border: 1px solid #e7ecf4;
+            border-radius: 14px;
+            background: rgba(255,255,255,.97);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 15px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 13px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel-subtitle {
+            margin: 3px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.45;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+        }
+
+        .attainment-table {
+            width: 100%;
+            min-width: 1850px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #34435b;
+            font-size: 11px;
+        }
+
+        .attainment-table th,
+        .attainment-table td {
+            padding: 7px 9px;
+            border-right: 1px solid #edf0f6;
+            border-bottom: 1px solid #edf0f6;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .attainment-table th:last-child,
+        .attainment-table td:last-child { border-right: 0; }
+
+        .attainment-table thead th {
+            background: #f3f6fb !important;
+            color: #65738a !important;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .045em;
+            text-transform: uppercase;
+        }
+
+        .attainment-table thead tr:first-child th.cie-band {
+            background: #f7c9a9 !important;
+            color: #59351f !important;
+        }
+
+        .attainment-table thead tr:first-child th.ese-band {
+            background: #dcebd7 !important;
+            color: #315a2f !important;
+        }
+
+        .attainment-table tbody tr:last-child td { border-bottom: 0; }
+        .attainment-table tbody tr:hover td { background: #fafbfe; }
+        .attainment-table .co-label { min-width: 74px; color: #245eea; font-weight: 800; }
+        .attainment-table .row-label { min-width: 112px; color: #53627a; font-weight: 700; }
+
+        .summary-cell,
+        .summary-header {
+            background: #f0f6ff !important;
+            color: #1c4a99 !important;
+            font-weight: 800;
+        }
+
+        .cie-average,
+        .cie-average-header {
+            background: #e3f0dc !important;
+            color: #315a2f !important;
+            font-weight: 800;
+        }
+
+        .final-ese,
+        .final-ese-header {
+            background: #eef4e9 !important;
+            color: #315a2f !important;
+            font-weight: 800;
+        }
+
+        .percentage { font-weight: 800; }
+        .cie-percent { background: #fff8eb; color: #8c6616; }
+        .ese-percent { background: #f5f7ff; color: #53618a; }
+        .direct-value { background: #eef4ff; color: #2452a3; font-weight: 700; }
+        .rounded-value { background: #f0faf4; color: #26734f; font-weight: 800; }
+        .indirect-value { background: #fff8eb; color: #8c6616; font-weight: 700; }
+        .level-cell { background: #f0faf4; color: #26734f; font-weight: 800; }
+
+        .info-row td {
+            background: #f8fafc;
+            color: #56657d;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .formula-row td {
+            padding: 9px 12px;
+            background: #f3f6ff;
+            color: #425b8a;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: normal;
+            text-align: left;
+        }
+
+        .scroll-hint {
+            display: none;
+            margin: 0;
+            padding: 8px 12px 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        @media (max-width: 650px) {
+            .page-shell { width: calc(100% - 28px); }
+            .topbar { min-height: 62px; }
+            .page-content { padding-top: 18px; }
+            .nav-links { gap: 2px; }
+            .nav-link { padding: 7px 8px; font-size: 9px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+            .course-chip { white-space: normal; }
+            .scroll-hint { display: block; }
+        }
+
+        @media print {
+            body { background: #fff !important; }
+            .topbar, .breadcrumb, .nav-links, .scroll-hint { display: none !important; }
+            .page-shell { width: 100%; }
+            .page-content { padding: 0; }
+            .panel { box-shadow: none; break-inside: avoid; }
+            .table-wrap { overflow: visible; }
+            .attainment-table { min-width: 0; font-size: 7px; }
+            .attainment-table th, .attainment-table td { padding: 3px; white-space: normal; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic Outcomes</span>
+                </span>
+            </a>
+            <nav class="nav-links" aria-label="Course navigation">
+                <a class="nav-link" href="{% url 'view_course' course.id %}">Back to course</a>
+                {% if request.user.role == "HOD" %}
+                <a class="nav-link" href="{% url 'hod_dashboard' %}">HOD dashboard</a>
+                {% elif request.user.role == "FACULTY" %}
+                <a class="nav-link" href="{% url 'faculty_dashboard' %}">Faculty dashboard</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' course.id %}">{{ course.course_code }}</a>
+                <span class="breadcrumb-separator">/</span>
+                <span>Attainment</span>
+                <span class="breadcrumb-separator">/</span>
+                <span>CO attainment sheet</span>
+            </nav>
+
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Course analytics</p>
+                    <h1>CO Attainment Sheet</h1>
+                    <p class="page-description">Class-average performance and weighted attainment for each course outcome.</p>
+                </div>
+                <span class="course-chip">{{ course.course_code }} · {{ course.course_name }}</span>
+            </div>
+
+            <section class="panel" aria-labelledby="averageTitle">
+                <div class="panel-heading">
+                    <div>
+                        <h2 class="panel-title" id="averageTitle">CIE Class Averages</h2>
+                        <p class="panel-subtitle">Class-average percentage for each assessment, with the CIE and final ESE averages.</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <p class="scroll-hint">Swipe horizontally to see all assessment columns.</p>
+                    <table class="attainment-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" colspan="2" scope="colgroup">Course outcomes</th>
+                                {% if cie_display_columns %}
+                                <th colspan="{{ cie_display_columns|length }}" class="cie-band" scope="colgroup">Continuous Internal Evaluation</th>
+                                {% endif %}
+                                <th rowspan="2" class="cie-average-header" scope="col">CIE Class Average</th>
+                                <th rowspan="2" scope="col">CO</th>
+                                <th rowspan="2" class="final-ese-header ese-band" scope="col">Final ESE Class Ave %</th>
+                            </tr>
+                            <tr>
+                                {% for column in cie_display_columns %}
+                                <th scope="col">{{ column.sub }}<br>Average %</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for co, avg_row in co_avg_table.items %}
+                            <tr>
+                                <td class="co-label">{{ co }}</td>
+                                <td class="row-label">Class Avg. %</td>
+                                {% for column in cie_display_columns %}
+                                <td>{{ display_avg_table|get_item:co|get_item:column.key|floatformat:"2" }}</td>
+                                {% endfor %}
+                                <td class="cie-average percentage">{{ cie_percentage_table|get_item:co|floatformat:"2" }}</td>
+                                <td class="co-label">{{ co }}</td>
+                                <td class="final-ese percentage">{{ ese_percentage_table|get_item:co|floatformat:"2" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td class="row-label" colspan="2">No course outcomes</td>
+                                {% for column in cie_display_columns %}
+                                <td>—</td>
+                                {% endfor %}
+                                <td class="cie-average">—</td>
+                                <td class="co-label">—</td>
+                                <td class="final-ese">—</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="directTitle">
+                <div class="panel-heading">
+                    <div>
+                        <h2 class="panel-title" id="directTitle">Direct CO Attainment</h2>
+                        <p class="panel-subtitle">{{ weightage.cie_weightage }}% CIE share and {{ weightage.ese_weightage }}% ESE share.</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <p class="scroll-hint">Swipe horizontally to see all direct attainment columns.</p>
+                    <table class="attainment-table">
+                        <thead>
+                            <tr class="info-row">
+                                <td colspan="2">Subject: {{ course.course_name }}</td>
+                                <td colspan="3">A.Y.: {{ course.academic_class.academic_year }}</td>
+                            </tr>
+                            <tr class="info-row">
+                                <td colspan="2">Subject code: {{ course.course_code }}</td>
+                                <td colspan="3">Semester: {{ course.academic_class.semester }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="col">CO</th>
+                                <th class="cie-percent" scope="col">CIE class average %</th>
+                                <th class="ese-percent" scope="col">ESE class average %</th>
+                                <th class="direct-value" scope="col">Direct CO attainment<br>({{ weightage.cie_weightage }}% CIE + {{ weightage.ese_weightage }}% ESE)</th>
+                                <th class="rounded-value" scope="col">Direct CO attainment %<br>(Rounded)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in direct_attainment_rows %}
+                            <tr>
+                                <td class="co-label">{{ row.co }}</td>
+                                <td class="cie-percent">{{ row.cie_percentage|floatformat:"2" }}</td>
+                                <td class="ese-percent">{{ row.ese_percentage|floatformat:"2" }}</td>
+                                <td class="direct-value">{{ row.direct_attainment|floatformat:"2" }}</td>
+                                <td class="rounded-value percentage">{{ row.direct_attainment_rounded }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td class="row-label" colspan="5">No direct attainment data available.</td></tr>
+                            {% endfor %}
+                            <tr class="formula-row">
+                                <td colspan="5">Direct CO Attainment = (CIE Class Average × {{ weightage.cie_weightage }}%) + (ESE Class Average × {{ weightage.ese_weightage }}%)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel" aria-labelledby="totalTitle">
+                <div class="panel-heading">
+                    <div>
+                        <h2 class="panel-title" id="totalTitle">Total CO Attainment</h2>
+                        <p class="panel-subtitle">{{ weightage.direct_attainment }}% direct share and {{ weightage.indirect_attainment }}% indirect share.</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <p class="scroll-hint">Swipe horizontally to see all total attainment columns.</p>
+                    <table class="attainment-table">
+                        <thead>
+                            <tr class="info-row">
+                                <td colspan="3">Subject: {{ course.course_name }}</td>
+                                <td colspan="3">A.Y.: {{ course.academic_class.academic_year }}</td>
+                            </tr>
+                            <tr class="info-row">
+                                <td colspan="3">Subject code: {{ course.course_code }}</td>
+                                <td colspan="3">Semester: {{ course.academic_class.semester }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="col">CO</th>
+                                <th class="cie-percent" scope="col">Direct CO attainment</th>
+                                <th class="indirect-value" scope="col">Indirect CO attainment</th>
+                                <th class="direct-value" scope="col">Total CO attainment %</th>
+                                <th class="rounded-value" scope="col">Total CO attainment %<br>(Rounded)</th>
+                                <th class="rounded-value" scope="col">Level of weighted CO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in total_attainment_rows %}
+                            <tr>
+                                <td class="co-label">{{ row.co }}</td>
+                                <td class="cie-percent">{{ row.direct_attainment_rounded }}</td>
+                                <td class="indirect-value">{{ row.indirect_attainment|floatformat:"2" }}</td>
+                                <td class="direct-value">{{ row.total_attainment|floatformat:"2" }}</td>
+                                <td class="rounded-value percentage">{{ row.total_attainment_rounded }}</td>
+                                <td class="level-cell">{{ row.weighted_level }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td class="row-label" colspan="6">No total attainment data available.</td></tr>
+                            {% endfor %}
+                            <tr class="formula-row">
+                                <td colspan="6">Total Attainment of CO = {{ weightage.direct_attainment }}% × Direct Attainment of CO + {{ weightage.indirect_attainment }}% × Indirect Attainment of CO</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

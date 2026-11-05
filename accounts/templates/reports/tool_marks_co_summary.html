@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>{{ tool.main_tool }} {{ tool.sub_tool }} | Marks Summary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/site.css">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0 !important;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff !important;
+            color: #17243b !important;
+            font-family: "DM Sans", "Segoe UI", sans-serif !important;
+        }
+
+        a:focus-visible { outline: 3px solid #93b4ff; outline-offset: 3px; }
+
+        .page-shell {
+            width: min(1320px, calc(100% - 48px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #245eea;
+            color: #fff;
+            font: 800 14px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 13px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 3px;
+            color: #78869c;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            padding: 8px 10px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: #56657d;
+            font-size: 10px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            border-color: #dfe6f0;
+            background: #fff;
+            color: #245eea;
+        }
+
+        .page-content { padding: 23px 0 42px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 13px;
+            color: #8995a8;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a { color: #65738a; text-decoration: none; }
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .eyebrow {
+            margin: 0 0 6px;
+            color: #245eea;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(22px, 2.8vw, 30px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 7px 0 0;
+            color: #78869b;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 8px 11px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 10px "Manrope", sans-serif;
+        }
+
+        .panel {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 14px;
+            background: rgba(255,255,255,.97);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 15px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 13px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel-subtitle {
+            margin: 3px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.45;
+        }
+
+        .header-toggle {
+            min-height: 31px;
+            flex: 0 0 auto;
+            padding: 0 10px;
+            border: 1px solid #dfe6f0;
+            border-radius: 8px;
+            background: #fff;
+            color: #56657d;
+            cursor: pointer;
+            font: 700 9px "DM Sans", sans-serif;
+        }
+
+        .header-toggle:hover { background: #f3f6ff; color: #245eea; }
+        .summary-table thead[hidden] { display: none !important; }
+
+        .student-count {
+            flex: 0 0 auto;
+            padding: 6px 9px;
+            border: 1px solid #e5e9f0;
+            border-radius: 20px;
+            background: #f6f8fb;
+            color: #697991;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .table-wrapper {
+            max-width: 100%;
+            max-height: 74vh;
+            overflow: auto;
+            overscroll-behavior: contain;
+        }
+
+        .summary-table {
+            width: 100%;
+            min-width: 820px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #34435b;
+            font-size: 11px;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 7px 9px;
+            border-right: 1px solid #edf0f6;
+            border-bottom: 1px solid #edf0f6;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .summary-table th:last-child,
+        .summary-table td:last-child { border-right: 0; }
+
+        .summary-table thead th {
+            position: sticky;
+            z-index: 3;
+            background: #f3f6fb !important;
+            color: #65738a !important;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .045em;
+            text-transform: uppercase;
+        }
+
+        .summary-table thead tr:nth-child(1) th { top: 0; height: 38px; }
+        .summary-table .expanded-head tr:nth-child(2) th { top: 34px; height: 42px; }
+
+        .summary-table thead th { background: #eaf1ff !important; color: #244b94 !important; }
+        .summary-table .expanded-head tr:first-child th { background: #eaf1ff !important; color: #244b94 !important; }
+        .summary-table thead th.row-heading { background: #eaf1ff !important; }
+        .summary-table thead th.total-heading { background: #dce8ff !important; color: #1c4a99 !important; }
+        .summary-table tbody tr:last-child td { border-bottom: 0; }
+        .summary-table tbody tr:hover td { background: #fafbfe; }
+        .summary-table .roll-cell { min-width: 78px; color: #53627a; font-weight: 700; }
+        .summary-table .name-cell { min-width: 220px; text-align: left; }
+        .summary-table .total-cell { color: #1c4a99; font-weight: 800; }
+        .summary-table .missing-mark { color: #8995a8; font-style: italic; }
+        .column-label { display: block; color: #344c76; font-size: 10px; }
+        .column-max { display: block; margin-top: 3px; color: #8995a8; font-size: 9px; font-weight: 600; letter-spacing: 0; }
+
+        .summary-row td {
+            background: #f7f9fc;
+            color: #42526b;
+            font-weight: 700;
+        }
+
+        .summary-row .summary-label {
+            text-align: right;
+            color: #263650;
+        }
+
+        .attending-count td { background: #eef4ff; }
+        .attending-count .summary-label { color: #2452a3; }
+        .status-achieved { color: #16835d !important; font-weight: 800; }
+        .status-not-achieved { color: #c04646 !important; font-weight: 800; }
+
+        .scroll-hint {
+            display: none;
+            margin: 0;
+            padding: 8px 12px 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .empty-state {
+            padding: 22px 14px !important;
+            color: #78869b !important;
+            text-align: center !important;
+        }
+
+        @media (max-width: 650px) {
+            .page-shell { width: calc(100% - 28px); }
+            .topbar { min-height: 62px; }
+            .page-content { padding-top: 18px; }
+            .nav-links { gap: 2px; }
+            .nav-link { padding: 7px 8px; font-size: 9px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+            .course-chip { white-space: normal; }
+            .scroll-hint { display: block; }
+            .summary-table { min-width: 720px; }
+        }
+
+        @media print {
+            body { background: #fff !important; }
+            .topbar, .breadcrumb, .nav-links, .scroll-hint { display: none !important; }
+            .page-shell { width: 100%; }
+            .page-content { padding: 0; }
+            .panel { box-shadow: none; }
+            .table-wrapper { max-height: none; overflow: visible; }
+            .summary-table { min-width: 0; font-size: 7px; }
+            .summary-table th, .summary-table td { padding: 3px; white-space: normal; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic Outcomes</span>
+                </span>
+            </a>
+            <nav class="nav-links" aria-label="Course navigation">
+                <a class="nav-link" href="{% url 'view_course' course.id %}">Back to course</a>
+                <a class="nav-link" href="{% url 'assessment_tool_page' course.id %}">Assessment tools</a>
+            </nav>
+        </header>
+
+        <main class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' course.id %}">{{ course.course_code }}</a>
+                <span class="breadcrumb-separator">/</span>
+                <a href="{% url 'assessment_tool_page' course.id %}">Assessment tools</a>
+                <span class="breadcrumb-separator">/</span>
+                <span>Marks summary</span>
+            </nav>
+
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Assessment results</p>
+                    <h1>Marks Summary: {{ tool.main_tool }} - {{ tool.sub_tool }}</h1>
+                    <p class="page-description">Student performance, course outcome breakdown and attainment summary.</p>
+                </div>
+                <span class="course-chip">{{ course.course_code }} · {{ course.course_name }}</span>
+            </div>
+
+            <section class="panel" aria-labelledby="summaryTitle">
+                <div class="panel-heading">
+                    <div>
+                        <h2 class="panel-title" id="summaryTitle">{{ tool.main_tool }} · {{ tool.sub_tool }}</h2>
+                        <p class="panel-subtitle">Marks obtained by student and course outcome.</p>
+                    </div>
+                    <div class="panel-heading-actions">
+                        <span class="student-count">{{ students|length }} students</span>
+                        <button class="header-toggle"
+                                id="headerToggle"
+                                type="button"
+                                aria-controls="compactHeader expandedHeader"
+                                aria-expanded="false"
+                                onclick="toggleSummaryHeader()">Show group header</button>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <p class="scroll-hint">Swipe horizontally to see all course outcome columns.</p>
+                    <table class="summary-table">
+                        <thead class="compact-head" id="compactHeader">
+                            <tr>
+                                <th class="row-heading" scope="col">Roll no.</th>
+                                <th class="row-heading" scope="col">Student name</th>
+                                {% for col in columns %}
+                                <th scope="col">
+                                    <span class="column-label">{{ col.label }}</span>
+                                    <span class="column-max">Max {{ col.max_marks }} marks</span>
+                                </th>
+                                {% endfor %}
+                                <th class="total-heading" scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <thead class="expanded-head" id="expandedHeader" hidden>
+                            <tr>
+                                <th class="row-heading" rowspan="2" scope="col">Roll no.</th>
+                                <th class="row-heading" rowspan="2" scope="col">Student name</th>
+                                {% if columns %}
+                                <th colspan="{{ columns|length }}" scope="colgroup">{{ tool.main_tool }} - {{ tool.sub_tool }}</th>
+                                {% endif %}
+                                <th class="total-heading" rowspan="2" scope="col">Total</th>
+                            </tr>
+                            <tr>
+                                {% for col in columns %}
+                                <th scope="col">
+                                    <span class="column-label">{{ col.label }}</span>
+                                    <span class="column-max">Max {{ col.max_marks }} marks</span>
+                                </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in students %}
+                            <tr>
+                                <td class="roll-cell">{{ s.roll_no }}</td>
+                                <td class="name-cell">{{ s.name }}</td>
+                                {% for mark in s.marks %}
+                                <td>
+                                    {% if mark == "-" %}
+                                    <span class="missing-mark">—</span>
+                                    {% else %}
+                                    {{ mark }}
+                                    {% endif %}
+                                </td>
+                                {% endfor %}
+                                <td class="total-cell">{{ s.total_obtained }} / {{ total_max }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td class="empty-state" colspan="{{ columns|length|add:3 }}">No students found in this class.</td>
+                            </tr>
+                            {% endfor %}
+
+                            {% for row in summary_rows %}
+                            <tr class="summary-row{% if row.label == 'No. of Students Attempted' %} attending-count{% endif %}">
+                                <td class="summary-label" colspan="2">{{ row.label }}</td>
+                                {% for val in row.values %}
+                                <td>
+                                    {% if row.label == "Status" %}
+                                    <span class="{% if val == 'Achieved' %}status-achieved{% else %}status-not-achieved{% endif %}">{{ val }}</span>
+                                    {% else %}
+                                    {{ val }}
+                                    {% endif %}
+                                </td>
+                                {% endfor %}
+                                <td class="total-cell">—</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        function toggleSummaryHeader() {
+            const compactHeader = document.getElementById("compactHeader");
+            const expandedHeader = document.getElementById("expandedHeader");
+            const toggle = document.getElementById("headerToggle");
+            const expanded = toggle.getAttribute("aria-expanded") === "true";
+
+            compactHeader.hidden = !expanded;
+            expandedHeader.hidden = expanded;
+            toggle.setAttribute("aria-expanded", String(!expanded));
+            toggle.textContent = expanded ? "Show group header" : "Hide group header";
+        }
+    </script>
+</body>
+
+</html>

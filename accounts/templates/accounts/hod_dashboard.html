@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>HOD Dashboard | COBL System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .hod-shell {
+            width: min(1240px, calc(100% - 64px));
+            margin: 0 auto;
+        }
+
+        .hod-topbar {
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 16px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 15px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .role-label {
+            color: #65738a;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .logout-link {
+            min-height: 39px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 15px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #45546c;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+        .logout-link:hover {
+            border-color: #fecaca;
+            background: #fff5f5;
+            color: #b42323;
+        }
+
+        .dashboard-content {
+            padding: 36px 0 52px;
+        }
+
+        .welcome-block {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        .welcome-block h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(28px, 3.2vw, 38px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .welcome-copy {
+            margin: 8px 0 0;
+            color: #78869b;
+            font-size: 13px;
+        }
+
+        .department-chip {
+            max-width: 360px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 13px;
+            border: 1px solid #e1e9fa;
+            border-radius: 10px;
+            background: rgba(255,255,255,.78);
+            color: #45546c;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .department-chip svg {
+            width: 15px;
+            height: 15px;
+            flex: 0 0 15px;
+            color: #245eea;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 23px;
+        }
+
+        .stat-card {
+            min-height: 94px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px;
+            border: 1px solid #e7ecf4;
+            border-radius: 13px;
+            background: rgba(255,255,255,.9);
+            box-shadow: 0 7px 22px rgba(34, 57, 97, .045);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            flex: 0 0 40px;
+            place-items: center;
+            border-radius: 11px;
+            background: #eff4ff;
+            color: #245eea;
+        }
+
+        .stat-icon svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .stat-label {
+            display: block;
+            color: #78869b;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            display: block;
+            margin-top: 3px;
+            color: #1b2b46;
+            font: 800 20px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.04em;
+        }
+
+        .quick-actions {
+            margin-bottom: 24px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 13px;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 17px/1.3 "Manrope", sans-serif;
+            letter-spacing: -.03em;
+        }
+
+        .section-heading p {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 11px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .action-card {
+            min-height: 104px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            border: 1px solid #e7ecf4;
+            border-radius: 12px;
+            background: #fff;
+            color: #1b2b46;
+            text-decoration: none;
+            box-shadow: 0 6px 18px rgba(34, 57, 97, .035);
+            transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            border-color: #bfd0fb;
+            box-shadow: 0 12px 24px rgba(34, 57, 97, .09);
+        }
+
+        .action-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            flex: 0 0 34px;
+            place-items: center;
+            border-radius: 10px;
+            background: #eff4ff;
+            color: #245eea;
+        }
+
+        .action-card:nth-child(4n) .action-icon {
+            background: #eaf8f1;
+            color: #16845d;
+        }
+
+        .action-icon svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .action-copy strong {
+            display: block;
+            color: #253650;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .action-copy span {
+            display: block;
+            margin-top: 4px;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .data-card {
+            margin-top: 20px;
+            padding: 21px;
+            border: 1px solid #e7ecf4;
+            border-radius: 14px;
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 8px 25px rgba(34, 57, 97, .05);
+        }
+
+        .data-card .section-heading {
+            margin-bottom: 14px;
+        }
+
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+            border: 1px solid #edf0f6;
+            border-radius: 10px;
+            background: #fff;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .hod-table {
+            width: 100%;
+            min-width: 620px;
+            border-collapse: collapse;
+            color: #36445b;
+        }
+
+        .hod-table th {
+            padding: 12px 15px !important;
+            border-bottom: 1px solid #e8edf5;
+            background: #f4f7fc !important;
+            color: #697991 !important;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-align: left;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .hod-table td {
+            padding: 12px 15px !important;
+            border-bottom: 1px solid #f0f2f7;
+            background: #fff !important;
+            color: #36445b !important;
+            font-size: 12px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .hod-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .hod-table tbody tr:hover td {
+            background: #f8faff !important;
+        }
+
+        .course-code {
+            color: #245eea !important;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .completion-table {
+            min-width: 1050px;
+        }
+
+        .completion-course-name,
+        .completion-course-class {
+            display: block;
+            margin-top: 4px;
+            color: #78869b;
+            font-size: 10px;
+        }
+
+        .completion-progress {
+            min-width: 130px;
+        }
+
+        .progress-track {
+            height: 8px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #e9eef7;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: #245eea;
+        }
+
+        .progress-caption {
+            display: block;
+            margin-top: 5px;
+            color: #78869b;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .completion-status {
+            display: inline-flex;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .completion-status.ready {
+            background: #eaf8f1;
+            color: #16845d;
+        }
+
+        .completion-status.in-progress {
+            background: #fff7e6;
+            color: #9a6700;
+        }
+
+        .completion-status.not-started {
+            background: #fff0f0;
+            color: #b42323;
+        }
+
+        .completion-list {
+            min-width: 205px;
+            margin: 0;
+            padding-left: 16px;
+            color: #78869b;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .completion-list .complete {
+            color: #16845d;
+        }
+
+        .completion-list .pending {
+            color: #b42323;
+        }
+
+        .completion-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+
+        .completion-summary span {
+            padding: 6px 9px;
+            border-radius: 8px;
+            background: #f4f7fc;
+            color: #56657d;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .table-action {
+            min-height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 7px;
+            background: #f3f6ff;
+            color: #245eea;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background .18s ease, color .18s ease;
+        }
+
+        .table-action:hover {
+            background: #245eea;
+            color: #fff;
+        }
+
+        .delete-form {
+            margin: 0;
+        }
+
+        .delete-button {
+            min-height: 32px;
+            padding: 0 11px;
+            border: 1px solid #fecaca;
+            border-radius: 7px;
+            background: #fff5f5;
+            color: #b42323;
+            font: 700 11px "DM Sans", sans-serif;
+            cursor: pointer;
+            transition: background .18s ease, color .18s ease;
+        }
+
+        .delete-button:hover {
+            background: #b42323;
+            color: #fff;
+        }
+
+        .empty-state {
+            padding: 27px 16px;
+            border: 1px dashed #dce3ee;
+            border-radius: 10px;
+            color: #78869b;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        @media (max-width: 950px) {
+            .action-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hod-shell {
+                width: calc(100% - 32px);
+            }
+
+            .hod-topbar {
+                min-height: 70px;
+            }
+
+            .role-label {
+                display: none;
+            }
+
+            .dashboard-content {
+                padding: 27px 0 38px;
+            }
+
+            .welcome-block {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .department-chip {
+                max-width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 9px;
+                margin-bottom: 22px;
+            }
+
+            .stat-card {
+                min-height: 76px;
+                padding: 13px 15px;
+            }
+
+            .stat-icon {
+                width: 36px;
+                height: 36px;
+                flex-basis: 36px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+                gap: 9px;
+            }
+
+            .action-card {
+                min-height: 76px;
+                align-items: center;
+                padding: 13px;
+            }
+
+            .data-card {
+                padding: 15px;
+            }
+
+            .section-heading h2 {
+                font-size: 15px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/site.css">
+</head>
+<body>
+    <div class="hod-shell">
+        <nav class="hod-topbar" aria-label="Main navigation">
+            <a class="brand" href="{% url 'hod_dashboard' %}" aria-label="COBL HOD dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <div class="topbar-actions">
+                <span class="role-label">Department administrator</span>
+                <a class="logout-link" href="{% url 'logout' %}">Log out</a>
+            </div>
+        </nav>
+
+        <main class="dashboard-content">
+            <section class="welcome-block" aria-labelledby="dashboard-title">
+                <div>
+                    <p class="eyebrow">Department overview</p>
+                    <h1 id="dashboard-title">HOD Dashboard</h1>
+                    <p class="welcome-copy">Welcome back, {{ request.user.get_full_name|default:request.user.username }}.</p>
+                </div>
+                <div class="department-chip">
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M3 17h14M5 17V6.5L10 3l5 3.5V17M8 8h.01M12 8h.01M8 11h.01M12 11h.01M9 17v-3h2v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>{{ request.user.department.name|default:"Department not assigned" }}</span>
+                </div>
+            </section>
+
+            <section class="stats-grid" aria-label="Department summary">
+                <article class="stat-card">
+                    <span class="stat-icon" aria-hidden="true">
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <path d="M3 5.5h14M3 10h14M3 14.5h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span><span class="stat-label">Assigned courses</span><strong class="stat-value">{{ assigned_courses|length }}</strong></span>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-icon" aria-hidden="true">
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <path d="M13.5 16v-1.5a3 3 0 0 0-3-3h-5a3 3 0 0 0-3 3V16M8 8.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM13 2.7a3 3 0 0 1 0 5.8M14.5 11.6a3 3 0 0 1 3 3V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span><span class="stat-label">Faculty members</span><strong class="stat-value">{{ teachers|length }}</strong></span>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-icon" aria-hidden="true">
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M6.5 3v3M13.5 3v3M3 8h14M6.5 11h2M11.5 11h2M6.5 14h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span>
+                        <span class="stat-label">Current semester</span>
+                        <strong class="stat-value">{% if current_semester %}{{ current_semester }}{% else %}—{% endif %}</strong>
+                    </span>
+                </article>
+            </section>
+
+            <section class="quick-actions" aria-labelledby="actions-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="actions-title">Quick actions</h2>
+                        <p>Manage department setup and academic resources.</p>
+                    </div>
+                </div>
+                <div class="action-grid">
+                    {% if not request.user.department.is_general_science %}
+                    <a class="action-card" href="{% url 'manage_po' %}">
+                        <span class="action-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none"><path d="M4 3.5h8l4 4V16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 3.5V8h4M7 11h6M7 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        </span>
+                        <span class="action-copy"><strong>Program Outcomes</strong><span>Manage department POs</span></span>
+                    </a>
+                    <a class="action-card" href="{% url 'manage_pso' %}">
+                        <span class="action-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5 12 7l4.8.5-3.6 3.2 1 4.8-4.2-2.5-4.2 2.5 1-4.8-3.6-3.2L8 7l2-4.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                        </span>
+                        <span class="action-copy"><strong>Program Specific Outcomes</strong><span>Manage department PSOs</span></span>
+                    </a>
+                    {% endif %}
+
+                    <a class="action-card" href="{% url 'department_report_header' %}">
+                        <span class="action-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none"><path d="M5 3.5h7l3 3V16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1ZM12 3.5V7h3M7 10h6M7 13h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        <span class="action-copy"><strong>Word Report Header</strong><span>Set department name, accreditation and HOD details</span></span>
+                    </a>
+
+                    <a class="action-card" href="{% url 'hod_course_completion' %}">
+                        <span class="action-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none"><path d="M4 4.5h12v11H4zM7 8h6M7 11h3M13 11l1 1 2-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        <span class="action-copy"><strong>Course Completion</strong><span>View class-wise subjects, progress and pending requirements</span></span>
+                    </a>
+
+                    <a class="action-card" href="{% url 'create_teacher' %}">
+                        <span class="action-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none"><path d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2.5 17v-1a4 4 0 0 1 4-4h3a4 4 0 0 1 4 4v1M15 6v6M12 9h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        </span>
+                        <span class="action-copy"><strong>Create New Teacher</strong><span>Add a faculty account</span></span>
+                    </a>
+
+                    {% if request.user.department.is_general_science %}
+                    <a class="action-card" href="{% url 'gs_class_list' %}">
+                        <span class="action-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none"><path d="M3 17h14M5 17V6.5L10 3l5 3.5V17M8 8h.01M12 8h.01M8 11h.01M12 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        <span class="action-copy"><strong>General Science Classes</strong><span>Manage classes and semesters</span></span>
+                    </a>
+                    {% else %}
+                    <a class="action-card" href="{% url 'dept_class_list' %}">
+                        <span class="action-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" fill="none"><path d="M3 17h14M5 17V6.5L10 3l5 3.5V17M8 8h.01M12 8h.01M8 11h.01M12 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        <span class="action-copy"><strong>Department Classes</strong><span>Manage classes and semesters</span></span>
+                    </a>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section class="data-card" aria-labelledby="courses-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="courses-title">My assigned courses</h2>
+                        <p>Courses assigned to your faculty account.</p>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="hod-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">Course code</th>
+                                <th scope="col">Course name</th>
+                                <th scope="col">Class</th>
+                                <th scope="col">Semester</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in assigned_courses %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td class="course-code">{{ course.course_code }}</td>
+                                <td>{{ course.course_name }}</td>
+                                <td>{{ course.academic_class.name }}</td>
+                                <td>{{ course.academic_class.semester }}</td>
+                                <td><a class="table-action" href="{% url 'view_course' course.id %}">View course</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="6"><div class="empty-state">No courses are assigned to your account yet.</div></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="data-card" aria-labelledby="faculty-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="faculty-title">Faculty members</h2>
+                        <p>Faculty accounts in your department.</p>
+                    </div>
+                </div>
+                {% if teachers %}
+                <div class="table-container">
+                    <table class="hod-table">
+                        <thead>
+                            <tr><th scope="col">Username</th><th scope="col">Full name</th><th scope="col">Action</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for teacher in teachers %}
+                            <tr>
+                                <td>{{ teacher.username }}</td>
+                                <td>{{ teacher.get_full_name|default:teacher.username }}</td>
+                                <td>
+                                    <form class="delete-form" method="post" action="{% url 'delete_teacher' teacher.id %}"
+                                          onsubmit="return confirm('Delete teacher {{ teacher.username|escapejs }}? This action cannot be undone.');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="delete-button">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">No faculty members have been added to this department yet.</div>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>

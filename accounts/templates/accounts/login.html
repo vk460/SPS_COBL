@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Sign in | COBL System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 85% 12%, rgba(196, 218, 255, .48), transparent 34%),
+                #f5f8ff;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .page-shell {
+            width: min(1120px, calc(100% - 64px));
+            min-height: 100vh;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-header {
+            min-height: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 17px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 16px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .header-note {
+            color: #65738a;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(360px, .82fr);
+            align-items: center;
+            gap: clamp(48px, 8vw, 104px);
+            padding: 64px 0;
+        }
+
+        .intro {
+            max-width: 480px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0 0 22px;
+            color: #245eea;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            width: 24px;
+            height: 2px;
+            background: #245eea;
+            content: "";
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(40px, 5vw, 58px)/1.08 "Manrope", "Segoe UI", sans-serif;
+            letter-spacing: -.065em;
+        }
+
+        .heading-accent {
+            color: #245eea;
+        }
+
+        .intro-copy {
+            max-width: 430px;
+            margin: 20px 0 0;
+            color: #65738a;
+            font-size: 16px;
+            line-height: 1.75;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 15px;
+            margin: 32px 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: #45546c;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            display: grid;
+            flex: 0 0 24px;
+            place-items: center;
+            border: 1px solid #dce7ff;
+            border-radius: 8px;
+            background: #fff;
+            color: #245eea;
+            font-size: 12px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            justify-self: end;
+            padding: 38px;
+            border: 1px solid #e7ecf4;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, .92);
+            box-shadow: 0 22px 60px rgba(34, 57, 97, .1);
+        }
+
+        .card-heading {
+            margin-bottom: 27px;
+        }
+
+        .card-heading h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 25px/1.25 "Manrope", sans-serif;
+            letter-spacing: -.04em;
+        }
+
+        .card-heading p {
+            margin: 8px 0 0;
+            color: #78869b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .role-badge {
+            display: inline-block;
+            margin-top: 13px;
+            padding: 5px 9px;
+            border: 1px solid #dce7ff;
+            border-radius: 7px;
+            background: #f3f6ff;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .error-message {
+            margin: 0 0 20px;
+            padding: 12px 14px;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            background: #fff5f5;
+            color: #a32727;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .field {
+            margin-top: 19px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #36445b;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .field input {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #17243b;
+            font: 500 14px "DM Sans", sans-serif;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        .field input::placeholder {
+            color: #9aa5b5;
+        }
+
+        .field input:focus {
+            border-color: #7ea1f4;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap input {
+            padding-right: 68px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            padding: 5px;
+            border: 0;
+            background: transparent;
+            color: #245eea;
+            font: 700 11px "DM Sans", sans-serif;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            width: 100%;
+            min-height: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 26px;
+            border: 0;
+            border-radius: 10px;
+            background: #245eea;
+            box-shadow: 0 8px 18px rgba(36, 94, 234, .18);
+            color: #fff;
+            font: 700 14px "DM Sans", sans-serif;
+            cursor: pointer;
+            transition: background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-1px);
+            background: #174bd0;
+            box-shadow: 0 11px 22px rgba(36, 94, 234, .24);
+        }
+
+        .submit-button svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 22px;
+            padding-top: 19px;
+            border-top: 1px solid #edf0f6;
+        }
+
+        .back-link {
+            color: #65738a;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #245eea;
+        }
+
+        .site-footer {
+            min-height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border-top: 1px solid #e6ebf4;
+            color: #8a96a9;
+            font-size: 11px;
+        }
+
+        .footer-label {
+            color: #66748b;
+            font-weight: 700;
+        }
+
+        @media (max-width: 800px) {
+            .page-shell {
+                width: min(100% - 40px, 620px);
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 36px;
+                padding: 48px 0;
+            }
+
+            .intro {
+                max-width: 560px;
+            }
+
+            .feature-list {
+                grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+                gap: 12px;
+                margin-top: 24px;
+            }
+
+            .login-card {
+                max-width: none;
+                justify-self: stretch;
+            }
+        }
+
+        @media (min-width: 801px) and (max-height: 760px) {
+            .site-header {
+                min-height: 72px;
+            }
+
+            .main-content {
+                padding: 32px 0;
+            }
+
+            .site-footer {
+                min-height: 50px;
+            }
+        }
+
+        @media (min-width: 801px) and (max-height: 650px) {
+            .site-header {
+                min-height: 64px;
+            }
+
+            .main-content {
+                gap: 42px;
+                padding: 12px 0;
+            }
+
+            .eyebrow {
+                margin-bottom: 15px;
+            }
+
+            h1 {
+                font-size: clamp(36px, 4.2vw, 48px);
+            }
+
+            .intro-copy {
+                margin-top: 14px;
+                font-size: 14px;
+            }
+
+            .feature-list {
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .login-card {
+                padding: 25px 30px;
+            }
+
+            .card-heading {
+                margin-bottom: 18px;
+            }
+
+            .field {
+                margin-top: 13px;
+            }
+
+            .field input {
+                height: 44px;
+            }
+
+            .submit-button {
+                min-height: 46px;
+                margin-top: 19px;
+            }
+
+            .card-footer {
+                margin-top: 14px;
+                padding-top: 12px;
+            }
+
+            .site-footer {
+                min-height: 42px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-shell {
+                width: calc(100% - 32px);
+            }
+
+            .site-header {
+                min-height: 72px;
+            }
+
+            .brand-mark {
+                width: 38px;
+                height: 38px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-caption {
+                font-size: 9px;
+            }
+
+            .header-note {
+                font-size: 11px;
+            }
+
+            .main-content {
+                gap: 29px;
+                padding: 39px 0;
+            }
+
+            .eyebrow {
+                margin-bottom: 17px;
+                font-size: 10px;
+            }
+
+            h1 {
+                font-size: clamp(38px, 11vw, 48px);
+            }
+
+            .intro-copy {
+                margin-top: 15px;
+                font-size: 14px;
+            }
+
+            .feature-list {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .login-card {
+                padding: 27px 22px;
+                border-radius: 17px;
+            }
+
+            .card-heading {
+                margin-bottom: 21px;
+            }
+
+            .site-footer {
+                min-height: 54px;
+                align-items: flex-start;
+                flex-direction: column;
+                justify-content: center;
+                gap: 3px;
+                padding: 10px 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="{% url 'home' %}" aria-label="COBL home">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <span class="header-note">College OBE platform</span>
+        </header>
+
+        <section class="main-content" aria-labelledby="page-title">
+            <div class="intro">
+                <p class="eyebrow">Welcome back</p>
+                <h1 id="page-title">Your work, <span class="heading-accent">all in one place.</span></h1>
+                <p class="intro-copy">
+                    Sign in to manage courses, assessments and learning outcomes for your institution.
+                </p>
+                <ul class="feature-list" aria-label="Platform features">
+                    <li><span class="feature-icon" aria-hidden="true">✓</span>Course and class management</li>
+                    <li><span class="feature-icon" aria-hidden="true">✓</span>Assessment and marks tracking</li>
+                    <li><span class="feature-icon" aria-hidden="true">✓</span>Outcome mapping and attainment</li>
+                </ul>
+            </div>
+
+            <section class="login-card" aria-labelledby="login-title">
+                <div class="card-heading">
+                    <h2 id="login-title">
+                        {% if role == "hod" %}HOD{% elif role == "teacher" %}Teacher{% elif role == "student" %}Student{% else %}Sign in{% endif %}
+                    </h2>
+                    <p>Enter your account details to continue to the dashboard.</p>
+                    {% if role %}
+                    <span class="role-badge">{{ role|title }} account</span>
+                    {% endif %}
+                </div>
+
+                {% if error %}
+                <div class="error-message" role="alert">{{ error }}</div>
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="role" value="{{ role }}">
+
+                    <div class="field">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" autocomplete="username" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+                            <button class="password-toggle" type="button" aria-controls="password" aria-label="Show password" aria-pressed="false">Show</button>
+                        </div>
+                    </div>
+
+                    <button class="submit-button" type="submit">
+                        Sign in
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d="M4.25 10h11.5M10 4.25 15.75 10 10 15.75" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+
+                <div class="card-footer">
+                    <a class="back-link" href="{% url 'home' %}">← Back to home</a>
+                </div>
+            </section>
+        </section>
+
+        <footer class="site-footer">
+            <span class="footer-label">COBL System</span>
+            <span>College Outcome Based Learning</span>
+        </footer>
+    </main>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const passwordToggle = document.querySelector(".password-toggle");
+
+        passwordToggle.addEventListener("click", () => {
+            const showingPassword = passwordInput.type === "password";
+            passwordInput.type = showingPassword ? "text" : "password";
+            passwordToggle.textContent = showingPassword ? "Hide" : "Show";
+            passwordToggle.setAttribute("aria-label", showingPassword ? "Hide password" : "Show password");
+            passwordToggle.setAttribute("aria-pressed", String(showingPassword));
+        });
+    </script>
+</body>
+</html>

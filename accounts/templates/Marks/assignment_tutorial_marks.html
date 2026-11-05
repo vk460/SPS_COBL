@@ -1,0 +1,675 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>{{ tool.sub_tool }} | Assignment Marks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 2px;
+        }
+
+        .page-shell {
+            width: min(1500px, calc(100% - 48px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 15px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 14px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link:hover { color: #245eea; }
+
+        .page-content { padding: 24px 0 42px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 14px;
+            color: #8995a8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a { color: #65738a; text-decoration: none; }
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 16px;
+        }
+
+        .eyebrow {
+            margin: 0 0 7px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(24px, 2.8vw, 32px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 7px 0 0;
+            color: #78869b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 9px 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 11px "Manrope", sans-serif;
+            white-space: nowrap;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .top-actions form { margin: 0; }
+
+        .locked-badge {
+            padding: 7px 10px;
+            border: 1px solid #dce7ff;
+            border-radius: 20px;
+            background: #f3f6ff;
+            color: #245eea;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .05em;
+        }
+
+        .locked-badge.editing {
+            border-color: #cdebdc;
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .button {
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font: 700 10px "DM Sans", sans-serif;
+            text-decoration: none;
+            transition: background .18s ease, color .18s ease, transform .18s ease;
+        }
+
+        .button:hover { transform: translateY(-1px); }
+        .button-primary { background: #245eea; color: #fff; }
+        .button-primary:hover { background: #194dc8; }
+        .button-success { background: #20b981; color: #fff; }
+        .button-success:hover { background: #159d6c; }
+        .button-secondary { border-color: #dfe6f0; background: #fff; color: #56657d; }
+        .button-secondary:hover { background: #f6f8fb; }
+        .button-export { border-color: #cdebdc; background: #f0faf4; color: #26734f; }
+        .button-export:hover { background: #e3f6eb; }
+        .button-import { background: #245eea; color: #fff; }
+        .button-import:hover { background: #194dc8; }
+
+        .messages {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 13px;
+        }
+
+        .message {
+            padding: 10px 12px;
+            border: 1px solid #dce7ff;
+            border-left: 3px solid #4a7dea;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #345d9c;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            border-color: #cdebdc;
+            border-left-color: #45a77b;
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .message.warning {
+            border-color: #f3e4be;
+            border-left-color: #e8ad35;
+            background: #fff9eb;
+            color: #87600c;
+        }
+
+        .message.error {
+            border-color: #f4dada;
+            border-left-color: #df7070;
+            background: #fff3f3;
+            color: #a84141;
+        }
+
+        .excel-card {
+            display: grid;
+            grid-template-columns: auto minmax(260px, 1fr);
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+            padding: 12px 14px;
+            border: 1px solid #e7ecf4;
+            border-radius: 13px;
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(34, 57, 97, .05);
+        }
+
+        .excel-card form { margin: 0; }
+
+        .import-row {
+            display: grid;
+            grid-template-columns: minmax(200px, 1fr) auto;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-input {
+            width: 100%;
+            min-height: 36px;
+            padding: 5px;
+            border: 1px solid #dbe3ef;
+            border-radius: 8px;
+            background: #fff;
+            color: #56657d;
+            font: 500 10px "DM Sans", sans-serif;
+        }
+
+        .file-input::file-selector-button {
+            margin-right: 8px;
+            padding: 7px 10px;
+            border: 0;
+            border-radius: 6px;
+            background: #eef3fb;
+            color: #53627a;
+            font: 700 10px "DM Sans", sans-serif;
+            cursor: pointer;
+        }
+
+        .table-card {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .table-caption {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 13px;
+            border-bottom: 1px solid #edf0f6;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .scroll-hint { display: none; }
+
+        .table-wrap {
+            max-width: 100%;
+            max-height: min(68vh, 760px);
+            overflow: auto;
+            position: relative;
+            overscroll-behavior: contain;
+        }
+
+        .marks-table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #34435b;
+            font-size: 11px;
+        }
+
+        .marks-table th,
+        .marks-table td {
+            min-width: 88px;
+            padding: 5px 10px;
+            border-right: 1px solid #e7ecf4;
+            border-bottom: 1px solid #e7ecf4;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .marks-table thead th {
+            position: sticky;
+            background: #f3f6fb;
+            color: #53627a;
+            font-size: 10px;
+            font-weight: 800;
+            z-index: 5;
+        }
+
+        .marks-table thead tr:first-child th {
+            top: 0;
+            height: 38px;
+            background: #eef3fb;
+            color: #2453a7;
+            font: 800 10px "Manrope", sans-serif;
+        }
+
+        .marks-table thead tr:nth-child(2) th { top: 38px; }
+        .marks-table thead tr:nth-child(3) th { top: 70px; }
+
+        .sticky-col {
+            position: sticky;
+            background: #f8faff;
+            box-shadow: 1px 0 0 #e7ecf4;
+        }
+
+        .sticky-col.sr {
+            left: 0;
+            min-width: 60px;
+            width: 60px;
+            max-width: 60px;
+            z-index: 7;
+        }
+
+        .sticky-col.roll {
+            left: 60px;
+            min-width: 80px;
+            width: 80px;
+            max-width: 80px;
+            z-index: 7;
+        }
+
+        .sticky-col.name {
+            left: 140px;
+            min-width: 260px;
+            width: 260px;
+            max-width: 260px;
+            overflow: hidden;
+            text-align: left !important;
+            text-overflow: ellipsis;
+            z-index: 7;
+        }
+
+        .marks-table thead .sticky-col {
+            background: #f3f6fb;
+            z-index: 9;
+        }
+
+        .marks-table thead tr:first-child .sticky-col { background: #eef3fb; }
+        .marks-table tbody tr:nth-child(even) td:not(.sticky-col) { background: #fbfcfe; }
+        .marks-table tbody tr:hover td { background: #f5f8ff; }
+        .marks-table tbody tr:hover .sticky-col { background: #f1f5fd; }
+
+        .mark-input {
+            width: 76px;
+            min-height: 30px;
+            padding: 3px 6px;
+            border: 1px solid #dbe3ef;
+            border-radius: 8px;
+            background: #fff;
+            color: #263650;
+            font: 600 11px "DM Sans", sans-serif;
+            text-align: center;
+        }
+
+        .total-input {
+            width: 78px;
+            border-color: transparent;
+            background: #f0faf4;
+            color: #18875f;
+            font-weight: 800;
+        }
+
+        .mark-input.invalid-mark {
+            border-color: #df7070;
+            background: #fff1f1;
+            color: #a84141;
+            box-shadow: 0 0 0 2px rgba(223, 112, 112, .12);
+        }
+
+        .empty-state {
+            padding: 28px 14px;
+            color: #78869b;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        @media (max-width: 900px) {
+            .page-shell { width: calc(100% - 32px); }
+            .topbar { min-height: 68px; }
+            .page-content { padding-top: 18px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 11px; }
+            .top-actions { width: 100%; justify-content: flex-start; }
+            .excel-card { grid-template-columns: 1fr; }
+            .marks-table { min-width: 820px; }
+            .sticky-col.name { min-width: 220px; width: 220px; max-width: 220px; }
+            .marks-table thead tr:nth-child(2) th { top: 36px; }
+            .marks-table thead tr:nth-child(3) th { top: 68px; }
+        }
+
+        @media (max-width: 520px) {
+            .page-shell { width: calc(100% - 24px); }
+            .top-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .top-actions > * { width: 100%; }
+            .top-actions form { display: contents; }
+            .locked-badge { grid-column: 1 / -1; justify-self: start; width: auto; }
+            .import-row { grid-template-columns: 1fr; }
+            .table-caption { font-size: 9px; }
+            .scroll-hint { display: inline; }
+            .marks-table .sticky-col.sr { min-width: 48px; width: 48px; max-width: 48px; }
+            .marks-table .sticky-col.roll { left: 48px; min-width: 70px; width: 70px; max-width: 70px; }
+            .marks-table .sticky-col.name { left: 118px; min-width: 190px; width: 190px; max-width: 190px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' tool.course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'assessment_tool_page' tool.course.id %}">Back to assessment tools</a>
+        </header>
+
+        <div class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' tool.course.id %}">{{ tool.course.course_name }}</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <a href="{% url 'assessment_tool_page' tool.course.id %}">Assessment tools</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <span>{{ tool.sub_tool }}</span>
+            </nav>
+
+            <section class="page-heading" aria-labelledby="page-title">
+                <div>
+                    <p class="eyebrow">Student assessment</p>
+                    <h1 id="page-title">{{ tool.main_tool }} · {{ tool.sub_tool }} Marks</h1>
+                    <p class="page-description">Review and manage assignment marks by course outcome.</p>
+                </div>
+                <div class="top-actions">
+                    <span class="locked-badge {% if not is_locked %}editing{% endif %}">
+                        {% if is_locked %}LOCKED{% else %}EDIT MODE{% endif %}
+                    </span>
+                    <a class="button button-secondary" href="{% url 'assessment_tool_page' tool.course.id %}">Back to tools</a>
+                    {% if is_locked %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button class="button button-primary" name="edit_mode">Edit marks</button>
+                    </form>
+                    {% endif %}
+                    <button class="button button-success" name="save_marks" form="marksForm" {% if is_locked %}style="display:none" {% endif %}>Save marks</button>
+                </div>
+            </section>
+
+            {% if messages %}
+            <div class="messages" role="status" aria-live="polite">
+                {% for message in messages %}
+                    <p class="message {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if not is_locked %}
+            <section class="excel-card" aria-label="Excel import and export">
+                <form method="POST">
+                    {% csrf_token %}
+                    <button class="button button-export" name="export_excel">Export Excel</button>
+                </form>
+                <form method="POST" enctype="multipart/form-data" class="import-row">
+                    {% csrf_token %}
+                    <input type="file" name="excel_file" class="file-input" accept=".xlsx" required>
+                    <button class="button button-import" name="import_excel">Import Excel</button>
+                </form>
+            </section>
+            {% endif %}
+
+            <form method="POST" id="marksForm">
+                {% csrf_token %}
+                <section class="table-card" aria-label="Student assignment marks">
+                    <div class="table-caption">
+                        <span>{{ student_rows|length }} students · {{ questions|length }} CO distributions</span>
+                        <span><span class="scroll-hint">Swipe horizontally to see all CO columns · </span>Use arrow keys or Enter to move between mark fields</span>
+                    </div>
+                    <div class="table-wrap" role="region" aria-label="Student assignment marks table" tabindex="0">
+                        <table class="marks-table">
+                            <thead>
+                                <tr>
+                                    <th class="sticky-col sr" rowspan="3" scope="col">Sr</th>
+                                    <th class="sticky-col roll" rowspan="3" scope="col">Roll</th>
+                                    <th class="sticky-col name" rowspan="3" scope="col">Student Name</th>
+                                    {% for group in assignment_groups %}
+                                    <th colspan="{{ group.questions|length }}">{{ group.label }}</th>
+                                    {% endfor %}
+                                    <th rowspan="3" scope="col">Total</th>
+                                </tr>
+                                <tr>
+                                    {% for q in questions %}
+                                    <th scope="col">{% if q.co %}CO{{ q.co.co_number }}{% else %}No CO{% endif %}</th>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    {% for q in questions %}
+                                    <th title="Max Marks">{{ q.marks }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in student_rows %}
+                                <tr>
+                                    <td class="sticky-col sr">{{ forloop.counter }}</td>
+                                    <td class="sticky-col roll">{{ row.student.roll_no }}</td>
+                                    <td class="sticky-col name" title="{{ row.student.name }}">{{ row.student.name }}</td>
+                                    {% for item in row.marks %}
+                                    <td>
+                                        <input type="number" class="mark-input {% if item.is_skipped %}invalid-mark{% endif %}"
+                                            name="marks_{{ row.student.id }}_{{ item.q_id }}"
+                                            data-row="{{ forloop.parentloop.counter0 }}" data-col="{{ forloop.counter0 }}"
+                                            min="0" max="{{ item.max_marks }}" value="{{ item.mark|default_if_none:'' }}"
+                                            {% if is_locked %}readonly{% endif %}>
+                                    </td>
+                                    {% endfor %}
+                                    <td><input class="mark-input total-input total-cell" value="{{ row.total }}" readonly aria-label="Total marks for {{ row.student.name }}"></td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="{{ questions|length|add:4 }}">
+                                        <div class="empty-state">No students are assigned to this class.</div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function calculateTotals() {
+            document.querySelectorAll(".marks-table tbody tr").forEach(row => {
+                const inputs = row.querySelectorAll(".mark-input:not(.total-cell)");
+                if (!inputs.length) return;
+
+                const total = [...inputs].reduce(
+                    (sum, input) => sum + (parseInt(input.value, 10) || 0),
+                    0
+                );
+                const totalCell = row.querySelector(".total-cell");
+                if (totalCell) totalCell.value = total;
+            });
+        }
+
+        document.addEventListener("input", calculateTotals);
+        calculateTotals();
+
+        function validateMarkInput(input) {
+            const value = input.value === "" ? null : Number(input.value);
+            const max = input.max === "" ? null : Number(input.max);
+            const invalid = value !== null && (value < 0 || (max !== null && value > max));
+            input.classList.toggle("invalid-mark", invalid);
+            return !invalid;
+        }
+
+        document.querySelectorAll(".mark-input:not(.total-cell)").forEach(input => {
+            input.addEventListener("input", () => validateMarkInput(input));
+            validateMarkInput(input);
+        });
+
+        document.getElementById("marksForm").addEventListener("submit", function (event) {
+            const invalid = [...document.querySelectorAll(".mark-input:not(.total-cell)")]
+                .some(input => !validateMarkInput(input));
+            if (invalid) {
+                event.preventDefault();
+                alert("Please correct red cells. Negative marks or marks above max are not allowed.");
+            }
+        });
+
+        const inputs = document.querySelectorAll(".mark-input:not(.total-cell)");
+
+        inputs.forEach(input => {
+            input.addEventListener("keydown", function (event) {
+                const row = parseInt(this.dataset.row, 10);
+                const col = parseInt(this.dataset.col, 10);
+
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    moveTo(row + 1, col);
+                }
+                if (event.key === "ArrowRight") moveTo(row, col + 1);
+                if (event.key === "ArrowLeft") moveTo(row, col - 1);
+                if (event.key === "ArrowDown") moveTo(row + 1, col);
+                if (event.key === "ArrowUp") moveTo(row - 1, col);
+            });
+        });
+
+        function moveTo(row, col) {
+            const next = document.querySelector(
+                `.mark-input:not(.total-cell)[data-row="${row}"][data-col="${col}"]`
+            );
+            if (next) {
+                next.focus();
+                next.select();
+            }
+        }
+    </script>
+</body>
+</html>

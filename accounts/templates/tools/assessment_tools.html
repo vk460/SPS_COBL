@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Assessment Tools | {{ course.course_code }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .page-shell {
+            width: min(1240px, calc(100% - 48px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 15px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 14px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link:hover { color: #245eea; }
+
+        .back-link svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .page-content { padding: 27px 0 44px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 15px;
+            color: #8995a8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a {
+            color: #65738a;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+
+        .eyebrow {
+            margin: 0 0 7px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(24px, 2.8vw, 32px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 8px 0 0;
+            color: #78869b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 9px 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 11px "Manrope", sans-serif;
+            white-space: nowrap;
+        }
+
+        .messages {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .message {
+            padding: 11px 13px;
+            border: 1px solid #cdebdc;
+            border-left: 3px solid #45a77b;
+            border-radius: 9px;
+            background: #f0faf4;
+            color: #26734f;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .message.warning {
+            border-color: #f3e4be;
+            border-left-color: #e8ad35;
+            background: #fff9eb;
+            color: #87600c;
+        }
+
+        .message.error {
+            border-color: #f4dada;
+            border-left-color: #df7070;
+            background: #fff3f3;
+            color: #a84141;
+        }
+
+        .message.info {
+            border-color: #dce7ff;
+            border-left-color: #4a7dea;
+            background: #f3f6ff;
+            color: #345d9c;
+        }
+
+        .panel {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel + .panel { margin-top: 16px; }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 14px 17px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 14px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel-subtitle {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .tool-count {
+            flex: 0 0 auto;
+            padding: 7px 10px;
+            border: 1px solid #e5e9f0;
+            border-radius: 20px;
+            background: #f6f8fb;
+            color: #697991;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .tool-form { padding: 16px 17px 17px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #53627a;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .form-field select {
+            width: 100%;
+            min-height: 42px;
+            padding: 0 12px;
+            border: 1px solid #dbe3ef;
+            border-radius: 9px;
+            background: #fff;
+            color: #263650;
+            font: 500 12px "DM Sans", sans-serif;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        .form-field select:focus {
+            border-color: #83a7f8;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        .form-actions { margin-top: 14px; }
+
+        .button {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 0 14px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font: 700 11px "DM Sans", sans-serif;
+            text-decoration: none;
+            transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+        }
+
+        .button:hover { transform: translateY(-1px); }
+
+        .button-primary {
+            background: #245eea;
+            box-shadow: 0 6px 14px rgba(36, 94, 234, .18);
+            color: #fff;
+        }
+
+        .button-primary:hover { background: #194dc8; }
+
+        .button-config {
+            min-height: 32px;
+            padding: 0 10px;
+            border-color: #dce7ff;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .button-config:hover { background: #eaf0ff; }
+
+        .button-marks {
+            min-height: 32px;
+            padding: 0 10px;
+            border-color: #d2edf8;
+            background: #effaff;
+            color: #087ba8;
+        }
+
+        .button-marks:hover { background: #e0f6ff; }
+
+        .button-danger {
+            min-height: 32px;
+            padding: 0 10px;
+            border-color: #f4dada;
+            background: #fff4f4;
+            color: #b74949;
+        }
+
+        .button-danger:hover { background: #ffe8e8; }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+        }
+
+        .scroll-hint {
+            display: none;
+            margin: 0;
+            padding: 9px 14px 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .tools-table {
+            width: 100%;
+            min-width: 720px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #34435b;
+            font-size: 11px;
+        }
+
+        .tools-table th,
+        .tools-table td {
+            padding: 11px 12px;
+            border-bottom: 1px solid #edf0f6;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .tools-table th {
+            background: #f3f6fb;
+            color: #65738a;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tools-table tbody tr:last-child td { border-bottom: 0; }
+        .tools-table tbody tr:hover td { background: #fafbfe; }
+        .tools-table .serial { width: 58px; color: #8995a8; font-weight: 700; }
+        .tools-table .action-cell { width: 110px; text-align: right; }
+        .tool-name { color: #243650; font-weight: 700; }
+
+        .tool-type {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 8px;
+            border: 1px solid #e3eaf5;
+            border-radius: 7px;
+            background: #f7f9fc;
+            color: #56657d;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .tool-link {
+            color: #245eea;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .tool-link:hover { text-decoration: underline; }
+        .unavailable { color: #a0aabc; }
+
+        .locked-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 6px;
+            color: #8995a8;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .empty-state {
+            padding: 28px 16px;
+            color: #78869b;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .empty-state strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #253650;
+            font: 800 13px "Manrope", sans-serif;
+        }
+
+        .panel-footer {
+            padding: 10px 16px;
+            border-top: 1px solid #edf0f6;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 680px) {
+            .page-shell { width: calc(100% - 28px); }
+            .topbar { min-height: 68px; }
+            .page-content { padding-top: 20px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+            .form-grid { grid-template-columns: 1fr; gap: 12px; }
+            .panel-header { align-items: flex-start; }
+            .tools-table { min-width: 700px; }
+            .scroll-hint { display: block; }
+        }
+
+        @media (max-width: 420px) {
+            .panel-header { flex-direction: column; gap: 8px; }
+            .button-primary { width: 100%; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'view_course' course.id %}">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5M7.5 10H17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Back to course
+            </a>
+        </header>
+
+        <div class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' course.id %}">{{ course.course_name }}</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <span>Assessment tools</span>
+            </nav>
+
+            <section class="page-heading" aria-labelledby="page-title">
+                <div>
+                    <p class="eyebrow">Course assessment setup</p>
+                    <h1 id="page-title">Assessment Tools</h1>
+                    <p class="page-description">Create and manage assessment tools, configure their structure, and enter student marks.</p>
+                </div>
+                <span class="course-chip">{{ course.course_code }} · {{ course.course_name }}</span>
+            </section>
+
+            {% if messages %}
+            <div class="messages" role="status" aria-live="polite">
+                {% for message in messages %}
+                    <p class="message {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <section class="panel" aria-labelledby="create-tool-title">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title" id="create-tool-title">Add an assessment tool</h2>
+                        <p class="panel-subtitle">Choose a main tool first to load its available sub-tools.</p>
+                    </div>
+                </div>
+                <form class="tool-form" method="POST">
+                    {% csrf_token %}
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="main_tool">Main tool</label>
+                            <select name="main_tool" id="main_tool" required>
+                                <option value="">Select main tool</option>
+                                <option value="ICA">ICA</option>
+                                <option value="ISE Assignment">ISE Assignment</option>
+                                <option value="ISE Exam">ISE Exam</option>
+                                <option value="ESE">ESE</option>
+                                <option value="Mock Oral">Mock Oral</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="sub_tool">Sub-tool</label>
+                            <select name="sub_tool" id="sub_tool" required>
+                                <option value="">Select main tool first</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="button button-primary">Add tool</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="panel" aria-labelledby="tools-list-title">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title" id="tools-list-title">Assessment tools</h2>
+                        <p class="panel-subtitle">Open a tool to configure it or enter marks for students.</p>
+                    </div>
+                    <span class="tool-count">{{ tools|length }} tool{{ tools|length|pluralize }}</span>
+                </div>
+                {% if tools %}<p class="scroll-hint">Scroll horizontally to view all actions.</p>{% endif %}
+                <div class="table-wrap" role="region" aria-label="Assessment tools list" tabindex="0">
+                    <table class="tools-table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="serial">Sr.</th>
+                                <th scope="col">Main tool</th>
+                                <th scope="col">Sub-tool</th>
+                                <th scope="col">Student marks</th>
+                                <th scope="col" class="action-cell">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tool in tools %}
+                            <tr>
+                                <td class="serial">{{ forloop.counter }}</td>
+                                <td><span class="tool-type">{{ tool.main_tool }}</span></td>
+                                <td>
+                                    {% if tool.main_tool == "ICA" %}
+                                    <a class="tool-link" href="{% url 'ica_tool_detail' tool.id %}">{{ tool.sub_tool }}</a>
+                                    {% elif tool.main_tool == "ISE Assignment" %}
+                                    <a class="tool-link" href="{% url 'assignment_tutorial_page' tool.id %}">{{ tool.sub_tool }}</a>
+                                    {% elif tool.main_tool == "ISE Exam" %}
+                                    <a class="tool-link" href="{% url 'exam_details' tool.id %}">{{ tool.sub_tool }}</a>
+                                    {% elif tool.main_tool == "ESE" %}
+                                    <a class="tool-link" href="{% url 'university_exam_page' tool.id %}">{{ tool.sub_tool }}</a>
+                                    {% elif tool.main_tool == "Mock Oral" %}
+                                    <a class="tool-link" href="{% url 'university_exam_page' tool.id %}">{{ tool.sub_tool }}</a>
+                                    {% else %}
+                                    <span class="tool-name">{{ tool.sub_tool }}</span>
+                                    {% endif %}
+                                    {% if tool.is_locked %}<span class="locked-badge">Locked</span>{% endif %}
+                                </td>
+                                <td>
+                                    {% if tool.main_tool == "ICA" %}
+                                    <a class="button button-marks" href="{% url 'ica_student_marks' tool.id %}">Enter / view marks</a>
+                                    {% elif tool.main_tool == "ISE Assignment" %}
+                                    <a class="button button-marks" href="{% url 'assignment_tutorial_marks' tool.id %}">Enter / view marks</a>
+                                    {% elif tool.main_tool == "ISE Exam" %}
+                                    <a class="button button-marks" href="{% url 'exam_marks' tool.id %}">Enter / view marks</a>
+                                    {% elif tool.main_tool == "ESE" %}
+                                    <a class="button button-marks" href="{% url 'university_exam_marks' tool.id %}">Enter / view marks</a>
+                                    {% elif tool.main_tool == "Mock Oral" %}
+                                    <a class="button button-marks" href="{% url 'university_exam_marks' tool.id %}">Enter / view marks</a>
+                                    {% else %}
+                                    <span class="unavailable">Not available</span>
+                                    {% endif %}
+                                </td>
+                                <td class="action-cell">
+                                    <form method="POST" action="{% url 'delete_assessment_tool' tool.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button button-danger"
+                                                onclick="return confirm('Delete this assessment tool and its setup? Tools with saved student marks cannot be deleted.');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">
+                                    <div class="empty-state">
+                                        <strong>No assessment tools yet</strong>
+                                        Add a main tool and sub-tool above to get started.
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if tools %}
+                <footer class="panel-footer">Tools with saved student marks cannot be deleted, protecting the existing assessment records.</footer>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const toolData = {
+            "ICA": ["Assignment", "Experiment"],
+            "ISE Assignment": ["Assignment", "Tutorial"],
+            "ISE Exam": ["UT1", "UT2", "UT3", "Prelim"],
+            "ESE": ["University Exam", "POE"],
+            "Mock Oral": ["Mock Oral"]
+        };
+
+        const mainTool = document.getElementById("main_tool");
+        const subTool = document.getElementById("sub_tool");
+
+        mainTool.addEventListener("change", function () {
+            const selected = this.value;
+            subTool.innerHTML = '<option value="">Select sub-tool</option>';
+
+            if (toolData[selected]) {
+                toolData[selected].forEach(function (item) {
+                    const option = document.createElement("option");
+                    option.value = item;
+                    option.text = item;
+                    subTool.appendChild(option);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Word Report Header | COBL System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/site.css">
+    <style>
+        :root { color-scheme: light; font-family: "DM Sans", "Segoe UI", sans-serif; color: #17243b; background: #f5f8ff; }
+        * { box-sizing: border-box; }
+        body { min-height: 100vh; margin: 0; background: radial-gradient(ellipse at 86% 8%, rgba(196,218,255,.36), transparent 32%), #f5f8ff; color: #17243b; }
+        .shell { width: min(900px, calc(100% - 40px)); margin: 0 auto; }
+        .topbar { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #e6ebf4; }
+        .brand { color: #17243b; font: 800 14px "Manrope", sans-serif; text-decoration: none; }
+        .back-link { color: #245eea; font-size: 13px; font-weight: 700; text-decoration: none; }
+        main { padding: 34px 0 48px; }
+        .eyebrow { margin: 0 0 7px; color: #245eea; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+        h1 { margin: 0; font: 800 28px/1.2 "Manrope", sans-serif; }
+        .intro { margin: 9px 0 20px; color: #78869b; font-size: 13px; line-height: 1.6; }
+        .panel { padding: 22px; border: 1px solid #e7ecf4; border-radius: 14px; background: rgba(255,255,255,.96); box-shadow: 0 8px 25px rgba(34,57,97,.05); }
+        .message { margin-bottom: 14px; padding: 11px 13px; border: 1px solid #cdebdc; border-radius: 8px; background: #f0faf4; color: #26734f; font-size: 13px; }
+        .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; }
+        .field { display: grid; align-content: start; gap: 7px; color: #45546c; font-size: 12px; font-weight: 700; }
+        .field input { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid #d9e2ef !important; border-radius: 8px !important; background: #fff !important; color: #17243b !important; font: 500 13px "DM Sans", sans-serif; }
+        .read-value { min-height: 42px; display: flex; align-items: center; padding: 9px 11px; border: 1px solid #e7ecf4; border-radius: 8px; background: #f8faff; color: #17243b; font-size: 13px; font-weight: 500; overflow-wrap: anywhere; }
+        .field input:focus { border-color: #7d9ff4 !important; outline: 3px solid #e8efff; }
+        .errorlist { margin: 0; padding-left: 18px; color: #b42323; font-size: 11px; font-weight: 500; }
+        .help { color: #8995a8; font-size: 11px; font-weight: 400; line-height: 1.4; }
+        .shared-note { margin: 18px 0 0; padding: 12px; border-radius: 8px; background: #f3f6ff; color: #56657d; font-size: 12px; line-height: 1.5; }
+        .actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+        .button { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; padding: 0 15px; border: 1px solid #d9e2ef; border-radius: 8px; background: #fff; color: #45546c; font: 700 12px "DM Sans", sans-serif; text-decoration: none; cursor: pointer; }
+        .button.primary { border-color: #245eea; background: #245eea; color: #fff; }
+        @media (max-width: 620px) { .shell { width: calc(100% - 28px); } .field-grid { grid-template-columns: 1fr; } .panel { padding: 16px; } h1 { font-size: 24px; } }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <nav class="topbar" aria-label="Main navigation">
+            <a class="brand" href="{% url 'hod_dashboard' %}">COBL System · {{ department.name }}</a>
+            <a class="back-link" href="{% url 'hod_dashboard' %}">Back to dashboard</a>
+        </nav>
+        <main>
+            <p class="eyebrow">Department settings</p>
+            <h1>Word Report Header</h1>
+            <p class="intro">Department-specific details used in this department’s CO-PO-PSO Word report header.</p>
+            <section class="panel" aria-label="Department report header settings">
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="field-grid">
+                        {% for field in form %}
+                            <label class="field" for="{{ field.id_for_label }}">
+                                {{ field.label }}
+                                {% if edit_mode %}
+                                    {{ field }}
+                                {% else %}
+                                    <span class="read-value">{{ field.value|default:"—" }}</span>
+                                {% endif %}
+                                {% if field.help_text %}<span class="help">{{ field.help_text }}</span>{% endif %}
+                                {% if edit_mode %}{{ field.errors }}{% endif %}
+                            </label>
+                        {% endfor %}
+                        <label class="field" for="{{ college_form.website.id_for_label }}">
+                            {{ college_form.website.label }}
+                            {% if edit_mode %}
+                                {{ college_form.website }}
+                            {% else %}
+                                <span class="read-value">{{ college_form.website.value|default:"—" }}</span>
+                            {% endif %}
+                            {% if college_form.website.help_text %}<span class="help">{{ college_form.website.help_text }}</span>{% endif %}
+                            {% if edit_mode %}{{ college_form.website.errors }}{% endif %}
+                        </label>
+                    </div>
+                    <p class="shared-note">The college name, logo, address, website and Principal details are shared across departments. The department name, accreditation, email and HOD details vary by department.</p>
+                    <div class="actions">
+                        {% if edit_mode %}
+                            <a class="button" href="{% url 'department_report_header' %}">Cancel</a>
+                            <button class="button primary" type="submit">Save header details</button>
+                        {% else %}
+                            <a class="button" href="{% url 'hod_dashboard' %}">Back to dashboard</a>
+                            <a class="button primary" href="{% url 'department_report_header' %}?edit=1">Edit details</a>
+                        {% endif %}
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

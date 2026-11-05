@@ -1,0 +1,672 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>CO Attainment Setup | {{ course.course_code }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/site.css">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0 !important;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff !important;
+            color: #17243b !important;
+            font-family: "DM Sans", "Segoe UI", sans-serif !important;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .page-shell {
+            width: min(1240px, calc(100% - 48px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #245eea;
+            color: #fff;
+            font: 800 14px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 13px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 3px;
+            color: #78869c;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link:hover { color: #245eea; }
+        .page-content { padding: 23px 0 42px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 13px;
+            color: #8995a8;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a { color: #65738a; text-decoration: none; }
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 16px;
+        }
+
+        .eyebrow {
+            margin: 0 0 6px;
+            color: #245eea;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(23px, 2.8vw, 30px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 7px 0 0;
+            color: #78869b;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 8px 11px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 10px "Manrope", sans-serif;
+        }
+
+        .heading-actions {
+            display: flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge {
+            padding: 7px 10px;
+            border: 1px solid #dce7ff;
+            border-radius: 20px;
+            background: #f3f6ff;
+            color: #245eea;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .status-badge.editing {
+            border-color: #cdebdc;
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .button {
+            min-height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font: 700 10px "DM Sans", sans-serif;
+            text-decoration: none;
+            transition: background .18s ease, color .18s ease, transform .18s ease;
+        }
+
+        .button[hidden] { display: none !important; }
+        .button:hover { transform: translateY(-1px); }
+        .button-primary { background: #245eea; color: #fff; }
+        .button-primary:hover { background: #194dc8; }
+        .button-secondary { border-color: #dfe6f0; background: #fff; color: #56657d; }
+        .button-secondary:hover { background: #f6f8fb; }
+        .button-success { background: #20a879; color: #fff; }
+        .button-success:hover { background: #168b64; }
+
+        .messages {
+            display: grid;
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            padding: 9px 11px;
+            border: 1px solid #dce7ff;
+            border-left: 3px solid #4a7dea;
+            border-radius: 8px;
+            background: #f3f6ff;
+            color: #345d9c;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            border-color: #cdebdc;
+            border-left-color: #45a77b;
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .message.error {
+            border-color: #f4dada;
+            border-left-color: #df7070;
+            background: #fff3f3;
+            color: #a84141;
+        }
+
+        .panel {
+            overflow: hidden;
+            margin-bottom: 13px;
+            border: 1px solid #e7ecf4;
+            border-radius: 14px;
+            background: rgba(255,255,255,.97);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 15px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 13px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel-subtitle {
+            margin: 3px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.45;
+        }
+
+        .weight-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            padding: 13px 15px;
+        }
+
+        .weight-card {
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #e8edf5;
+            border-radius: 10px;
+            background: #fbfcfe;
+        }
+
+        .weight-card.direct,
+        .weight-card.indirect { grid-column: span 1; }
+
+        .weight-card-title {
+            margin: 0 0 8px;
+            color: #53627a;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .055em;
+            text-transform: uppercase;
+        }
+
+        .weight-card-title span {
+            display: block;
+            margin-top: 3px;
+            color: #8995a8;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .weight-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .weight-input {
+            width: 100%;
+            min-height: 35px;
+            padding: 0 10px;
+            border: 1px solid #dbe3ef !important;
+            border-radius: 8px !important;
+            background: #fff !important;
+            color: #263650 !important;
+            font: 700 12px "DM Sans", sans-serif;
+            text-align: center;
+        }
+
+        .weight-input[readonly] {
+            background: #f6f8fb !important;
+            color: #52627a !important;
+        }
+
+        .percent {
+            color: #65738a;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            border-top: 1px solid #edf0f6;
+        }
+
+        .component-card {
+            min-width: 0;
+            padding: 12px 15px;
+            border-right: 1px solid #edf0f6;
+        }
+
+        .component-card:last-child { border-right: 0; }
+
+        .component-title {
+            margin: 0 0 3px;
+            color: #53627a;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .045em;
+            text-transform: uppercase;
+        }
+
+        .component-subtitle {
+            min-height: 14px;
+            margin: 0 0 8px;
+            color: #8995a8;
+            font-size: 9px;
+            line-height: 1.4;
+        }
+
+        .survey-value {
+            min-height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e8edf5;
+            border-radius: 8px;
+            background: #f6f8fb;
+            color: #52627a;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .weightage-note {
+            margin: 0;
+            padding: 0 15px 13px;
+            color: #78869b;
+            font-size: 10px;
+            line-height: 1.55;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+        }
+
+        .targets-table {
+            width: 100%;
+            min-width: 680px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #34435b;
+            font-size: 11px;
+        }
+
+        .targets-table th,
+        .targets-table td {
+            padding: 8px 11px;
+            border-right: 1px solid #edf0f6;
+            border-bottom: 1px solid #edf0f6;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .targets-table th:last-child,
+        .targets-table td:last-child { border-right: 0; }
+
+        .targets-table th {
+            background: #f3f6fb !important;
+            color: #65738a !important;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .targets-table tbody tr:last-child td { border-bottom: 0; }
+        .targets-table tbody tr:hover td { background: #fafbfe; }
+        .targets-table .co-code { width: 75px; color: #245eea; font-weight: 800; }
+        .targets-table .statement { min-width: 300px; text-align: left; line-height: 1.45; }
+        .targets-table .bl-col { width: 130px; }
+        .targets-table .target-col { width: 140px; }
+
+        .target-input,
+        .bl-select {
+            width: 100%;
+            min-height: 33px;
+            padding: 0 8px;
+            border: 1px solid #dbe3ef !important;
+            border-radius: 7px !important;
+            background: #fff !important;
+            color: #263650 !important;
+            font: 600 10px "DM Sans", sans-serif;
+        }
+
+        .target-input { max-width: 90px; text-align: center; }
+        .target-input[readonly] { background: #f6f8fb !important; color: #52627a !important; }
+        .bl-select { max-width: 100px; }
+
+        .readonly .bl-select {
+            pointer-events: none;
+            background: #f6f8fb !important;
+            color: #52627a !important;
+        }
+
+        .scroll-hint {
+            display: none;
+            margin: 0;
+            padding: 8px 12px 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        @media (max-width: 700px) {
+            .page-shell { width: calc(100% - 28px); }
+            .topbar { min-height: 62px; }
+            .page-content { padding-top: 18px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+            .course-chip { white-space: normal; }
+            .heading-actions { width: 100%; }
+            .heading-actions .button { flex: 1; }
+            .weight-grid { grid-template-columns: 1fr; padding: 11px; }
+            .component-grid { grid-template-columns: 1fr; }
+            .component-card { border-right: 0; border-bottom: 1px solid #edf0f6; }
+            .component-card:last-child { border-bottom: 0; }
+            .scroll-hint { display: block; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic Outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'view_course' course.id %}">Back to course</a>
+        </header>
+
+        <main class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' course.id %}">{{ course.course_code }}</a>
+                <span class="breadcrumb-separator">/</span>
+                <span>Attainment</span>
+                <span class="breadcrumb-separator">/</span>
+                <span>CO setup</span>
+            </nav>
+
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Course configuration</p>
+                    <h1>CO Attainment Setup</h1>
+                    <p class="page-description">Configure direct and indirect attainment weights and targets for each course outcome.</p>
+                    <span class="course-chip">{{ course.course_code }} · {{ course.course_name }}</span>
+                </div>
+                <div class="heading-actions">
+                    <span class="status-badge" id="editStatus">LOCKED</span>
+                    <button type="button" class="button button-primary" id="editBtn" onclick="enableEdit()">Edit</button>
+                    <button type="submit" class="button button-success" id="saveBtn" form="coTargetForm" hidden>Save changes</button>
+                </div>
+            </div>
+
+            <form method="post" id="coTargetForm">
+                {% csrf_token %}
+
+                {% if messages %}
+                <div class="messages" role="status">
+                    {% for message in messages %}
+                    <div class="message{% if message.tags %} {{ message.tags }}{% endif %}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <section class="panel" aria-labelledby="weightageTitle">
+                    <div class="panel-heading">
+                        <div>
+                            <h2 class="panel-title" id="weightageTitle">Weightage for CO Attainment</h2>
+                            <p class="panel-subtitle">Set the balance between direct and indirect attainment.</p>
+                        </div>
+                    </div>
+
+                    <div class="weight-grid">
+                        <div class="weight-card direct">
+                            <p class="weight-card-title">Direct attainment<span>Overall weight</span></p>
+                            <div class="weight-input-wrap">
+                                <input class="weight-input locked-input"
+                                       type="number" min="0" max="100"
+                                       name="direct_attainment"
+                                       value="{{ weightage.direct_attainment }}"
+                                       required readonly>
+                                <span class="percent">%</span>
+                            </div>
+                        </div>
+                        <div class="weight-card indirect">
+                            <p class="weight-card-title">Indirect attainment<span>Overall weight</span></p>
+                            <div class="weight-input-wrap">
+                                <input class="weight-input locked-input"
+                                       type="number" min="0" max="100"
+                                       name="indirect_attainment"
+                                       value="{{ weightage.indirect_attainment }}"
+                                       required readonly>
+                                <span class="percent">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="component-grid">
+                        <div class="component-card">
+                            <p class="component-title">Continuous Internal Evaluation (CIE)</p>
+                            <p class="component-subtitle">Share of direct attainment</p>
+                            <div class="weight-input-wrap">
+                                <input class="weight-input locked-input"
+                                       type="number" min="0" max="100"
+                                       name="cie_weightage"
+                                       value="{{ weightage.cie_weightage }}"
+                                       required readonly>
+                                <span class="percent">%</span>
+                            </div>
+                        </div>
+                        <div class="component-card">
+                            <p class="component-title">End Semester Examination (ESE)</p>
+                            <p class="component-subtitle">Share of direct attainment</p>
+                            <div class="weight-input-wrap">
+                                <input class="weight-input locked-input"
+                                       type="number" min="0" max="100"
+                                       name="ese_weightage"
+                                       value="{{ weightage.ese_weightage }}"
+                                       required readonly>
+                                <span class="percent">%</span>
+                            </div>
+                        </div>
+                        <div class="component-card">
+                            <p class="component-title">Course Exit Survey</p>
+                            <p class="component-subtitle">Uses the indirect-attainment weight</p>
+                            <div class="survey-value">{{ weightage.indirect_attainment }}%</div>
+                        </div>
+                    </div>
+                    <p class="weightage-note">
+                        CIE and ESE shares combine to form direct attainment, which is then given its overall weight.
+                        Course Exit Survey uses the indirect-attainment share. Each pair of weights must total 100%.
+                    </p>
+                </section>
+
+                <section class="panel" aria-labelledby="targetsTitle">
+                    <div class="panel-heading">
+                        <div>
+                            <h2 class="panel-title" id="targetsTitle">CO-wise Target (%)</h2>
+                            <p class="panel-subtitle">Set the Bloom's level and attainment target for each course outcome.</p>
+                        </div>
+                        <span class="panel-count">{{ cos|length }} outcomes</span>
+                    </div>
+                    <div class="table-wrap">
+                        <p class="scroll-hint">Swipe horizontally to see all target columns.</p>
+                        <table id="coTable" class="targets-table readonly">
+                            <thead>
+                                <tr>
+                                    <th class="co-code" scope="col">CO</th>
+                                    <th scope="col">Course outcome statement</th>
+                                    <th class="bl-col" scope="col">BL level</th>
+                                    <th class="target-col" scope="col">Target (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for co in cos %}
+                                {% with target=existing_targets|get_item:co.id %}
+                                <tr>
+                                    <td class="co-code">CO{{ co.co_number }}</td>
+                                    <td class="statement">{{ co.description }}</td>
+                                    <td>
+                                        <select class="bl-select" name="bl_{{ co.id }}" tabindex="-1" aria-disabled="true">
+                                            {% for bl in bl_levels %}
+                                            <option value="{{ bl }}" {% if target and target.bl_level == bl %}selected{% endif %}>{{ bl }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input class="target-input locked-input"
+                                               type="number"
+                                               min="10"
+                                               max="100"
+                                               name="target_{{ co.id }}"
+                                               value="{% if target %}{{ target.target_percentage }}{% else %}65{% endif %}"
+                                               readonly>
+                                    </td>
+                                </tr>
+                                {% endwith %}
+                                {% empty %}
+                                <tr>
+                                    <td class="statement" colspan="4">No course outcomes have been configured yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        function enableEdit() {
+            document.querySelectorAll(".locked-input").forEach((input) => {
+                input.readOnly = false;
+            });
+            document.querySelectorAll(".bl-select").forEach((select) => {
+                select.tabIndex = 0;
+                select.removeAttribute("aria-disabled");
+            });
+            document.getElementById("coTable").classList.remove("readonly");
+            document.getElementById("editBtn").hidden = true;
+            document.getElementById("saveBtn").hidden = false;
+
+            const status = document.getElementById("editStatus");
+            status.textContent = "EDIT MODE";
+            status.classList.add("editing");
+        }
+    </script>
+</body>
+
+</html>

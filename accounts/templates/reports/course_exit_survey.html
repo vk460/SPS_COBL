@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Course Exit Survey | {{ course.course_code }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/site.css">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0 !important;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff !important;
+            color: #17243b !important;
+            font-family: "DM Sans", "Segoe UI", sans-serif !important;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .page-shell {
+            width: min(1320px, calc(100% - 48px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #245eea;
+            color: #fff;
+            font: 800 14px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 13px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 3px;
+            color: #78869c;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link:hover { color: #245eea; }
+        .page-content { padding: 23px 0 42px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 13px;
+            color: #8995a8;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a { color: #65738a; text-decoration: none; }
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 15px;
+        }
+
+        .eyebrow {
+            margin: 0 0 6px;
+            color: #245eea;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(23px, 2.8vw, 30px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 7px 0 0;
+            color: #78869b;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        .heading-actions {
+            display: flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge {
+            padding: 7px 10px;
+            border: 1px solid #dce7ff;
+            border-radius: 20px;
+            background: #f3f6ff;
+            color: #245eea;
+            font-size: 9px;
+            font-weight: 800;
+        }
+
+        .status-badge.editing {
+            border-color: #cdebdc;
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .button {
+            min-height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font: 700 10px "DM Sans", sans-serif;
+            text-decoration: none;
+            transition: background .18s ease, color .18s ease, transform .18s ease;
+        }
+
+        .button:hover { transform: translateY(-1px); }
+        .button-primary { background: #245eea; color: #fff; }
+        .button-primary:hover { background: #194dc8; }
+        .button-secondary { border-color: #dfe6f0; background: #fff; color: #56657d; }
+        .button-secondary:hover { background: #f6f8fb; }
+        .button-success { background: #20a879; color: #fff; }
+        .button-success:hover { background: #168b64; }
+
+        .messages {
+            display: grid;
+            gap: 7px;
+            margin-bottom: 12px;
+        }
+
+        .message {
+            padding: 9px 11px;
+            border: 1px solid #dce7ff;
+            border-left: 3px solid #4a7dea;
+            border-radius: 8px;
+            background: #f3f6ff;
+            color: #345d9c;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            border-color: #cdebdc;
+            border-left-color: #45a77b;
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .message.error {
+            border-color: #f4dada;
+            border-left-color: #df7070;
+            background: #fff3f3;
+            color: #a84141;
+        }
+
+        .excel-panel {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 12px;
+            padding: 11px 13px;
+            border: 1px solid #e7ecf4;
+            border-radius: 12px;
+            background: rgba(255,255,255,.97);
+            box-shadow: 0 8px 24px rgba(34, 57, 97, .04);
+        }
+
+        .import-form {
+            display: grid;
+            grid-template-columns: minmax(160px, 1fr) auto;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .file-input {
+            width: 100%;
+            min-height: 35px;
+            padding: 5px 8px;
+            border: 1px solid #dbe3ef !important;
+            border-radius: 8px !important;
+            background: #fff !important;
+            color: #53627a !important;
+            font: 10px "DM Sans", sans-serif;
+        }
+
+        .panel {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 14px;
+            background: rgba(255,255,255,.97);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 15px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 13px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel-subtitle {
+            margin: 3px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.45;
+        }
+
+        .summary-badge {
+            flex: 0 0 auto;
+            padding: 6px 9px;
+            border: 1px solid #e5e9f0;
+            border-radius: 20px;
+            background: #f6f8fb;
+            color: #697991;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            max-height: 72vh;
+            overflow: auto;
+            overscroll-behavior: contain;
+        }
+
+        .survey-table {
+            width: 100%;
+            min-width: 1090px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #34435b;
+            font-size: 11px;
+        }
+
+        .survey-table th,
+        .survey-table td {
+            padding: 8px 9px;
+            border-right: 1px solid #edf0f6;
+            border-bottom: 1px solid #edf0f6;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .survey-table th:last-child,
+        .survey-table td:last-child { border-right: 0; }
+
+        .survey-table thead th {
+            position: sticky;
+            z-index: 3;
+            top: 0;
+            background: #f3f6fb !important;
+            color: #65738a !important;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .045em;
+            text-transform: uppercase;
+        }
+
+        .survey-table thead th:first-child { left: 0; z-index: 5; }
+        .survey-table tbody tr:last-child td { border-bottom: 0; }
+        .survey-table tbody tr:hover td { background: #fafbfe; }
+        .survey-table .co-cell {
+            position: sticky;
+            z-index: 2;
+            left: 0;
+            width: 68px;
+            background: #f6f8fc;
+            color: #245eea;
+            font-weight: 800;
+        }
+
+        .survey-table .question-cell {
+            min-width: 250px;
+            text-align: left;
+            line-height: 1.45;
+        }
+
+        .survey-table .response-header { min-width: 112px; }
+        .survey-table .metric-header,
+        .survey-table .metric-cell { min-width: 84px; }
+        .survey-table .average-cell { color: #42526b; font-weight: 700; }
+        .survey-table .percent-cell {
+            background: #f0faf4;
+            color: #26734f;
+            font-weight: 800;
+        }
+
+        .rating-input {
+            width: 72px;
+            min-height: 32px;
+            padding: 0 7px;
+            border: 1px solid #dbe3ef !important;
+            border-radius: 7px !important;
+            background: #fff !important;
+            color: #263650 !important;
+            font: 600 11px "DM Sans", sans-serif;
+            text-align: center;
+        }
+
+        .rating-input[readonly] {
+            border-color: transparent !important;
+            background: transparent !important;
+            color: #52627a !important;
+        }
+
+        .empty-state {
+            padding: 24px 14px !important;
+            color: #78869b !important;
+            text-align: center !important;
+        }
+
+        .scroll-hint {
+            display: none;
+            margin: 0;
+            padding: 8px 12px 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        @media (max-width: 650px) {
+            .page-shell { width: calc(100% - 28px); }
+            .topbar { min-height: 62px; }
+            .page-content { padding-top: 18px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+            .heading-actions { width: 100%; }
+            .heading-actions .button { flex: 1; }
+            .excel-panel { grid-template-columns: 1fr; }
+            .import-form { grid-template-columns: 1fr; }
+            .import-form .button { width: 100%; }
+            .scroll-hint { display: block; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic Outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'view_course' course.id %}">Back to course</a>
+        </header>
+
+        <main class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' course.id %}">{{ course.course_code }}</a>
+                <span class="breadcrumb-separator">/</span>
+                <span>Attainment</span>
+                <span class="breadcrumb-separator">/</span>
+                <span>Course Exit Survey</span>
+            </nav>
+
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">Indirect attainment</p>
+                    <h1>Course Exit Survey</h1>
+                    <p class="page-description">Review course outcome responses and survey attainment for {{ course.course_name }}.</p>
+                </div>
+                <div class="heading-actions">
+                    <span class="status-badge{% if not is_locked %} editing{% endif %}">
+                        {% if is_locked %}LOCKED{% else %}EDIT MODE{% endif %}
+                    </span>
+                    {% if is_locked %}
+                    <a class="button button-primary" href="?edit=1">Edit survey</a>
+                    {% else %}
+                    <button class="button button-primary" type="submit" form="surveyForm">Save changes</button>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if messages %}
+            <div class="messages" role="status">
+                {% for message in messages %}
+                <div class="message{% if message.tags %} {{ message.tags }}{% endif %}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if not is_locked %}
+            <section class="excel-panel" aria-label="Excel tools">
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="button button-secondary" name="export_excel" type="submit">Export Excel</button>
+                </form>
+                <form method="post" enctype="multipart/form-data" class="import-form">
+                    {% csrf_token %}
+                    <input class="file-input" type="file" name="excel_file" accept=".xlsx,.xls" required>
+                    <button class="button button-success" name="import_excel" type="submit">Import Excel</button>
+                </form>
+            </section>
+            {% endif %}
+
+            <form method="post" id="surveyForm">
+                {% csrf_token %}
+                <section class="panel" aria-labelledby="surveyPanelTitle">
+                    <div class="panel-heading">
+                        <div>
+                            <h2 class="panel-title" id="surveyPanelTitle">Course Exit Survey · {{ course.course_name }}</h2>
+                            <p class="panel-subtitle">Response counts, averages and attainment are shown for each course outcome.</p>
+                        </div>
+                        <span class="summary-badge">Submitted answers: {{ submitted_answers }}</span>
+                    </div>
+                    <div class="table-wrap">
+                        <p class="scroll-hint">Swipe horizontally to see all response and attainment columns.</p>
+                        <table class="survey-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">CO</th>
+                                    <th scope="col">Course outcome question</th>
+                                    <th class="response-header" scope="col">Strongly Agree<br>(5)</th>
+                                    <th class="response-header" scope="col">Agree<br>(4)</th>
+                                    <th class="response-header" scope="col">Neutral<br>(3)</th>
+                                    <th class="response-header" scope="col">Disagree<br>(2)</th>
+                                    <th class="response-header" scope="col">Strongly Disagree<br>(1)</th>
+                                    <th class="metric-header" scope="col">Average</th>
+                                    <th class="metric-header" scope="col">Attainment %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in rows %}
+                                <tr>
+                                    <td class="co-cell">CO{{ row.co.co_number }}</td>
+                                    <td class="question-cell">
+                                        {{ row.question_text }}
+                                        <input type="hidden" name="question_{{ row.co.id }}" value="{{ row.question_text }}">
+                                    </td>
+                                    <td>
+                                        <input class="rating-input"
+                                               type="number" min="0"
+                                               name="strongly_agree_{{ row.co.id }}"
+                                               value="{{ row.strongly_agree }}"
+                                               {% if is_locked %}readonly{% endif %}
+                                               aria-label="Strongly agree responses for CO{{ row.co.co_number }}">
+                                    </td>
+                                    <td>
+                                        <input class="rating-input"
+                                               type="number" min="0"
+                                               name="agree_{{ row.co.id }}"
+                                               value="{{ row.agree }}"
+                                               {% if is_locked %}readonly{% endif %}
+                                               aria-label="Agree responses for CO{{ row.co.co_number }}">
+                                    </td>
+                                    <td>
+                                        <input class="rating-input"
+                                               type="number" min="0"
+                                               name="neutral_{{ row.co.id }}"
+                                               value="{{ row.neutral }}"
+                                               {% if is_locked %}readonly{% endif %}
+                                               aria-label="Neutral responses for CO{{ row.co.co_number }}">
+                                    </td>
+                                    <td>
+                                        <input class="rating-input"
+                                               type="number" min="0"
+                                               name="disagree_{{ row.co.id }}"
+                                               value="{{ row.disagree }}"
+                                               {% if is_locked %}readonly{% endif %}
+                                               aria-label="Disagree responses for CO{{ row.co.co_number }}">
+                                    </td>
+                                    <td>
+                                        <input class="rating-input"
+                                               type="number" min="0"
+                                               name="strongly_disagree_{{ row.co.id }}"
+                                               value="{{ row.strongly_disagree }}"
+                                               {% if is_locked %}readonly{% endif %}
+                                               aria-label="Strongly disagree responses for CO{{ row.co.co_number }}">
+                                    </td>
+                                    <td class="average-cell metric-cell">{{ row.average|floatformat:"2" }}</td>
+                                    <td class="percent-cell metric-cell">{{ row.percentage|floatformat:"2" }}%</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td class="empty-state" colspan="9">Add course outcomes before entering survey responses.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </form>
+        </main>
+    </div>
+</body>
+
+</html>

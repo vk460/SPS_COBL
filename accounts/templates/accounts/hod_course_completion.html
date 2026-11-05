@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Class-wise Course Completion | COBL System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+        * { box-sizing: border-box; }
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background: radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%), #f5f8ff;
+        }
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 2px;
+        }
+        .shell { width: min(1240px, calc(100% - 40px)); margin: 0 auto; }
+        .topbar {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+        .brand { color: #17243b; font: 800 15px "Manrope", sans-serif; text-decoration: none; }
+        .brand span { color: #245eea; }
+        .top-actions { display: flex; align-items: center; gap: 10px; }
+        .top-actions a, .button {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 13px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            background: #fff;
+            color: #45546c;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .top-actions a:hover, .button:hover { border-color: #b8caf4; color: #245eea; }
+        main { padding: 34px 0 52px; }
+        .eyebrow {
+            margin: 0 0 7px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+        h1, h2 { font-family: "Manrope", sans-serif; }
+        h1 { margin: 0; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.04em; }
+        .intro { margin: 7px 0 0; color: #78869b; font-size: 13px; }
+        .summary { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 16px; }
+        .summary span {
+            padding: 7px 10px;
+            border-radius: 8px;
+            background: #fff;
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(34, 57, 97, .04);
+        }
+        .panel, .class-card {
+            border: 1px solid #e7ecf4;
+            border-radius: 13px;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 8px 25px rgba(34, 57, 97, .045);
+        }
+        .panel { padding: 18px; margin-bottom: 18px; }
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(130px, 1fr));
+            align-items: end;
+            gap: 11px;
+        }
+        .field label {
+            display: block;
+            margin: 0 0 6px;
+            color: #697991;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+        .field select, .field input {
+            width: 100%;
+            min-height: 39px;
+            padding: 0 10px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            background: #fff;
+            color: #36445b;
+            font: inherit;
+            font-size: 12px;
+        }
+        .filter-actions { display: flex; gap: 8px; }
+        .button.primary { border-color: #245eea; background: #245eea; color: #fff; }
+        .button.clear { color: #697991; }
+        .class-card { margin-top: 16px; overflow: hidden; }
+        .class-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 16px 18px;
+            background: #f4f7fc;
+            border-bottom: 1px solid #e8edf5;
+        }
+        .class-heading h2 { margin: 0; font-size: 16px; letter-spacing: -.02em; }
+        .class-heading p { margin: 4px 0 0; color: #78869b; font-size: 11px; }
+        .class-count {
+            flex: 0 0 auto;
+            padding: 6px 9px;
+            border-radius: 999px;
+            background: #fff;
+            color: #56657d;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; min-width: 950px; border-collapse: collapse; }
+        th {
+            padding: 11px 14px;
+            background: #fbfcfe;
+            color: #697991;
+            font-size: 10px;
+            letter-spacing: .05em;
+            text-align: left;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        td { padding: 13px 14px; border-top: 1px solid #f0f2f7; color: #36445b; font-size: 12px; vertical-align: middle; }
+        .subject-code { display: block; color: #245eea; font-weight: 700; }
+        .subject-name, .secondary { display: block; margin-top: 4px; color: #78869b; font-size: 10px; }
+        .progress { min-width: 135px; }
+        .track { height: 7px; overflow: hidden; border-radius: 999px; background: #e9eef7; }
+        .fill { height: 100%; border-radius: inherit; background: #245eea; }
+        .progress small { display: block; margin-top: 5px; color: #78869b; font-size: 10px; white-space: nowrap; }
+        .status {
+            display: inline-flex;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .status.ready { background: #eaf8f1; color: #16845d; }
+        .status.in-progress { background: #fff7e6; color: #9a6700; }
+        .status.not-started { background: #fff0f0; color: #b42323; }
+        details { min-width: 210px; }
+        summary { color: #45546c; font-size: 11px; cursor: pointer; }
+        .checklist { margin: 7px 0 0; padding-left: 17px; color: #78869b; font-size: 10px; line-height: 1.6; }
+        .checklist .complete { color: #16845d; }
+        .checklist .pending { color: #b42323; }
+        .open-course {
+            display: inline-flex;
+            min-height: 32px;
+            align-items: center;
+            padding: 0 11px;
+            border: 1px solid #dce7ff;
+            border-radius: 7px;
+            background: #f3f6ff;
+            color: #245eea;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .empty { padding: 28px 16px; color: #78869b; text-align: center; font-size: 13px; }
+        @media (max-width: 900px) { .filters { grid-template-columns: repeat(3, minmax(130px, 1fr)); } }
+        @media (max-width: 560px) {
+            .shell { width: calc(100% - 24px); }
+            main { padding-top: 24px; }
+            .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .field.search { grid-column: 1 / -1; }
+            .filter-actions { grid-column: 1 / -1; }
+            .class-heading { align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <nav class="topbar" aria-label="Main navigation">
+            <a class="brand" href="{% url 'hod_dashboard' %}"><span>CO</span>BL System</a>
+            <div class="top-actions">
+                <a href="{% url 'hod_dashboard' %}">HOD Dashboard</a>
+                <a href="{% url 'logout' %}">Log out</a>
+            </div>
+        </nav>
+        <main>
+            <header>
+                <p class="eyebrow">{{ request.user.department.name }} · Department overview</p>
+                <h1>Class-wise subject completion</h1>
+                <p class="intro">Review subject progress, pending requirements and attainment readiness by class.</p>
+            </header>
+
+            <div class="summary" aria-label="Filtered course completion summary">
+                <span>{{ course_count }} subjects shown</span>
+                <span>{{ ready_count }} ready</span>
+                <span>{{ in_progress_count }} in progress</span>
+                <span>{{ not_started_count }} not started</span>
+            </div>
+
+            <section class="panel" aria-label="Filter subjects">
+                <form method="get" class="filters">
+                    <div class="field">
+                        <label for="filter-year">Academic year</label>
+                        <select id="filter-year" name="year">
+                            <option value="">All years</option>
+                            {% for year in year_options %}
+                            <option value="{{ year }}"{% if selected_year == year %} selected{% endif %}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="filter-class">Class</label>
+                        <select id="filter-class" name="class">
+                            <option value="">All classes</option>
+                            {% for class_id, class_label in class_options %}
+                            <option value="{{ class_id }}"{% if selected_class == class_id %} selected{% endif %}>{{ class_label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="filter-semester">Semester</label>
+                        <select id="filter-semester" name="semester">
+                            <option value="">All semesters</option>
+                            {% for semester in semester_options %}
+                            <option value="{{ semester }}"{% if selected_semester == semester %} selected{% endif %}>{{ semester }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="filter-faculty">Faculty</label>
+                        <select id="filter-faculty" name="faculty">
+                            <option value="">All faculty</option>
+                            <option value="unassigned"{% if selected_faculty == "unassigned" %} selected{% endif %}>Not assigned</option>
+                            {% for faculty_id, faculty_name in faculty_options %}
+                            <option value="{{ faculty_id }}"{% if selected_faculty == faculty_id %} selected{% endif %}>{{ faculty_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="filter-status">Completion status</label>
+                        <select id="filter-status" name="status">
+                            <option value="">All statuses</option>
+                            <option value="Ready"{% if selected_status == "Ready" %} selected{% endif %}>Ready</option>
+                            <option value="In progress"{% if selected_status == "In progress" %} selected{% endif %}>In progress</option>
+                            <option value="Not started"{% if selected_status == "Not started" %} selected{% endif %}>Not started</option>
+                        </select>
+                    </div>
+                    <div class="field search">
+                        <label for="filter-search">Subject or course code</label>
+                        <input id="filter-search" type="search" name="q" value="{{ search_query }}" placeholder="Search subjects">
+                    </div>
+                    <div class="filter-actions">
+                        <button class="button primary" type="submit">Apply filters</button>
+                        <a class="button clear" href="{% url 'hod_course_completion' %}">Clear</a>
+                    </div>
+                </form>
+            </section>
+
+            {% for class_group in class_groups %}
+            <section class="class-card" aria-label="{{ class_group.academic_class.name }} subjects">
+                <div class="class-heading">
+                    <div>
+                        <h2>{{ class_group.academic_class.name }}</h2>
+                        <p>Academic year {{ class_group.academic_class.academic_year }} · Semester {{ class_group.academic_class.semester }}</p>
+                    </div>
+                    <span class="class-count">{{ class_group.rows|length }} subject{{ class_group.rows|length|pluralize }}</span>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Faculty</th>
+                                <th>Progress</th>
+                                <th>Status</th>
+                                <th>Pending requirements</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in class_group.rows %}
+                            <tr>
+                                <td>
+                                    <span class="subject-code">{{ row.course.course_code }}</span>
+                                    <span class="subject-name">{{ row.course.course_name }}</span>
+                                </td>
+                                <td>
+                                    {% if row.course.faculty %}
+                                        {{ row.course.faculty.get_full_name|default:row.course.faculty.username }}
+                                    {% else %}
+                                        Not assigned
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="progress">
+                                        <div class="track" role="progressbar" aria-label="{{ row.course.course_code }} completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ row.percentage }}">
+                                            <div class="fill" style="width: {{ row.percentage }}%"></div>
+                                        </div>
+                                        <small>{{ row.completed_count }} / {{ row.total_count }} required · {{ row.percentage }}%</small>
+                                    </div>
+                                </td>
+                                <td><span class="status {{ row.status_class }}">{{ row.status }}</span></td>
+                                <td>
+                                    <details>
+                                        <summary>{{ row.pending_sections|length }} pending requirement{{ row.pending_sections|length|pluralize }}</summary>
+                                        <ul class="checklist">
+                                            {% for step in row.steps %}
+                                            <li class="{% if step.complete %}complete{% else %}pending{% endif %}">
+                                                {% if step.url_name %}
+                                                <a href="{% url step.url_name row.course.id %}">{{ step.label }}</a>
+                                                {% else %}
+                                                {{ step.label }}
+                                                {% endif %}
+                                                — {% if step.complete %}Complete{% else %}Pending{% endif %}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </details>
+                                </td>
+                                <td><a class="open-course" href="{% url 'view_course' row.course.id %}">Open course</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            {% empty %}
+            <section class="panel empty">No subjects match these filters. Try changing or clearing the filters.</section>
+            {% endfor %}
+        </main>
+    </div>
+</body>
+</html>

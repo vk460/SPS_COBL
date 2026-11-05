@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Create Teacher | COBL System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .page-shell {
+            width: min(1120px, calc(100% - 64px));
+            min-height: 100vh;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 16px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 15px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            min-height: 39px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #45546c;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+        .back-link:hover {
+            border-color: #bfd0fb;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .back-link svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: minmax(0, .9fr) minmax(420px, 1fr);
+            align-items: center;
+            gap: clamp(42px, 7vw, 88px);
+            padding: 48px 0;
+        }
+
+        .intro {
+            max-width: 440px;
+        }
+
+        .eyebrow {
+            margin: 0 0 14px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        .intro h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(34px, 4vw, 48px)/1.1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .intro-accent {
+            color: #245eea;
+        }
+
+        .intro-copy {
+            max-width: 390px;
+            margin: 17px 0 0;
+            color: #65738a;
+            font-size: 14px;
+            line-height: 1.75;
+        }
+
+        .department-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 27px;
+            padding: 15px;
+            border: 1px solid #e1e9fa;
+            border-radius: 12px;
+            background: rgba(255,255,255,.78);
+        }
+
+        .department-icon {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            flex: 0 0 34px;
+            place-items: center;
+            border-radius: 10px;
+            background: #eff4ff;
+            color: #245eea;
+        }
+
+        .department-icon svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .department-label {
+            display: block;
+            color: #8995a8;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .department-name {
+            display: block;
+            margin-top: 4px;
+            color: #35445c;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .steps {
+            display: grid;
+            gap: 13px;
+            margin: 27px 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .steps li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #65738a;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .step-number {
+            width: 23px;
+            height: 23px;
+            display: grid;
+            flex: 0 0 23px;
+            place-items: center;
+            border: 1px solid #dce7ff;
+            border-radius: 50%;
+            background: #fff;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .form-card {
+            width: 100%;
+            padding: 30px;
+            border: 1px solid #e7ecf4;
+            border-radius: 18px;
+            background: rgba(255,255,255,.94);
+            box-shadow: 0 18px 48px rgba(34, 57, 97, .08);
+        }
+
+        .form-heading {
+            margin-bottom: 20px;
+        }
+
+        .form-heading h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 21px/1.3 "Manrope", sans-serif;
+            letter-spacing: -.04em;
+        }
+
+        .form-heading p {
+            margin: 6px 0 0;
+            color: #8995a8;
+            font-size: 12px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 11px 13px;
+            border: 1px solid #fecaca;
+            border-radius: 9px;
+            background: #fff5f5;
+            color: #a32727;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            border-color: #bfe8d3;
+            background: #effaf4;
+            color: #17764f;
+        }
+
+        .message[hidden] {
+            display: none;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px 12px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #45546c;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .field input,
+        .modal-field input,
+        .modal-field select {
+            width: 100%;
+            height: 43px;
+            padding: 0 12px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            background: #fff;
+            color: #17243b;
+            font: 500 12px "DM Sans", sans-serif;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        .field input::placeholder,
+        .modal-field input::placeholder {
+            color: #9aa5b5;
+        }
+
+        .field input:focus,
+        .modal-field input:focus,
+        .modal-field select:focus {
+            border-color: #7ea1f4;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap input {
+            padding-right: 56px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 8px;
+            transform: translateY(-50%);
+            padding: 5px;
+            border: 0;
+            background: transparent;
+            color: #245eea;
+            font: 700 10px "DM Sans", sans-serif;
+            cursor: pointer;
+        }
+
+        .primary-button {
+            width: 100%;
+            min-height: 45px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 19px;
+            border: 0;
+            border-radius: 9px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .17);
+            color: #fff;
+            font: 700 12px "DM Sans", sans-serif;
+            cursor: pointer;
+            transition: background .18s ease, box-shadow .18s ease, transform .18s ease;
+        }
+
+        .primary-button:hover {
+            transform: translateY(-1px);
+            background: #174bd0;
+            box-shadow: 0 10px 20px rgba(36, 94, 234, .23);
+        }
+
+        .primary-button svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .form-divider {
+            height: 1px;
+            margin: 19px 0 15px;
+            background: #edf0f6;
+        }
+
+        .reset-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .reset-copy strong {
+            display: block;
+            color: #35445c;
+            font-size: 11px;
+        }
+
+        .reset-copy span {
+            display: block;
+            margin-top: 3px;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .reset-open {
+            min-height: 35px;
+            flex: 0 0 auto;
+            padding: 0 11px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            background: #fff;
+            color: #45546c;
+            font: 700 10px "DM Sans", sans-serif;
+            cursor: pointer;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+        .reset-open:hover {
+            border-color: #bfd0fb;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(19, 32, 54, .42);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .modal[aria-hidden="false"] {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(100%, 420px);
+            padding: 25px;
+            border: 1px solid #e7ecf4;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 24px 70px rgba(19, 32, 54, .22);
+        }
+
+        .modal-heading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .modal-heading h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 18px/1.3 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .modal-heading p {
+            margin: 5px 0 0;
+            color: #8995a8;
+            font-size: 11px;
+        }
+
+        .modal-close {
+            width: 30px;
+            height: 30px;
+            display: grid;
+            flex: 0 0 30px;
+            place-items: center;
+            border: 1px solid #e5e9f0;
+            border-radius: 8px;
+            background: #fff;
+            color: #697991;
+            font-size: 17px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            background: #f4f7fc;
+            color: #1b2b46;
+        }
+
+        .modal-field {
+            margin-top: 13px;
+        }
+
+        .modal-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #45546c;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 19px;
+        }
+
+        .modal-actions button {
+            min-height: 39px;
+            padding: 0 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            background: #fff;
+            color: #45546c;
+            font: 700 11px "DM Sans", sans-serif;
+            cursor: pointer;
+        }
+
+        .modal-actions button:hover {
+            background: #f4f7fc;
+        }
+
+        .modal-actions .modal-save {
+            border-color: #245eea;
+            background: #245eea;
+            color: #fff;
+        }
+
+        .modal-actions .modal-save:hover {
+            background: #174bd0;
+        }
+
+        .footer {
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border-top: 1px solid #e6ebf4;
+            color: #8a96a9;
+            font-size: 10px;
+        }
+
+        .footer strong {
+            color: #66748b;
+        }
+
+        @media (max-width: 800px) {
+            .page-shell {
+                width: min(100% - 40px, 620px);
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 27px;
+                padding: 38px 0;
+            }
+
+            .intro {
+                max-width: 560px;
+            }
+
+            .department-card {
+                margin-top: 18px;
+            }
+
+            .steps {
+                display: none;
+            }
+
+            .form-card {
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-shell {
+                width: calc(100% - 32px);
+            }
+
+            .topbar {
+                min-height: 70px;
+            }
+
+            .brand-mark {
+                width: 36px;
+                height: 36px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-caption {
+                font-size: 8px;
+            }
+
+            .back-link {
+                min-height: 36px;
+                padding: 0 10px;
+                font-size: 11px;
+            }
+
+            .main-content {
+                gap: 23px;
+                padding: 30px 0;
+            }
+
+            .intro h1 {
+                font-size: 36px;
+            }
+
+            .intro-copy {
+                margin-top: 11px;
+                font-size: 13px;
+            }
+
+            .form-card {
+                padding: 21px 17px;
+                border-radius: 15px;
+            }
+
+            .field-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .form-heading {
+                margin-bottom: 17px;
+            }
+
+            .reset-row {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .reset-open {
+                width: 100%;
+            }
+
+            .footer {
+                min-height: 48px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'hod_dashboard' %}" aria-label="COBL HOD dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'hod_dashboard' %}">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Dashboard
+            </a>
+        </header>
+
+        <main class="main-content">
+            <section class="intro" aria-labelledby="page-title">
+                <p class="eyebrow">Faculty management</p>
+                <h1 id="page-title">Build your <span class="intro-accent">teaching team.</span></h1>
+                <p class="intro-copy">Create faculty accounts for your department and give teachers access to their assigned courses and learning outcomes.</p>
+
+                <div class="department-card">
+                    <span class="department-icon" aria-hidden="true">
+                        <svg viewBox="0 0 20 20" fill="none"><path d="M3 17h14M5 17V6.5L10 3l5 3.5V17M8 8h.01M12 8h.01M8 11h.01M12 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <span>
+                        <span class="department-label">Your department</span>
+                        <span class="department-name">{{ request.user.department.name|default:"Department not assigned" }}</span>
+                    </span>
+                </div>
+
+                <ol class="steps" aria-label="Account setup steps">
+                    <li><span class="step-number">1</span>Enter the teacher's name and username</li>
+                    <li><span class="step-number">2</span>Set and confirm a temporary password</li>
+                    <li><span class="step-number">3</span>Assign courses from the dashboard</li>
+                </ol>
+            </section>
+
+            <section class="form-card" aria-labelledby="form-title">
+                <div class="form-heading">
+                    <h2 id="form-title">Create teacher account</h2>
+                    <p>New accounts are added to your department.</p>
+                </div>
+
+                {% if error %}
+                <div class="message" role="alert">{{ error }}</div>
+                {% endif %}
+
+                {% if success %}
+                <div class="message success" role="status">{{ success }}</div>
+                {% endif %}
+
+                <div class="message" id="createError" role="alert" hidden>Passwords do not match.</div>
+
+                <form method="post" onsubmit="return validateCreate()">
+                    {% csrf_token %}
+                    <div class="field-grid">
+                        <div class="field">
+                            <label for="teacherName">Teacher name</label>
+                            <input type="text" id="teacherName" name="name" placeholder="Enter full name" autocomplete="name" required>
+                        </div>
+                        <div class="field">
+                            <label for="teacherUsername">Username / email</label>
+                            <input type="text" id="teacherUsername" name="username" placeholder="Enter username or email" autocomplete="username" required>
+                        </div>
+                        <div class="field">
+                            <label for="password">Password</label>
+                            <div class="password-wrap">
+                                <input type="password" id="password" name="password" placeholder="Create a password" autocomplete="new-password" required>
+                                <button class="password-toggle" type="button" data-password-toggle="password" aria-label="Show password" aria-pressed="false">Show</button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="confirm_password">Confirm password</label>
+                            <div class="password-wrap">
+                                <input type="password" id="confirm_password" placeholder="Enter password again" autocomplete="new-password" required>
+                                <button class="password-toggle" type="button" data-password-toggle="confirm_password" aria-label="Show confirmation password" aria-pressed="false">Show</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="primary-button" type="submit">
+                        Create teacher
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4.25 10h11.5M10 4.25 15.75 10 10 15.75" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </form>
+
+                <div class="form-divider"></div>
+                <div class="reset-row">
+                    <span class="reset-copy">
+                        <strong>Need to update a password?</strong>
+                        <span>Reset credentials for an existing teacher.</span>
+                    </span>
+                    <button class="reset-open" id="openReset" type="button">Reset teacher password</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <strong>COBL System</strong>
+            <span>Department faculty management</span>
+        </footer>
+    </div>
+
+    <div class="modal" id="resetModal" aria-hidden="true">
+        <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+            <div class="modal-heading">
+                <div>
+                    <h2 id="modal-title">Reset teacher password</h2>
+                    <p>Choose a teacher and set a new password.</p>
+                </div>
+                <button class="modal-close" id="closeReset" type="button" aria-label="Close dialog">×</button>
+            </div>
+
+            <div class="message" id="modalError" role="alert" hidden></div>
+            <div class="message success" id="modalSuccess" role="status" hidden></div>
+
+            <div class="modal-field">
+                <label for="teacherSelect">Teacher</label>
+                <select id="teacherSelect">
+                    <option value="">Select a teacher</option>
+                    {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}">{{ teacher.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="modal-field">
+                <label for="newPassword">New password</label>
+                <input type="password" id="newPassword" autocomplete="new-password" placeholder="Enter new password">
+            </div>
+
+            <div class="modal-field">
+                <label for="confirmPassword">Confirm new password</label>
+                <input type="password" id="confirmPassword" autocomplete="new-password" placeholder="Enter password again">
+            </div>
+
+            <div class="modal-actions">
+                <button id="cancelReset" type="button">Cancel</button>
+                <button class="modal-save" id="saveReset" type="button">Save password</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const passwordToggles = document.querySelectorAll("[data-password-toggle]");
+        const resetModal = document.getElementById("resetModal");
+        const modalCard = resetModal.querySelector(".modal-card");
+        const resetError = document.getElementById("modalError");
+        const resetSuccess = document.getElementById("modalSuccess");
+        const resetOpenButton = document.getElementById("openReset");
+
+        passwordToggles.forEach((toggle) => {
+            toggle.addEventListener("click", () => {
+                const field = document.getElementById(toggle.dataset.passwordToggle);
+                const showingPassword = field.type === "password";
+                field.type = showingPassword ? "text" : "password";
+                toggle.textContent = showingPassword ? "Hide" : "Show";
+                toggle.setAttribute("aria-pressed", String(showingPassword));
+                toggle.setAttribute(
+                    "aria-label",
+                    `${showingPassword ? "Hide" : "Show"} ${field.id === "confirm_password" ? "confirmation " : ""}password`
+                );
+            });
+        });
+
+        function validateCreate() {
+            const password = document.getElementById("password").value;
+            const confirmation = document.getElementById("confirm_password").value;
+            const error = document.getElementById("createError");
+            error.hidden = password === confirmation;
+            return password === confirmation;
+        }
+
+        function openModal() {
+            resetError.hidden = true;
+            resetSuccess.hidden = true;
+            resetModal.setAttribute("aria-hidden", "false");
+            modalCard.focus();
+            document.getElementById("teacherSelect").focus();
+        }
+
+        function closeModal() {
+            resetModal.setAttribute("aria-hidden", "true");
+            resetError.hidden = true;
+            resetSuccess.hidden = true;
+            resetOpenButton.focus();
+        }
+
+        async function saveReset() {
+            const teacher = document.getElementById("teacherSelect").value;
+            const password = document.getElementById("newPassword").value;
+            const confirmation = document.getElementById("confirmPassword").value;
+            const saveButton = document.getElementById("saveReset");
+
+            resetError.hidden = true;
+            resetSuccess.hidden = true;
+
+            if (!teacher || !password || password !== confirmation) {
+                resetError.textContent = !teacher
+                    ? "Select a teacher before continuing."
+                    : !password
+                        ? "Enter a new password before continuing."
+                        : "The passwords do not match.";
+                resetError.hidden = false;
+                return;
+            }
+
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving...";
+
+            try {
+                const response = await fetch("{% url 'reset_teacher_password' %}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({ teacher, password })
+                });
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || "Password reset failed. Please try again.");
+                }
+
+                resetSuccess.textContent = "Teacher password updated successfully.";
+                resetSuccess.hidden = false;
+                document.getElementById("newPassword").value = "";
+                document.getElementById("confirmPassword").value = "";
+            } catch (error) {
+                resetError.textContent = error instanceof TypeError
+                    ? "Could not reach the server. Check your connection and try again."
+                    : error.message;
+                resetError.hidden = false;
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = "Save password";
+            }
+        }
+
+        resetOpenButton.addEventListener("click", openModal);
+        document.getElementById("closeReset").addEventListener("click", closeModal);
+        document.getElementById("cancelReset").addEventListener("click", closeModal);
+        document.getElementById("saveReset").addEventListener("click", saveReset);
+
+        resetModal.addEventListener("click", (event) => {
+            if (event.target === resetModal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && resetModal.getAttribute("aria-hidden") === "false") {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

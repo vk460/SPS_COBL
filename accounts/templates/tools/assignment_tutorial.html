@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>{{ tool.main_tool }} · {{ tool.sub_tool }} | Tool Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        select:focus-visible,
+        input:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .page-shell {
+            width: min(1240px, calc(100% - 48px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 11px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 15px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 14px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link:hover { color: #245eea; }
+
+        .page-content { padding: 25px 0 40px; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 14px;
+            color: #8995a8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a { color: #65738a; text-decoration: none; }
+        .breadcrumb a:hover { color: #245eea; }
+        .breadcrumb-separator { color: #b7c0ce; }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 17px;
+        }
+
+        .eyebrow {
+            margin: 0 0 7px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(24px, 2.8vw, 32px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            margin: 8px 0 0;
+            color: #78869b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 9px 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 11px "Manrope", sans-serif;
+            white-space: nowrap;
+        }
+
+        .messages {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 13px;
+        }
+
+        .message {
+            padding: 10px 12px;
+            border: 1px solid #dce7ff;
+            border-left: 3px solid #4a7dea;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #345d9c;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .message.success {
+            border-color: #cdebdc;
+            border-left-color: #45a77b;
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .message.warning {
+            border-color: #f3e4be;
+            border-left-color: #e8ad35;
+            background: #fff9eb;
+            color: #87600c;
+        }
+
+        .message.error {
+            border-color: #f4dada;
+            border-left-color: #df7070;
+            background: #fff3f3;
+            color: #a84141;
+        }
+
+        .panel {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 14px 17px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 14px/1.4 "Manrope", sans-serif;
+        }
+
+        .panel-subtitle {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .assignment-form { padding: 14px 16px 16px; }
+
+        .count-field {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .count-field label {
+            color: #53627a;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        select,
+        input[type="number"] {
+            min-height: 34px;
+            padding: 0 10px;
+            border: 1px solid #dbe3ef;
+            border-radius: 8px;
+            background: #fff;
+            color: #263650;
+            font: 500 11px "DM Sans", sans-serif;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        select:focus,
+        input[type="number"]:focus {
+            border-color: #83a7f8;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        #assignCount { min-width: 112px; }
+
+        .scroll-hint {
+            display: none;
+            margin: 0;
+            padding: 8px 12px 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow-x: auto;
+            overscroll-behavior-x: contain;
+        }
+
+        .assignment-table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #34435b;
+            font-size: 11px;
+        }
+
+        .assignment-table th,
+        .assignment-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #edf0f6;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .assignment-table th {
+            background: #f3f6fb;
+            color: #65738a;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .assignment-table tbody tr:last-child td { border-bottom: 0; }
+        .assignment-table select { width: 100%; min-width: 95px; }
+        .assignment-table input[type="number"] { width: 100%; min-width: 74px; }
+
+        .assignment-table .main-row td {
+            background: #f5f8ff;
+            color: #243650;
+            font-weight: 700;
+        }
+
+        .assignment-table .main-row td:first-child {
+            color: #245eea;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .assignment-table .assignment-total-label {
+            color: #65738a;
+            font-size: 10px;
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .assignment-table .sub-row:hover td { background: #fafbfe; }
+        .assignment-table .sub-row td:first-child { color: #56657d; }
+
+        .calculated-mark {
+            color: #247650;
+            font: 800 11px "Manrope", sans-serif;
+        }
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 13px;
+        }
+
+        .button {
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 13px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font: 700 10px "DM Sans", sans-serif;
+            text-decoration: none;
+            transition: background .18s ease, color .18s ease, transform .18s ease;
+        }
+
+        .button:hover { transform: translateY(-1px); }
+        .button-primary { background: #245eea; color: #fff; }
+        .button-primary:hover { background: #194dc8; }
+        .button-success { background: #20b981; color: #fff; }
+        .button-success:hover { background: #159d6c; }
+        .button-secondary { border-color: #dfe6f0; background: #fff; color: #56657d; }
+        .button-secondary:hover { background: #f6f8fb; }
+
+        .totals-panel {
+            margin-top: 14px;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .totals-header {
+            padding: 13px 16px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .totals-header h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 14px "Manrope", sans-serif;
+        }
+
+        .totals-header p {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .totals-content { padding: 12px 16px; }
+
+        .totals-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #53627a;
+            font-size: 11px;
+        }
+
+        .totals-table th,
+        .totals-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #edf0f6;
+            text-align: left;
+        }
+
+        .totals-table th {
+            background: #f7f9fc;
+            color: #65738a;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+
+        .totals-table td:last-child,
+        .totals-table th:last-child { text-align: right; }
+
+        .totals-table tfoot th {
+            border-bottom: 0;
+            background: #f0faf4;
+            color: #247650;
+            font-size: 11px;
+        }
+
+        .empty-totals {
+            padding: 10px;
+            color: #8995a8;
+            text-align: center !important;
+        }
+
+        @media (max-width: 760px) {
+            .page-shell { width: calc(100% - 28px); }
+            .topbar { min-height: 68px; }
+            .page-content { padding-top: 19px; }
+            .page-heading { align-items: flex-start; flex-direction: column; gap: 11px; }
+            .panel-header { align-items: flex-start; }
+            .scroll-hint { display: block; }
+            .assignment-form { padding: 12px; }
+            .assignment-table { min-width: 800px; }
+        }
+
+        @media (max-width: 440px) {
+            .topbar { align-items: flex-start; flex-direction: column; justify-content: center; gap: 8px; padding: 10px 0; }
+            .count-field { align-items: flex-start; flex-direction: column; gap: 7px; }
+            #assignCount { width: 100%; }
+            .form-actions .button { flex: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'assessment_tool_page' course.id %}">Back to assessment tools</a>
+        </header>
+
+        <div class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' course.id %}">{{ course.course_name }}</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <a href="{% url 'assessment_tool_page' course.id %}">Assessment tools</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <span>{{ tool.sub_tool }}</span>
+            </nav>
+
+            <section class="page-heading" aria-labelledby="page-title">
+                <div>
+                    <p class="eyebrow">Assessment configuration</p>
+                    <h1 id="page-title">{{ tool.main_tool }} · {{ tool.sub_tool }}</h1>
+                    <p class="page-description">Set assignment totals and distribute marks across course outcomes.</p>
+                </div>
+                <span class="course-chip">{{ course.course_code }} · {{ course.course_name }}</span>
+            </section>
+
+            {% if messages %}
+            <div class="messages" role="status" aria-live="polite">
+                {% for message in messages %}
+                    <p class="message {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <section class="panel" aria-labelledby="assignment-title">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title" id="assignment-title">{{ tool.sub_tool }} setup</h2>
+                        <p class="panel-subtitle">Choose the assignment count, then configure the CO distribution for each one.</p>
+                    </div>
+                </div>
+
+                <form method="post" class="assignment-form" onsubmit="enableBeforeSubmit()">
+                    {% csrf_token %}
+                    <div class="count-field">
+                        <label for="assignCount">No. of {{ tool.sub_tool }}</label>
+                        <select id="assignCount" name="assignment_count" required>
+                            <option value="">Select count</option>
+                            {% for i in range %}
+                            <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <p class="scroll-hint">Scroll horizontally to view all assignment details.</p>
+                    <div class="table-wrap" role="region" aria-label="Assignment CO distributions" tabindex="0">
+                        <table class="assignment-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{ tool.sub_tool }}</th>
+                                    <th scope="col">No. of COs</th>
+                                    <th scope="col">No. of Questions</th>
+                                    <th scope="col">Course outcome</th>
+                                    <th scope="col">Bloom level</th>
+                                    <th scope="col">Total Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                                <tr class="empty-row">
+                                    <td colspan="6">Select the number of assignments to add configuration rows.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="button button-primary" id="editBtn" onclick="enableEdit()">Edit</button>
+                        <button type="submit" class="button button-success" id="saveBtn" style="display:none;">Save changes</button>
+                        <a class="button button-secondary" href="{% url 'assessment_tool_page' course.id %}">Back</a>
+                    </div>
+                </form>
+            </section>
+
+            <section class="totals-panel" aria-labelledby="totals-title">
+                <header class="totals-header">
+                    <h2 id="totals-title">CO-wise total marks</h2>
+                    <p>Calculated from the marks allocated to each course outcome.</p>
+                </header>
+                <div class="totals-content">
+                    <table class="totals-table">
+                        <thead>
+                            <tr><th scope="col">Course outcome</th><th scope="col">Total marks</th></tr>
+                        </thead>
+                        <tbody id="coWise">
+                            <tr><td class="empty-totals" colspan="2">Totals will appear when distributions are configured.</td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr><th scope="row">Overall total</th><th id="overallTotal">0</th></tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    {{ saved_rows|json_script:"saved-assignment-data" }}
+    <script>
+        const savedData = JSON.parse(
+            document.getElementById("saved-assignment-data").textContent
+        );
+        const cosHTML = `<option value="">Select CO</option>{% for co in cos %}<option value="{{ co.id }}">CO{{ co.co_number }}</option>{% endfor %}`;
+        const blHTML = `<option value="">Select BL</option><option>BL1</option><option>BL2</option><option>BL3</option><option>BL4</option><option>BL5</option><option>BL6</option>`;
+        const maxCos = {{ co_count }};
+        const tbody = document.getElementById("tbody");
+        const assignCount = document.getElementById("assignCount");
+
+        assignCount.onchange = () => createAssignments(Number(assignCount.value));
+
+        function createAssignments(count) {
+            tbody.innerHTML = "";
+            if (!count) {
+                tbody.innerHTML = '<tr class="empty-row"><td colspan="6">Select the number of assignments to add configuration rows.</td></tr>';
+                calculateTotals();
+                return;
+            }
+            for (let assignment = 1; assignment <= count; assignment++) {
+                const distributionOptions = Array.from(
+                    { length: maxCos },
+                    (_, index) => `<option value="${index + 1}">${index + 1}</option>`
+                ).join("");
+                tbody.insertAdjacentHTML("beforeend", `
+                    <tr class="main-row" id="A${assignment}">
+                        <td>{{ tool.sub_tool }} ${assignment}</td>
+                        <td>
+                            <select aria-label="Number of CO distributions for {{ tool.sub_tool }} ${assignment}" onchange="createDistributionRows(${assignment}, Number(this.value))">
+                                <option value="">Select</option>
+                                ${distributionOptions}
+                            </select>
+                        </td>
+                        <td colspan="3" class="assignment-total-label">
+                            Enter total marks for this assignment
+                        </td>
+                        <td>
+                            <input type="number" id="total_A${assignment}" name="total_A${assignment}"
+                                aria-label="Total marks for {{ tool.sub_tool }} ${assignment}" min="0" required oninput="calculateTotals()">
+                        </td>
+                    </tr>
+                `);
+            }
+        }
+
+        function createDistributionRows(assignment, count) {
+            document.querySelectorAll(`.q_${assignment}`).forEach(row => row.remove());
+            if (!count) {
+                calculateTotals();
+                return;
+            }
+
+            const mainRow = document.getElementById(`A${assignment}`);
+            let html = "";
+            for (let index = 1; index <= count; index++) {
+                const key = `A${assignment}.${index}`;
+                html += `
+                    <tr class="sub-row q_${assignment}" data-q="${key}" data-assignment="${assignment}">
+                        <td>CO Distribution ${index}</td>
+                        <td></td>
+                        <td><input type="number" name="questions_${key}" aria-label="Question count for ${key}" min="1" required oninput="calculateTotals()"></td>
+                        <td><select name="co_${key}" aria-label="Course outcome for ${key}" onchange="updateCoOptions(${assignment}); calculateTotals()">${cosHTML}</select></td>
+                        <td><select name="bl_${key}" aria-label="Bloom level for ${key}" required>${blHTML}</select></td>
+                        <td><span class="calculated-mark" id="marks_${key}">0</span></td>
+                    </tr>
+                `;
+            }
+            mainRow.insertAdjacentHTML("afterend", html);
+            updateCoOptions(assignment);
+            calculateTotals();
+        }
+
+        function updateCoOptions(assignment) {
+            const rows = [...document.querySelectorAll(`.q_${assignment}`)];
+            const selectedValues = rows
+                .map(row => row.querySelector('[name^="co_"]').value)
+                .filter(Boolean);
+
+            rows.forEach(row => {
+                const select = row.querySelector('[name^="co_"]');
+                const currentValue = select.value;
+                [...select.options].forEach(option => {
+                    option.disabled = option.value !== "" &&
+                        option.value !== currentValue &&
+                        selectedValues.includes(option.value);
+                });
+            });
+        }
+
+        function calculateTotals() {
+            const coTotals = {};
+            let overall = 0;
+            const assignments = new Set();
+
+            document.querySelectorAll(".sub-row").forEach(row => {
+                const assignment = row.dataset.assignment;
+                assignments.add(assignment);
+                document.getElementById(`marks_${row.dataset.q}`).textContent = "0";
+            });
+
+            assignments.forEach(assignment => {
+                const rows = [...document.querySelectorAll(`.q_${assignment}`)];
+                const totalMarks = Number(
+                    document.getElementById(`total_A${assignment}`).value
+                ) || 0;
+                const questionTotal = rows.reduce(
+                    (total, row) => total +
+                        (Number(row.querySelector('[name^="questions_"]').value) || 0),
+                    0
+                );
+                if (!questionTotal) return;
+
+                const shares = rows.map((row, index) => {
+                    const questions = Number(
+                        row.querySelector('[name^="questions_"]').value
+                    ) || 0;
+                    const numerator = totalMarks * questions;
+                    return {
+                        row,
+                        index,
+                        marks: Math.floor(numerator / questionTotal),
+                        remainder: numerator % questionTotal,
+                    };
+                });
+                let remaining = totalMarks - shares.reduce(
+                    (sum, share) => sum + share.marks,
+                    0
+                );
+                [...shares]
+                    .sort((left, right) =>
+                        right.remainder - left.remainder || left.index - right.index
+                    )
+                    .slice(0, remaining)
+                    .forEach(share => share.marks++);
+
+                shares.forEach(share => {
+                    const row = share.row;
+                    const coSelect = row.querySelector('[name^="co_"]');
+                    const coLabel = coSelect.selectedOptions[0]?.text || "";
+                    document.getElementById(`marks_${row.dataset.q}`).textContent =
+                        String(share.marks);
+                    overall += share.marks;
+                    if (coSelect.value) {
+                        coTotals[coLabel] = (coTotals[coLabel] || 0) + share.marks;
+                    }
+                });
+            });
+
+            document.getElementById("overallTotal").textContent = String(overall);
+            const coWise = document.getElementById("coWise");
+            coWise.innerHTML = "";
+            const outcomes = Object.keys(coTotals).sort();
+            if (!outcomes.length) {
+                coWise.innerHTML = '<tr><td class="empty-totals" colspan="2">Totals will appear when distributions are configured.</td></tr>';
+                return;
+            }
+            outcomes.forEach(co => {
+                const row = document.createElement("tr");
+                const outcomeCell = document.createElement("td");
+                outcomeCell.textContent = co;
+                const marksCell = document.createElement("td");
+                marksCell.textContent = String(coTotals[co]);
+                row.append(outcomeCell, marksCell);
+                coWise.appendChild(row);
+            });
+        }
+
+        if (savedData.length) {
+            const maxAssignment = Math.max(...savedData.map(row => row.assignment_no));
+            const distributionCounts = {};
+            savedData.forEach(row => {
+                distributionCounts[row.assignment_no] =
+                    (distributionCounts[row.assignment_no] || 0) + 1;
+            });
+
+            assignCount.value = String(maxAssignment);
+            createAssignments(maxAssignment);
+            Object.entries(distributionCounts).forEach(([assignment, count]) => {
+                createDistributionRows(Number(assignment), count);
+                const countSelect = document.querySelector(`#A${assignment} select`);
+                if (countSelect) countSelect.value = String(count);
+            });
+
+            const assignmentTotals = {};
+            savedData.forEach(row => {
+                const element = document.querySelector(`[data-q="${row.question_no}"]`);
+                if (!element) return;
+                element.querySelector('[name^="co_"]').value = row.co_id || "";
+                element.querySelector('[name^="bl_"]').value = row.bl;
+                element.querySelector('[name^="questions_"]').value = row.question_count;
+                assignmentTotals[row.assignment_no] =
+                    (assignmentTotals[row.assignment_no] || 0) + row.marks;
+            });
+            Object.entries(assignmentTotals).forEach(([assignment, total]) => {
+                document.getElementById(`total_A${assignment}`).value = String(total);
+            });
+            for (let assignment = 1; assignment <= maxAssignment; assignment++) {
+                if (!distributionCounts[assignment]) {
+                    createDistributionRows(assignment, 1);
+                }
+                updateCoOptions(assignment);
+            }
+            calculateTotals();
+            disableTable();
+        } else {
+            document.getElementById("editBtn").style.display = "none";
+            document.getElementById("saveBtn").style.display = "inline-flex";
+        }
+
+        function enableEdit() {
+            document.querySelectorAll(".assignment-form select, .assignment-form input").forEach(element => element.disabled = false);
+            document.getElementById("editBtn").style.display = "none";
+            document.getElementById("saveBtn").style.display = "inline-flex";
+        }
+
+        function disableTable() {
+            document.querySelectorAll(".assignment-form select, .assignment-form input").forEach(element => element.disabled = true);
+        }
+
+        function enableBeforeSubmit() {
+            document.querySelectorAll(".assignment-form select, .assignment-form input").forEach(element => element.disabled = false);
+        }
+    </script>
+</body>
+</html>

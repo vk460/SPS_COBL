@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>CO-PO-PSO Matrix | {{ course.course_code }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .matrix-shell {
+            width: min(1240px, calc(100% - 64px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+            flex: 0 0 auto;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 16px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 15px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links a {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background .18s ease, color .18s ease, border-color .18s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a[aria-current="page"] {
+            border-color: #dce7ff;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .page-content {
+            padding: 34px 0 56px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 22px;
+            color: #8995a8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a {
+            color: #65738a;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #245eea;
+        }
+
+        .breadcrumb-separator {
+            color: #b7c0ce;
+        }
+
+        .page-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 22px;
+            margin-bottom: 21px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(25px, 3vw, 34px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            max-width: 720px;
+            margin: 8px 0 0;
+            color: #78869b;
+            font-size: 12px;
+            line-height: 1.65;
+        }
+
+        .course-chip {
+            flex: 0 0 auto;
+            padding: 9px 12px;
+            border: 1px solid #dce7ff;
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #245eea;
+            font: 800 11px "Manrope", sans-serif;
+            white-space: nowrap;
+        }
+
+        .matrix-card {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: rgba(255,255,255,.96);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .matrix-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 19px 22px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .matrix-card-header h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 15px/1.4 "Manrope", sans-serif;
+            letter-spacing: -.025em;
+        }
+
+        .matrix-card-header p {
+            margin: 4px 0 0;
+            color: #8995a8;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .matrix-count {
+            flex: 0 0 auto;
+            padding: 7px 10px;
+            border: 1px solid #e5e9f0;
+            border-radius: 20px;
+            background: #f6f8fb;
+            color: #697991;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .legend {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 14px 22px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .legend-label {
+            margin-right: 3px;
+            color: #78869b;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 8px;
+            border: 1px solid #edf0f6;
+            border-radius: 7px;
+            background: #fff;
+            color: #56657d;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .legend-swatch {
+            width: 9px;
+            height: 9px;
+            border-radius: 3px;
+        }
+
+        .legend-swatch.level-1 { background: #df706a; }
+        .legend-swatch.level-2 { background: #e8b842; }
+        .legend-swatch.level-3 { background: #56ad7d; }
+
+        .scroll-hint {
+            display: none;
+            margin: 0;
+            padding: 9px 16px 0;
+            color: #8995a8;
+            font-size: 10px;
+        }
+
+        .table-wrap {
+            max-width: 100%;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .matrix-table {
+            width: 100%;
+            min-width: max-content;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            min-width: 54px;
+            padding: 9px 6px;
+            border-bottom: 1px solid #edf0f6;
+            color: #45546c;
+            font-size: 11px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .matrix-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: #f4f7fc;
+            color: #697991;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            min-width: 68px;
+            background: #fff;
+            text-align: left;
+        }
+
+        .matrix-table thead th:first-child {
+            z-index: 3;
+            background: #f4f7fc;
+        }
+
+        .matrix-table tbody tr:hover td {
+            background: #f8faff;
+        }
+
+        .matrix-table tbody tr:hover td:first-child {
+            background: #f8faff;
+        }
+
+        .outcome-trigger {
+            min-height: 30px;
+            padding: 0 7px;
+            border: 1px solid transparent;
+            border-radius: 7px;
+            background: transparent;
+            color: #245eea;
+            font: 800 11px "Manrope", sans-serif;
+            cursor: pointer;
+            transition: border-color .18s ease, background .18s ease;
+        }
+
+        .outcome-trigger:hover {
+            border-color: #dce7ff;
+            background: #f3f6ff;
+        }
+
+        .matrix-value {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .matrix-value.value-1 {
+            background: #fff0ef;
+            color: #b83c36;
+            font-weight: 800;
+        }
+
+        .matrix-value.value-2 {
+            background: #fff8df;
+            color: #946600;
+            font-weight: 800;
+        }
+
+        .matrix-value.value-3 {
+            background: #eaf8f0;
+            color: #187447;
+            font-weight: 800;
+        }
+
+        .matrix-value.no-mapping {
+            color: #b3bdcc;
+        }
+
+        .average-row td {
+            border-bottom: 0;
+            background: #f2f6ff;
+            color: #2452b6;
+            font-weight: 800;
+        }
+
+        .average-row td:first-child {
+            background: #f2f6ff;
+            color: #2452b6;
+        }
+
+        .average-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .average-label svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .matrix-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 15px 22px;
+            border-top: 1px solid #edf0f6;
+            background: #fbfcff;
+        }
+
+        .footer-note {
+            margin: 0;
+            color: #8995a8;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .primary-link {
+            min-height: 39px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 13px;
+            border: 1px solid #245eea;
+            border-radius: 8px;
+            background: #245eea;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background .18s ease, transform .18s ease;
+        }
+
+        .primary-link:hover {
+            background: #174bd0;
+            transform: translateY(-1px);
+        }
+
+        .primary-link svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .empty-state {
+            padding: 38px 20px;
+            color: #78869b;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .empty-state strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #35445c;
+            font: 700 13px "Manrope", sans-serif;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(21, 33, 54, .42);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.is-open {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(480px, 100%);
+            padding: 22px;
+            border: 1px solid #e4e9f2;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: 0 24px 70px rgba(22, 38, 67, .2);
+            animation: modal-in .18s ease-out;
+        }
+
+        @keyframes modal-in {
+            from { opacity: 0; transform: translateY(8px) scale(.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .modal-kicker {
+            margin: 0 0 5px;
+            color: #245eea;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .modal-title {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 19px/1.3 "Manrope", sans-serif;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: grid;
+            flex: 0 0 auto;
+            place-items: center;
+            border: 1px solid #e4e9f2;
+            border-radius: 8px;
+            background: #fff;
+            color: #64738a;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            background: #f4f7fc;
+            color: #17243b;
+        }
+
+        .modal-text {
+            margin: 15px 0 0;
+            color: #56657d;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 760px) {
+            .matrix-shell {
+                width: calc(100% - 36px);
+            }
+
+            .topbar {
+                min-height: 72px;
+                align-items: flex-start;
+                flex-direction: column;
+                justify-content: center;
+                gap: 10px;
+                padding: 13px 0;
+            }
+
+            .nav-links {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 2px;
+            }
+
+            .nav-links a {
+                flex: 0 0 auto;
+                min-height: 34px;
+                padding: 0 9px;
+                font-size: 10px;
+            }
+
+            .page-content {
+                padding: 25px 0 38px;
+            }
+
+            .page-heading {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .matrix-card-header {
+                padding: 16px;
+            }
+
+            .legend {
+                padding: 12px 16px;
+            }
+
+            .scroll-hint {
+                display: block;
+            }
+
+            .matrix-footer {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 14px 16px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .matrix-shell {
+                width: calc(100% - 28px);
+            }
+
+            .brand-mark {
+                width: 36px;
+                height: 36px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-caption {
+                font-size: 8px;
+            }
+
+            .matrix-card-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 9px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <nav class="nav-links" aria-label="Course navigation">
+                <a href="{% url 'view_course' course.id %}">Course</a>
+                <a href="{% url 'course_performance_indicators' course.id %}">Mapping Performance Indicators</a>
+                <a href="{% url 'course_mapping_grade' course.id %}">Mapping Grade</a>
+                <a href="{% url 'co_po_pso_matrix' course.id %}" aria-current="page">CO–PO–PSO Matrix</a>
+            </nav>
+        </header>
+
+        <main class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'view_course' course.id %}">{{ course.course_name }}</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <span>CO–PO–PSO Matrix</span>
+            </nav>
+
+            <section class="page-heading" aria-labelledby="page-title">
+                <div>
+                    <p class="eyebrow">Outcome mapping</p>
+                    <h1 id="page-title">CO vs PO + PSO Matrix</h1>
+                    <p class="page-description">Mapping levels are calculated automatically from the saved performance indicators. Select an outcome label to view its full statement.</p>
+                </div>
+                <span class="course-chip">{{ course.course_code }} · {{ course.course_name }}</span>
+            </section>
+
+            <section class="matrix-card" aria-labelledby="matrix-title">
+                <div class="matrix-card-header">
+                    <div>
+                        <h2 id="matrix-title">Course outcome alignment</h2>
+                        <p>Each cell shows the calculated mapping level for the corresponding outcome pair.</p>
+                    </div>
+                    <span class="matrix-count">{{ cos|length }} COs · {{ pos|length }} POs · {{ psos|length }} PSOs</span>
+                </div>
+
+                <div class="legend" aria-label="Mapping level legend">
+                    <span class="legend-label">Mapping level</span>
+                    <span class="legend-item"><span class="legend-swatch level-1" aria-hidden="true"></span>1 · Low</span>
+                    <span class="legend-item"><span class="legend-swatch level-2" aria-hidden="true"></span>2 · Medium</span>
+                    <span class="legend-item"><span class="legend-swatch level-3" aria-hidden="true"></span>3 · High</span>
+                    <span class="legend-item"><span class="legend-swatch" style="background:#e8edf5" aria-hidden="true"></span>— · No mapping</span>
+                </div>
+
+                <p class="scroll-hint">Swipe horizontally to view all program outcomes.</p>
+                <div class="table-wrap" role="region" aria-label="CO to PO and PSO matrix" tabindex="0">
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">CO</th>
+                                {% for po in pos %}
+                                <th scope="col">
+                                    <button class="outcome-trigger" type="button" data-outcome-title="{{ po.po_number }}" data-outcome-description="{{ po.description }}">
+                                        {{ po.po_number }}
+                                    </button>
+                                </th>
+                                {% endfor %}
+                                {% for pso in psos %}
+                                <th scope="col">
+                                    <button class="outcome-trigger" type="button" data-outcome-title="{{ pso.pso_number }}" data-outcome-description="{{ pso.description }}">
+                                        {{ pso.pso_number }}
+                                    </button>
+                                </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in matrix_rows %}
+                            <tr>
+                                <td>
+                                    <button class="outcome-trigger" type="button" data-outcome-title="CO{{ row.co.co_number }}" data-outcome-description="{{ row.co.description }}">
+                                        CO{{ row.co.co_number }}
+                                    </button>
+                                </td>
+                                {% for value in row.cells %}
+                                <td class="matrix-value {% if value != '-' %}value-{{ value }}{% else %}no-mapping{% endif %}"
+                                    aria-label="{% if value == '-' %}No mapping{% else %}Mapping level {{ value }}{% endif %}">
+                                    {{ value }}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="20">
+                                    <div class="empty-state">
+                                        <strong>No course outcomes configured</strong>
+                                        Add course outcomes and performance indicators to build the mapping matrix.
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if matrix_rows %}
+                            <tr class="average-row">
+                                <td>
+                                    <span class="average-label">
+                                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 16.5h14M5 13l3-3 2 2 5-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        Average
+                                    </span>
+                                </td>
+                                {% for avg in po_averages %}
+                                <td>{{ avg|floatformat:2 }}</td>
+                                {% endfor %}
+                                {% for avg in pso_averages %}
+                                <td>{{ avg|floatformat:2 }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <footer class="matrix-footer">
+                    <p class="footer-note">Average values include only mapped COs. Mapping levels are derived from performance indicator coverage.</p>
+                    <a class="primary-link" href="{% url 'course_performance_indicators' course.id %}">
+                        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M11.5 3.5H16v4.5M16 4l-6.5 6.5M8 5H5a1.5 1.5 0 0 0-1.5 1.5v8A1.5 1.5 0 0 0 5 16h8a1.5 1.5 0 0 0 1.5-1.5v-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Edit performance indicators
+                    </a>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal" id="statementModal" aria-hidden="true">
+        <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalText">
+            <div class="modal-header">
+                <div>
+                    <p class="modal-kicker">Outcome statement</p>
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                </div>
+                <button class="modal-close" type="button" aria-label="Close outcome statement">&times;</button>
+            </div>
+            <p class="modal-text" id="modalText"></p>
+        </section>
+    </div>
+
+    <script>
+        const statementModal = document.getElementById("statementModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalText = document.getElementById("modalText");
+        const closeModalButton = statementModal.querySelector(".modal-close");
+
+        function closeStatement() {
+            statementModal.classList.remove("is-open");
+            statementModal.setAttribute("aria-hidden", "true");
+        }
+
+        document.querySelectorAll(".outcome-trigger[data-outcome-description]").forEach((button) => {
+            button.addEventListener("click", () => {
+                modalTitle.textContent = button.dataset.outcomeTitle;
+                modalText.textContent = button.dataset.outcomeDescription;
+                statementModal.classList.add("is-open");
+                statementModal.setAttribute("aria-hidden", "false");
+                closeModalButton.focus();
+            });
+        });
+
+        closeModalButton.addEventListener("click", closeStatement);
+        statementModal.addEventListener("click", (event) => {
+            if (event.target === statementModal) {
+                closeStatement();
+            }
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && statementModal.classList.contains("is-open")) {
+                closeStatement();
+            }
+        });
+    </script>
+</body>
+</html>

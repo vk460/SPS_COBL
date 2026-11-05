@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f7fc">
+    <title>Weighted CO Levels | {{ academic_class.name }}</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #17243b;
+            background: #f4f7fc;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+        * { box-sizing: border-box; }
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 4%, rgba(196, 218, 255, .35), transparent 34%),
+                #f4f7fc;
+        }
+        a:focus-visible { outline: 3px solid #93b4ff; outline-offset: 3px; }
+        .page { width: min(1440px, calc(100% - 48px)); margin: 0 auto; padding: 28px 0 48px; }
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .button {
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #45546c;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color .16s ease, background .16s ease, transform .16s ease;
+        }
+        .button:hover { border-color: #b7caf5; background: #f8faff; transform: translateY(-1px); }
+        .button.primary {
+            border-color: #245eea;
+            background: #245eea;
+            color: #fff;
+            box-shadow: 0 5px 12px rgba(36, 94, 234, .16);
+        }
+        .button.primary:hover { border-color: #174bc7; background: #174bc7; }
+        .button svg { width: 15px; height: 15px; flex: 0 0 15px; }
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font-size: clamp(24px, 3vw, 32px);
+            letter-spacing: -.045em;
+            line-height: 1.2;
+        }
+        .description { margin: 8px 0 0; color: #78869b; font-size: 13px; line-height: 1.6; }
+        .class-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+        .meta-chip {
+            display: inline-flex;
+            min-height: 30px;
+            align-items: center;
+            padding: 0 10px;
+            border: 1px solid #e3eaf5;
+            border-radius: 999px;
+            background: rgba(255,255,255,.82);
+            color: #56657d;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .report-card {
+            margin-top: 22px;
+            overflow: hidden;
+            border: 1px solid #e2e8f2;
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 12px 32px rgba(34, 57, 97, .07);
+        }
+        .report-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 19px 22px;
+            border-bottom: 1px solid #e8edf5;
+            background: linear-gradient(110deg, #fff 0%, #fbfcff 100%);
+        }
+        .report-heading h2 {
+            margin: 0;
+            color: #1b2b46;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: -.02em;
+        }
+        .report-heading p { margin: 5px 0 0; color: #8995a8; font-size: 11px; }
+        .co-count {
+            flex: 0 0 auto;
+            padding: 6px 9px;
+            border-radius: 8px;
+            background: #eff4ff;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 800;
+        }
+        .table-frame { overflow: auto; }
+        table { width: 100%; min-width: max-content; border-collapse: separate; border-spacing: 0; }
+        th, td {
+            min-width: 64px;
+            height: 48px;
+            padding: 10px 13px;
+            border-bottom: 1px solid #edf0f6;
+            color: #45546c;
+            font-size: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        thead th {
+            position: sticky;
+            z-index: 1;
+            top: 0;
+            background: #f4f7fc;
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        thead .title-row th {
+            position: static;
+            height: 52px;
+            background: #fff;
+            color: #1b2b46;
+            font-size: 14px;
+            letter-spacing: .045em;
+        }
+        thead .title-row .title-cell {
+            background: #fce8da;
+            color: #7f3f1d;
+            font-size: 13px;
+            letter-spacing: .07em;
+        }
+        th:first-child, td:first-child { min-width: 72px; }
+        .course-column { min-width: 150px; }
+        .name-column { min-width: 210px; text-align: left; }
+        tbody tr:last-child td { border-bottom: 0; }
+        tbody tr:hover td { background: #f8faff; }
+        td.serial { color: #8995a8; font-weight: 700; }
+        td.course-code { color: #245eea; font-weight: 800; white-space: nowrap; }
+        td.course-name { color: #263650; font-weight: 600; text-align: left; }
+        td.level { background: #eef9f3; color: #16845d; font-weight: 800; }
+        td.level.missing { color: #9aa5b5; font-weight: 600; }
+        .empty-state { padding: 32px 18px; color: #78869b; font-size: 13px; text-align: center; }
+        .legend {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            margin: 14px 0 0;
+            color: #78869b;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        .legend-mark {
+            display: grid;
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+            place-items: center;
+            border-radius: 6px;
+            background: #eaf8f1;
+            color: #16845d;
+            font-size: 11px;
+            font-weight: 800;
+        }
+        @media (max-width: 640px) {
+            .page { width: calc(100% - 24px); padding-top: 18px; }
+            .toolbar { align-items: flex-start; margin-bottom: 20px; }
+            .report-heading { padding: 15px; }
+            th, td { padding: 9px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <nav class="toolbar" aria-label="Page navigation">
+            <a class="button" href="{% url 'class_dashboard' academic_class.id %}">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Back to class dashboard
+            </a>
+            <a class="button primary" href="{% url 'class_weighted_co_levels' academic_class.id %}?export=excel">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v9m0 0 3-3m-3 3L7 9M4 13v3h12v-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Export Excel
+            </a>
+        </nav>
+
+        <header>
+            <p class="eyebrow">Academic outcomes · Class report</p>
+            <h1>Weighted CO Attainment Levels</h1>
+            <p class="description">Course-wise weighted CO levels calculated against each subject's configured CO targets.</p>
+            <div class="class-meta" aria-label="Class information">
+                <span class="meta-chip">{{ academic_class.name }}</span>
+                <span class="meta-chip">Semester {{ academic_class.semester }}</span>
+                <span class="meta-chip">Academic year {{ academic_class.academic_year }}</span>
+            </div>
+        </header>
+
+        <section class="report-card" aria-labelledby="report-table-title">
+            <div class="report-heading">
+                <div>
+                    <h2 id="report-table-title">Weighted CO level by course</h2>
+                    <p>Each subject row shows its attainment level for the configured course outcomes.</p>
+                </div>
+                <span class="co-count">{{ co_columns|length }} course outcomes</span>
+            </div>
+            <div class="table-frame">
+                <table aria-label="Weighted CO attainment level by course">
+                    <thead>
+                        <tr class="title-row">
+                            {% if co_columns %}
+                            <th colspan="3"></th>
+                            <th class="title-cell" colspan="{{ co_columns|length }}">LEVEL OF WEIGHTED CO</th>
+                            {% else %}
+                            <th class="title-cell" colspan="4">LEVEL OF WEIGHTED CO</th>
+                            {% endif %}
+                        </tr>
+                        <tr>
+                            <th scope="col">SR.NO</th>
+                            <th scope="col" class="course-column">Course Code</th>
+                            <th scope="col" class="name-column">Course Name</th>
+                            {% for co in co_columns %}
+                            <th scope="col">{{ co }}</th>
+                            {% empty %}
+                            <th scope="col">COs not configured</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in subject_rows %}
+                        <tr>
+                            <td class="serial">{{ row.serial_number }}</td>
+                            <td class="course-code">{{ row.course.course_code }}</td>
+                            <td class="course-name">{{ row.course.course_name }}</td>
+                            {% for level in row.levels %}
+                            <td class="level{% if level == "" %} missing{% endif %}">{% if level != "" %}{{ level }}{% else %}<span aria-label="Target not set">—</span>{% endif %}</td>
+                            {% empty %}
+                            <td class="level missing">—</td>
+                            {% endfor %}
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="{% if co_columns %}{{ co_columns|length|add:'3' }}{% else %}4{% endif %}" class="empty-state">
+                                No subjects are registered in this class.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <p class="legend">
+            <span class="legend-mark" aria-hidden="true">i</span>
+            <span>Levels use the same weighted CO attainment calculation as the course attainment report. The level is based on the configured CO target; a dash means a target is not set.</span>
+        </p>
+    </main>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>CO-PO-PSO Attainment | {{ course.course_code }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/site.css">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+        }
+
+        * { box-sizing: border-box; }
+        body { min-width: 320px; min-height: 100vh; margin: 0; padding: 0 !important; background: radial-gradient(ellipse at 86% 8%, rgba(196,218,255,.36), transparent 32%), #f5f8ff !important; color: #17243b !important; font-family: "DM Sans", "Segoe UI", sans-serif !important; }
+        .page-shell { width: min(1360px, calc(100% - 48px)); margin: 0 auto; }
+        .topbar { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid #e6ebf4; }
+        .brand { display: flex; align-items: center; gap: 11px; color: #17243b; text-decoration: none; }
+        .brand-mark { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: #245eea; color: #fff; font: 800 14px "Manrope", sans-serif; }
+        .brand-name { font: 800 13px "Manrope", sans-serif; }
+        .brand-caption { display: block; margin-top: 3px; color: #78869c; font-size: 8px; font-weight: 700; text-transform: uppercase; }
+        .nav-links { display: flex; flex-wrap: wrap; gap: 8px; }
+        .nav-link { padding: 8px 10px; border: 1px solid transparent; border-radius: 8px; color: #56657d; font-size: 12px; font-weight: 700; text-decoration: none; }
+        .nav-link:hover { border-color: #dfe6f0; background: #fff; color: #245eea; }
+        .page-content { padding: 28px 0 42px; }
+        .eyebrow { margin: 0 0 6px; color: #245eea; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        h1 { margin: 0; color: #17243b; font: 800 30px/1.2 "Manrope", sans-serif; }
+        .page-description { margin: 8px 0 20px; color: #78869b; font-size: 14px; }
+        .panel { overflow: hidden; margin-bottom: 18px; border: 1px solid #e7ecf4; border-radius: 14px; background: rgba(255,255,255,.97); box-shadow: 0 10px 32px rgba(34,57,97,.06); }
+        .report-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-bottom: 1px solid #e7ecf4; }
+        .report-meta div { padding: 13px 18px; color: #34435b; font-size: 13px; }
+        .report-meta div:nth-child(odd) { border-right: 1px solid #e7ecf4; }
+        .report-meta div:nth-child(-n+2) { border-bottom: 1px solid #e7ecf4; }
+        .report-meta strong { color: #1b2b46; }
+        .table-wrap { max-width: 100%; overflow-x: auto; }
+        .attainment-table { width: 100%; min-width: 1240px; border-collapse: separate; border-spacing: 0; color: #34435b; font-size: 12px; }
+        .attainment-table th, .attainment-table td { padding: 11px 12px; border-right: 1px solid #e7ecf4; border-bottom: 1px solid #e7ecf4; text-align: center; vertical-align: middle; }
+        .attainment-table th:last-child, .attainment-table td:last-child { border-right: 0; }
+        .attainment-table thead th { background: #f7c9a9 !important; color: #59351f !important; font-size: 11px; font-weight: 800; white-space: normal; }
+        .attainment-table tbody tr:last-child td { border-bottom: 0; }
+        .attainment-table .outcome-label { color: #245eea; font-weight: 800; }
+        .formula-cell { min-width: 260px; color: #56657d; font-size: 11px; white-space: normal; overflow-wrap: anywhere; }
+        .rounded-cell { background: #f0faf4; color: #26734f; font-weight: 800; }
+        .level-cell { color: #1b2b46; font-weight: 800; }
+        .empty-cell { padding: 24px !important; color: #78869b; }
+        .formula-note { padding: 11px 14px; color: #8995a8; font-size: 11px; }
+        .legend-panel { padding: 16px; }
+        .legend-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+        .legend-title { flex: 1; margin: 0; padding: 12px; background: #e3f0dc; color: #315a2f; font: 800 17px "Manrope", sans-serif; text-align: center; }
+        .threshold-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+        .threshold-button { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; padding: 9px 14px; border: 1px solid #d9e2ef; border-radius: 8px; background: #fff; color: #45546c; font: 700 13px "DM Sans", sans-serif; text-decoration: none; cursor: pointer; }
+        .threshold-button.primary { border-color: #245eea; background: #245eea; color: #fff; }
+        .threshold-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 14px; }
+        .threshold-field { display: grid; gap: 7px; color: #45546c; font-size: 13px; font-weight: 700; }
+        .threshold-field input { width: 100%; padding: 10px 12px; border: 1px solid #d9e2ef !important; border-radius: 8px !important; background: #fff !important; color: #17243b !important; font: 500 14px "DM Sans", sans-serif; }
+        .threshold-message { margin: 0 0 12px; padding: 10px 12px; border: 1px solid #dce7ff; border-radius: 8px; background: #f3f6ff; color: #345d9c; font-size: 13px; }
+        .threshold-message.error { border-color: #f4dada; background: #fff3f3; color: #a84141; }
+        .threshold-message.success { border-color: #cdebdc; background: #f0faf4; color: #26734f; }
+        .legend-table { width: 100%; border-collapse: collapse; }
+        .legend-table th, .legend-table td { padding: 12px; border: 1px solid #e7ecf4; color: #34435b; text-align: center; }
+        .legend-table th { background: #fff; font-size: 14px; }
+        @media (max-width: 650px) {
+            .page-shell { width: calc(100% - 28px); }
+            .topbar { min-height: 62px; align-items: flex-start; padding: 12px 0; }
+            .nav-links { justify-content: flex-end; }
+            .page-content { padding-top: 22px; }
+            h1 { font-size: 25px; }
+            .report-meta { grid-template-columns: 1fr; }
+            .report-meta div:nth-child(odd) { border-right: 0; }
+            .report-meta div:nth-child(3) { border-bottom: 1px solid #e7ecf4; }
+            .attainment-table { min-width: 1100px; }
+            .legend-panel { padding: 10px; }
+            .legend-heading { align-items: flex-start; flex-direction: column; }
+            .legend-title { width: 100%; }
+            .threshold-fields { grid-template-columns: 1fr; }
+        }
+        @media print {
+            body { background: #fff !important; }
+            .topbar, .nav-links { display: none !important; }
+            .page-shell { width: 100%; }
+            .page-content { padding: 0; }
+            .panel { box-shadow: none; break-inside: avoid; }
+            .table-wrap { overflow: visible; }
+            .attainment-table { min-width: 0; font-size: 8px; }
+            .attainment-table th, .attainment-table td { padding: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <a class="brand" href="{% url 'view_course' course.id %}" aria-label="COBL course dashboard">
+                <span class="brand-mark">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic Outcomes</span>
+                </span>
+            </a>
+            <nav class="nav-links" aria-label="Course navigation">
+                <a class="nav-link" href="{% url 'co_attainment_gap' course.id %}">CO Attainment Gap</a>
+                <a class="nav-link" href="{% url 'view_course' course.id %}">Back to course</a>
+            </nav>
+        </header>
+
+        <main class="page-content">
+            <p class="eyebrow">Course analytics</p>
+            <h1>CO-PO-PSO Attainment</h1>
+            <p class="page-description">Program and program-specific outcome attainment based on mapped course outcomes.</p>
+
+            <section class="panel" aria-label="CO-PO-PSO attainment report">
+                <div class="report-meta">
+                    <div><strong>Subject:</strong> {{ course.course_name }}</div>
+                    <div><strong>A.Y.:</strong> {{ course.academic_class.academic_year }}</div>
+                    <div><strong>Subject Code:</strong> {{ course.course_code }}</div>
+                    <div><strong>Semester:</strong> {{ course.academic_class.semester }}</div>
+                </div>
+                <div class="table-wrap">
+                    <table class="attainment-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">PO / PSO</th>
+                                <th scope="col">Mapped CO</th>
+                                <th scope="col">Mapping Level</th>
+                                <th scope="col">Max Level</th>
+                                <th scope="col">PO-PSO Attainment<br>(Avg. Attainment × Actual Mapping / Max Mapping)<br><span style="color:#a63d2f;font-weight:600;">Formula shown for reference</span></th>
+                                <th scope="col">PO-PSO Attainment<br>(Avg. Attainment × Actual Mapping / Max Mapping)</th>
+                                <th scope="col">Attainment</th>
+                                <th scope="col">Attainment Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in po_pso_attainment_rows %}
+                            <tr>
+                                <td class="outcome-label">{{ row.outcome }}</td>
+                                <td>{{ row.mapped_cos|default:"—" }}</td>
+                                <td>{% if row.mapping_level != "" %}{{ row.mapping_level|floatformat:2 }}{% endif %}</td>
+                                <td>{{ row.max_level }}</td>
+                                <td class="formula-cell">{{ row.formula }}</td>
+                                <td>{% if row.attainment != "" %}{{ row.attainment|floatformat:"2" }}{% endif %}</td>
+                                <td class="rounded-cell">{{ row.rounded_attainment }}</td>
+                                <td class="level-cell">{{ row.attainment_level }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td class="empty-cell" colspan="8">No program outcomes or program-specific outcomes are configured.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="formula-note">Attainment = average attainment of mapped COs × average mapping level ÷ 3. Unmapped COs are excluded.</p>
+            </section>
+
+            <section class="panel legend-panel" aria-labelledby="mapping-level-title">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="legend-heading">
+                        <h2 class="legend-title" id="mapping-level-title">CO-PO Mapping Level</h2>
+                        {% if can_edit_thresholds %}
+                        <div class="threshold-actions">
+                            {% if threshold_edit_mode %}
+                            <button class="threshold-button primary" type="submit">Save changes</button>
+                            <a class="threshold-button" href="{% url 'co_po_pso_attainment' course.id %}">Cancel</a>
+                            {% else %}
+                            <a class="threshold-button primary" href="{% url 'co_po_pso_attainment' course.id %}?edit=1">Edit levels</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    <p class="threshold-message {{ message.tags }}" role="status">{{ message }}</p>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if threshold_edit_mode %}
+                    <div class="threshold-fields">
+                        <label class="threshold-field" for="level-2-min">Level 2 starts at (%)
+                            <input id="level-2-min" type="number" name="level_2_min" min="1" max="99" value="{{ attainment_thresholds.level_2_min }}" required>
+                        </label>
+                        <label class="threshold-field" for="level-3-min">Level 3 starts at (%)
+                            <input id="level-3-min" type="number" name="level_3_min" min="2" max="100" value="{{ attainment_thresholds.level_3_min }}" required>
+                        </label>
+                    </div>
+                    {% endif %}
+
+                    <table class="legend-table">
+                        <thead>
+                            <tr><th scope="col">Level 1</th><th scope="col">Level 2</th><th scope="col">Level 3</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>&lt;{{ attainment_thresholds.level_2_min }}</td><td>≥{{ attainment_thresholds.level_2_min }} and &lt;{{ attainment_thresholds.level_3_min }}</td><td>≥{{ attainment_thresholds.level_3_min }}</td></tr>
+                            <tr><td>&lt;{{ attainment_thresholds.level_2_min }}%</td><td>{{ attainment_thresholds.level_2_min }}–{{ attainment_thresholds.level_3_min }}%</td><td>Above {{ attainment_thresholds.level_3_min }}%</td></tr>
+                        </tbody>
+                    </table>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

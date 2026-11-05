@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Students | COBL</title>
+
+    <link rel="stylesheet" href="/static/css/site.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            --page-bg: #f5f8ff;
+            --surface: #fff;
+            --border: #e5eaf2;
+            --ink: #17243b;
+            --muted: #78869b;
+            --blue: #245eea;
+            --green: #0eaa7a;
+            --red: #df4545;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-width: 320px;
+            margin: 0;
+            padding: 0 24px 40px !important;
+            background:
+                radial-gradient(ellipse at 86% 5%, rgba(196, 218, 255, .36), transparent 32%),
+                var(--page-bg) !important;
+            color: var(--ink) !important;
+            font-family: "DM Sans", "Segoe UI", sans-serif !important;
+        }
+
+        .assign-navbar,
+        .assign-page,
+        .assign-page h1,
+        .assign-page h2,
+        .assign-page h3,
+        .assign-page p { color: var(--ink); }
+
+        .assign-navbar {
+            width: min(1240px, 100%);
+            min-height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 24px auto 34px;
+            padding: 14px 26px !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 15px !important;
+            background: var(--surface) !important;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, .07) !important;
+        }
+
+        .assign-brand {
+            color: #244b94 !important;
+            font: 800 24px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.04em;
+        }
+
+        .assign-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .assign-nav-links a {
+            color: var(--blue);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .assign-nav-links a:hover { color: #1747bf; }
+
+        .assign-page {
+            width: min(1180px, 100%);
+            margin: 0 auto;
+        }
+
+        .assign-card {
+            width: 100%;
+            padding: 38px !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 20px !important;
+            background: var(--surface) !important;
+            box-shadow: 0 14px 38px rgba(34, 57, 97, .07) !important;
+        }
+
+        .page-heading {
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+            font: 800 clamp(23px, 3vw, 32px)/1.25 "Manrope", sans-serif;
+            letter-spacing: -.045em;
+        }
+
+        .page-heading p {
+            margin: 10px 0 0;
+            color: var(--muted) !important;
+            font-size: 15px;
+        }
+
+        .assign-messages {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .assign-message {
+            margin: 0;
+            padding: 11px 14px;
+            border: 1px solid #dce7ff;
+            border-left: 4px solid var(--blue);
+            border-radius: 9px;
+            background: #f3f6ff;
+            color: #345d9c;
+            font-size: 13px;
+        }
+
+        .assign-message.error {
+            border-color: #f4dada;
+            border-left-color: var(--red);
+            background: #fff3f3;
+            color: #a84141;
+        }
+
+        .assign-message.success {
+            border-color: #cdebdc;
+            border-left-color: var(--green);
+            background: #f0faf4;
+            color: #26734f;
+        }
+
+        .excel-bar {
+            display: grid;
+            grid-template-columns: auto minmax(240px, 1fr) auto;
+            align-items: center;
+            gap: 18px;
+            margin: 0 0 28px;
+        }
+
+        .excel-upload {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .excel-file {
+            width: 100%;
+            min-width: 0;
+            padding: 9px 12px;
+            border: 1px solid #d9e2ef !important;
+            border-radius: 9px !important;
+            background: #fff !important;
+            color: #45546c !important;
+            font-size: 13px;
+        }
+
+        .assign-page .btn {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 0 18px;
+            border: 0;
+            border-radius: 9px;
+            color: #fff !important;
+            font: 700 13px "DM Sans", sans-serif;
+            white-space: nowrap;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+
+        .assign-page .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(34, 57, 97, .16);
+        }
+
+        .assign-page .btn-blue { background: var(--blue) !important; }
+        .assign-page .btn-blue:hover { background: #1747bf !important; }
+        .assign-page .btn-green { background: var(--green) !important; }
+        .assign-page .btn-green:hover { background: #07875f !important; }
+        .assign-page .btn-red { background: var(--red) !important; }
+        .assign-page .btn-red:hover { background: #c83232 !important; }
+
+        .table-wrapper {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: auto;
+            border: 1px solid var(--border) !important;
+            border-radius: 13px !important;
+            background: #fff !important;
+            box-shadow: none !important;
+        }
+
+        .student-table {
+            width: 100%;
+            min-width: 680px;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .student-table th,
+        .student-table td {
+            padding: 14px 16px !important;
+            border-bottom: 1px solid #edf0f6;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .student-table th {
+            background: #eaf1ff !important;
+            color: #244b94 !important;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .student-table td {
+            background: #fff;
+            color: #34435b;
+            font-size: 13px;
+        }
+
+        .student-table tbody tr:last-child td { border-bottom: 0; }
+        .student-table tbody tr:hover td { background: #f8faff; }
+        .student-table .roll-cell { width: 18%; font-weight: 700; }
+        .student-table .student-name { min-width: 260px; font-weight: 600; }
+        .student-table .action-cell { width: 130px; text-align: center; }
+        .student-table .action-cell .btn { min-width: 84px; min-height: 37px; }
+
+        .student-empty {
+            padding: 32px !important;
+            color: var(--muted) !important;
+            text-align: center !important;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-link {
+            color: var(--blue);
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .back-link:hover { text-decoration: underline; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(15, 23, 42, .52);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-box {
+            width: min(440px, 100%);
+            padding: 26px !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 16px !important;
+            background: #fff !important;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, .22) !important;
+        }
+
+        .modal-box h3 {
+            margin: 0 0 22px;
+            color: var(--ink) !important;
+            font: 800 20px/1.3 "Manrope", sans-serif;
+            text-align: left;
+        }
+
+        .modal-field {
+            display: grid;
+            gap: 7px;
+            margin-bottom: 16px;
+            color: #53627a;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .modal-field select,
+        .modal-field input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d9e2ef !important;
+            border-radius: 8px !important;
+            color: var(--ink) !important;
+            background: #fff !important;
+        }
+
+        .current-roll {
+            margin-bottom: 15px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #f3f6ff;
+            color: #53627a;
+            font-size: 12px;
+        }
+
+        .current-roll span { color: var(--blue); font-weight: 800; }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .modal-actions .btn { flex: 1; }
+
+        @media (max-width: 760px) {
+            body { padding: 0 14px 28px !important; }
+            .assign-navbar {
+                min-height: 64px;
+                margin: 14px auto 20px;
+                padding: 12px 16px !important;
+            }
+            .assign-brand { font-size: 20px; }
+            .assign-nav-links { gap: 16px; }
+            .assign-nav-links a { font-size: 12px; }
+            .assign-card { padding: 24px 18px !important; }
+            .excel-bar { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .excel-upload { grid-column: 1 / -1; grid-row: 1; }
+            .excel-bar > .btn { width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .assign-navbar { align-items: flex-start; }
+            .assign-nav-links { gap: 10px; padding-top: 4px; }
+            .assign-nav-links a { font-size: 11px; }
+            .assign-card { padding: 20px 14px !important; }
+            .page-heading { margin-bottom: 20px; }
+            .page-heading p { font-size: 13px; }
+            .excel-bar { grid-template-columns: 1fr; }
+            .excel-upload { grid-template-columns: 1fr; }
+            .excel-upload .btn { width: 100%; }
+            .excel-bar > .btn { grid-column: auto; }
+            .student-table { min-width: 620px; }
+            .student-table th,
+            .student-table td { padding: 11px 12px !important; }
+            .modal-actions { flex-direction: column; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar assign-navbar">
+        <h1 class="assign-brand">COBL System</h1>
+
+        <nav class="nav-links assign-nav-links" aria-label="Class navigation">
+            <a href="{% url 'class_dashboard' academic_class.id %}">Dashboard</a>
+            {% if request.user.department.is_general_science %}
+            <a href="{% url 'gs_class_list' %}">Classes</a>
+            {% else %}
+            <a href="{% url 'dept_class_list' %}">Classes</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="page assign-page">
+
+        <section class="card assign-card">
+
+            <div class="page-heading">
+                <h1>Assign Students – {{ academic_class.name }}</h1>
+                <p>Upload or download the class list, or manage students individually.</p>
+            </div>
+
+            {% if messages %}
+            <div class="assign-messages" role="status" aria-live="polite">
+                {% for message in messages %}
+                <div class="assign-message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="excel-bar">
+
+                <a href="{% url 'export_class_students_excel' academic_class.id %}" class="btn btn-blue">
+                    Download Excel
+                </a>
+
+                <form class="excel-upload" method="post" action="{% url 'import_class_students_excel' academic_class.id %}"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input class="excel-file" type="file" name="excel" accept=".xlsx,.xls" aria-label="Choose student Excel file">
+                    <button class="btn btn-green" type="submit">Upload Excel</button>
+                </form>
+
+            </div>
+
+            <div class="table-wrapper">
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in students %}
+                        <tr>
+                            <td class="roll-cell">{{ s.roll_no }}</td>
+                            <td class="student-name">{{ s.name }}</td>
+                            <td class="action-cell">
+                                <button class="btn btn-blue"
+                                        onclick="openEdit('{{ s.id }}','{{ s.roll_no }}','{{ s.name }}')">
+                                    Edit
+                                </button>
+                            </td>
+                            <td class="action-cell">
+                                <button class="btn btn-red" onclick="deleteStudent('{{ s.id }}')">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td class="student-empty" colspan="4">No students are assigned to this class yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="footer">
+                <a href="{% url 'class_dashboard' academic_class.id %}" class="back-link">
+                    ⬅ Back to Class Dashboard
+                </a>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal" id="studentModal">
+        <div class="modal-box">
+
+            <h3 id="modalTitle">Add Student</h3>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <input type="hidden" name="action" id="action">
+                <input type="hidden" name="student_id" id="student_id">
+
+                <div id="rollTextWrapper" class="current-roll" style="display:none;">
+                    <strong>Current Roll No:</strong>
+                    <span id="rollText"></span>
+                </div>
+
+                <label class="modal-field" for="roll_no">
+                    Roll number
+                    <select name="roll_no" id="roll_no" required>
+                        <option value="">Select Roll No</option>
+                        {% for r in available_rolls %}
+                        <option value="{{ r }}">{{ r }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label class="modal-field" for="name">
+                    Student name
+                    <input type="text" name="name" id="name" placeholder="Enter student name" required>
+                </label>
+
+                <div class="modal-actions">
+                    <button class="btn btn-green" type="submit">Save Student</button>
+                    <button type="button" class="btn btn-red" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById("studentModal");
+        const actionField = document.getElementById("action");
+        const studentIdField = document.getElementById("student_id");
+        const rollField = document.getElementById("roll_no");
+        const rollTextWrapper = document.getElementById("rollTextWrapper");
+        const rollText = document.getElementById("rollText");
+        const nameField = document.getElementById("name");
+        const modalTitle = document.getElementById("modalTitle");
+
+        function openAdd() {
+            modal.classList.add("active");
+            modalTitle.innerText = "Add Student";
+            actionField.value = "add";
+            studentIdField.value = "";
+
+            rollTextWrapper.style.display = "none";
+            rollField.style.display = "block";
+            rollField.value = "";
+
+            nameField.value = "";
+        }
+
+        function openEdit(id, roll, name) {
+            modal.classList.add("active");
+            modalTitle.innerText = "Edit Student";
+            actionField.value = "edit";
+            studentIdField.value = id;
+
+            rollText.innerText = roll;
+            rollTextWrapper.style.display = "block";
+
+            rollField.innerHTML = "";
+
+            const currentOption = document.createElement("option");
+            currentOption.value = roll;
+            currentOption.textContent = roll + " (Current)";
+            currentOption.selected = true;
+            rollField.appendChild(currentOption);
+
+            const availableRolls = {{ available_rolls|safe }};
+
+            availableRolls.forEach(r => {
+                if (r !== roll) {
+                    const opt = document.createElement("option");
+                    opt.value = r;
+                    opt.textContent = r;
+                    rollField.appendChild(opt);
+                }
+            });
+
+            nameField.value = name;
+        }
+
+        function deleteStudent(id) {
+            if (confirm("Delete this student?")) {
+                actionField.value = "delete";
+                studentIdField.value = id;
+                document.querySelector("#studentModal form").submit();
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove("active");
+        }
+    </script>
+
+</body>
+</html>

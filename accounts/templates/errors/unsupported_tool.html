@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsupported Tool Type</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        h1 { color: #ef4444; margin-bottom: 20px; }
+        p { font-size: 1.1rem; margin-bottom: 30px; }
+        .tool-info { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin: 20px 0; }
+        a { color: #38bdf8; text-decoration: underline; }
+        a:hover { color: #60a5fa; }
+    </style>
+    <link rel="stylesheet" href="/static/css/site.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Oops! Unsupported Tool Type</h1>
+        <p>This CO Summary view does not yet support this type of assessment tool.</p>
+
+        <div class="tool-info">
+            <strong>Tool Type:</strong> {{ tool.main_tool }}<br>
+            <strong>Sub Tool:</strong> {{ tool.sub_tool }}<br>
+            <strong>ID:</strong> {{ tool.id }}
+        </div>
+
+        <p>Please contact the developer or use supported tools (ICA, Assignment, Exam, etc.) for now.</p>
+
+        <a href="{% url 'faculty_dashboard' %}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

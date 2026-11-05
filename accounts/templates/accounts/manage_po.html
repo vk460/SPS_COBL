@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <title>Program Outcomes | COBL System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "DM Sans", "Segoe UI", sans-serif;
+            color: #17243b;
+            background: #f5f8ff;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 86% 8%, rgba(196, 218, 255, .36), transparent 32%),
+                #f5f8ff;
+            color: #17243b;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid #93b4ff;
+            outline-offset: 3px;
+        }
+
+        .po-shell {
+            width: min(1120px, calc(100% - 64px));
+            margin: 0 auto;
+        }
+
+        .po-topbar {
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e6ebf4;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #17243b;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .2);
+            color: #fff;
+            font: 800 16px/1 "Manrope", sans-serif;
+            letter-spacing: -.06em;
+        }
+
+        .brand-name {
+            font: 800 15px/1.2 "Manrope", sans-serif;
+            letter-spacing: -.035em;
+        }
+
+        .brand-caption {
+            display: block;
+            margin-top: 4px;
+            color: #78869c;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            min-height: 39px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 14px;
+            border: 1px solid #dce3ee;
+            border-radius: 9px;
+            background: #fff;
+            color: #45546c;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+        .back-link:hover {
+            border-color: #bfd0fb;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .back-link svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .page-content {
+            padding: 38px 0 60px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 24px;
+            color: #8995a8;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .breadcrumb a {
+            color: #65738a;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #245eea;
+        }
+
+        .breadcrumb-separator {
+            color: #b7c0ce;
+        }
+
+        .page-heading {
+            margin-bottom: 22px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #245eea;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .13em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            color: #17243b;
+            font: 800 clamp(28px, 3.2vw, 36px)/1.2 "Manrope", sans-serif;
+            letter-spacing: -.05em;
+        }
+
+        .page-description {
+            max-width: 680px;
+            margin: 9px 0 0;
+            color: #78869b;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .department-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 14px;
+            padding: 7px 10px;
+            border: 1px solid #e1e9fa;
+            border-radius: 8px;
+            background: rgba(255,255,255,.78);
+            color: #45546c;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .department-label svg {
+            width: 14px;
+            height: 14px;
+            color: #245eea;
+        }
+
+        .po-panel {
+            overflow: hidden;
+            border: 1px solid #e7ecf4;
+            border-radius: 15px;
+            background: rgba(255,255,255,.95);
+            box-shadow: 0 10px 32px rgba(34, 57, 97, .06);
+        }
+
+        .panel-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 20px 23px;
+            border-bottom: 1px solid #edf0f6;
+        }
+
+        .panel-top h2 {
+            margin: 0;
+            color: #1b2b46;
+            font: 800 16px/1.35 "Manrope", sans-serif;
+            letter-spacing: -.03em;
+        }
+
+        .panel-top p {
+            margin: 5px 0 0;
+            color: #8995a8;
+            font-size: 11px;
+        }
+
+        .mode-badge {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 10px;
+            border: 1px solid #e5e9f0;
+            border-radius: 20px;
+            background: #f6f8fb;
+            color: #697991;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .mode-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #93a0b3;
+        }
+
+        .mode-badge.edit-mode {
+            border-color: #bfe8d3;
+            background: #effaf4;
+            color: #17764f;
+        }
+
+        .mode-badge.edit-mode .mode-dot {
+            background: #22a06b;
+        }
+
+        .po-form {
+            padding: 21px 23px 23px;
+        }
+
+        .form-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 15px;
+        }
+
+        .count-control {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .count-control label {
+            color: #45546c;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .count-control select {
+            min-width: 112px;
+            height: 40px;
+            padding: 0 32px 0 12px;
+            border: 1px solid #dce3ee;
+            border-radius: 8px;
+            background: #fff;
+            color: #263650;
+            font: 600 12px "DM Sans", sans-serif;
+        }
+
+        .form-hint {
+            color: #8995a8;
+            font-size: 11px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid #edf0f6;
+            border-radius: 10px;
+            background: #fff;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .po-table {
+            width: 100%;
+            min-width: 620px;
+            border-collapse: collapse;
+        }
+
+        .po-table th {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e8edf5;
+            background: #f4f7fc;
+            color: #697991;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-align: left;
+            text-transform: uppercase;
+        }
+
+        .po-table th:first-child {
+            width: 100px;
+            text-align: center;
+        }
+
+        .po-table td {
+            padding: 11px 15px;
+            border-bottom: 1px solid #f0f2f7;
+            color: #36445b;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .po-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .po-table tbody tr:hover td {
+            background: #f8faff;
+        }
+
+        .po-number {
+            color: #245eea !important;
+            font: 800 12px "Manrope", sans-serif;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .po-description {
+            width: 100%;
+            min-height: 58px;
+            display: block;
+            padding: 10px 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            background: transparent;
+            color: #36445b;
+            font: 400 12px/1.55 "DM Sans", sans-serif;
+            resize: vertical;
+            transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+        }
+
+        .po-description:read-only {
+            cursor: default;
+        }
+
+        .po-description:not(:read-only) {
+            border-color: #dce3ee;
+            background: #fff;
+        }
+
+        .po-description:not(:read-only):focus {
+            border-color: #7ea1f4;
+            box-shadow: 0 0 0 3px rgba(36, 94, 234, .1);
+            outline: none;
+        }
+
+        .po-description::placeholder {
+            color: #9aa5b5;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .action-button {
+            min-height: 41px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 16px;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            font: 700 12px "DM Sans", sans-serif;
+            cursor: pointer;
+            transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
+        }
+
+        .action-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .edit-button {
+            border-color: #dce3ee;
+            background: #fff;
+            color: #45546c;
+        }
+
+        .edit-button:hover {
+            border-color: #bfd0fb;
+            background: #f3f6ff;
+            color: #245eea;
+        }
+
+        .save-button {
+            display: none;
+            background: #245eea;
+            box-shadow: 0 7px 16px rgba(36, 94, 234, .17);
+            color: #fff;
+        }
+
+        .save-button:hover {
+            background: #174bd0;
+            box-shadow: 0 10px 20px rgba(36, 94, 234, .23);
+        }
+
+        .action-button svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        @media (max-width: 640px) {
+            .po-shell {
+                width: calc(100% - 32px);
+            }
+
+            .po-topbar {
+                min-height: 70px;
+            }
+
+            .page-content {
+                padding: 27px 0 40px;
+            }
+
+            .breadcrumb {
+                margin-bottom: 19px;
+            }
+
+            .panel-top {
+                align-items: flex-start;
+                padding: 17px;
+            }
+
+            .po-form {
+                padding: 17px;
+            }
+
+            .form-toolbar {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .brand-mark {
+                width: 36px;
+                height: 36px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-caption {
+                font-size: 8px;
+            }
+
+            .back-link {
+                min-height: 36px;
+                padding: 0 10px;
+                font-size: 11px;
+            }
+
+            .panel-top {
+                flex-direction: column;
+            }
+
+            .mode-badge {
+                align-self: flex-start;
+            }
+
+            .count-control {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .count-control select {
+                flex: 1;
+                max-width: 150px;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="po-shell">
+        <header class="po-topbar">
+            <a class="brand" href="{% url 'hod_dashboard' %}" aria-label="COBL HOD dashboard">
+                <span class="brand-mark" aria-hidden="true">CO</span>
+                <span>
+                    <span class="brand-name">COBL System</span>
+                    <span class="brand-caption">Academic outcomes</span>
+                </span>
+            </a>
+            <a class="back-link" href="{% url 'hod_dashboard' %}">
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Dashboard
+            </a>
+        </header>
+
+        <main class="page-content">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="{% url 'hod_dashboard' %}">HOD Dashboard</a>
+                <span class="breadcrumb-separator" aria-hidden="true">/</span>
+                <span>Program Outcomes</span>
+            </nav>
+
+            <section class="page-heading" aria-labelledby="page-title">
+                <p class="eyebrow">Department setup</p>
+                <h1 id="page-title">Program Outcomes</h1>
+                <p class="page-description">Define and maintain the outcomes your program expects students to achieve.</p>
+                <span class="department-label">
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 17h14M5 17V6.5L10 3l5 3.5V17M8 8h.01M12 8h.01M8 11h.01M12 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ department.name }}
+                </span>
+            </section>
+
+            <section class="po-panel" aria-labelledby="panel-title">
+                <div class="panel-top">
+                    <div>
+                        <h2 id="panel-title">Outcome statements</h2>
+                        <p>Review your existing POs or switch to edit mode to make changes.</p>
+                    </div>
+                    <span class="mode-badge" id="mode" aria-live="polite">
+                        <span class="mode-dot" aria-hidden="true"></span>
+                        Read-only mode
+                    </span>
+                </div>
+
+                <form class="po-form" method="post">
+                    {% csrf_token %}
+                    <div class="form-toolbar">
+                        <div class="count-control">
+                            <label for="poCount">Number of POs</label>
+                            <select id="poCount" onchange="generateRows()" disabled>
+                                <option value="">Select count</option>
+                                {% for i in "123456789012"|make_list %}
+                                <option value="{{ forloop.counter }}" {% if forloop.counter == po_count %}selected{% endif %}>
+                                    {{ forloop.counter }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <input type="hidden" name="po_count" id="poCountInput" value="{{ po_count }}">
+                        </div>
+                        <span class="form-hint">Up to 12 program outcomes. Existing POs are preserved.</span>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="po-table" id="poTable">
+                            <thead>
+                                <tr><th scope="col">PO No.</th><th scope="col">Description</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for po in pos %}
+                                <tr>
+                                    <td class="po-number">PO{{ forloop.counter }}</td>
+                                    <td><textarea class="po-description" name="po_desc_{{ forloop.counter }}" aria-label="PO{{ forloop.counter }} description" readonly>{{ po.description }}</textarea></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="action-button edit-button" onclick="enableEdit()">Edit outcomes</button>
+                        <button type="submit" class="action-button save-button" id="saveBtn">
+                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m4 10.5 4 4 8-9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Save changes
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function enableEdit() {
+            const mode = document.getElementById("mode");
+            mode.innerHTML = '<span class="mode-dot" aria-hidden="true"></span>Edit mode';
+            mode.classList.add("edit-mode");
+
+            document.querySelectorAll(".po-description").forEach((textarea) => {
+                textarea.removeAttribute("readonly");
+            });
+
+            document.getElementById("poCount").removeAttribute("disabled");
+            document.querySelector(".edit-button").hidden = true;
+            document.getElementById("saveBtn").style.display = "inline-flex";
+        }
+
+        function generateRows() {
+            const count = Number.parseInt(document.getElementById("poCount").value, 10);
+            const tbody = document.querySelector("#poTable tbody");
+            const rowCount = tbody.rows.length;
+
+            if (!Number.isInteger(count) || count < 0 || count > 12) {
+                return;
+            }
+
+            if (count < rowCount) {
+                document.getElementById("poCount").value = String(rowCount);
+                document.getElementById("poCountInput").value = String(rowCount);
+                return;
+            }
+
+            document.getElementById("poCountInput").value = count;
+
+            for (let index = rowCount + 1; index <= count; index += 1) {
+                const row = tbody.insertRow();
+                const numberCell = row.insertCell();
+                numberCell.className = "po-number";
+                numberCell.textContent = `PO${index}`;
+
+                const descriptionCell = row.insertCell();
+                const textarea = document.createElement("textarea");
+                textarea.className = "po-description";
+                textarea.name = `po_desc_${index}`;
+                textarea.setAttribute("aria-label", `PO${index} description`);
+                textarea.placeholder = `Enter PO${index} statement`;
+                descriptionCell.appendChild(textarea);
+            }
+
+        }
+    </script>
+</body>
+</html>
